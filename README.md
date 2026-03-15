@@ -36,37 +36,37 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 
 ---
 
-## ✅ Milestones
+## ✅ Milestone
+- **Phase 1**: Project Foundation & Android Environment Setup
+    - [] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
+    - [] Phase 1-2: Setup Android Studio & Kotlin/Compose Development Environment
+    - [] Phase 1-3: Define Design System (Color Palette, Typography, & Brand Assets)
+    - [] Phase 1-4: Security Configuration (API Key Management & local.properties Setup)
 
-### Phase 1: Project Foundation & UI Prototyping
-* [] **Phase 1-1**: Initialize GitHub Repository & Technical Documentation (README.md)
-* [ ] **Phase 1-2**: Android Studio Project Initialization (Empty Compose Activity)
-* [ ] **Phase 1-3**: Design System Definition (Color Palette, Typography, & Brand Identity)
-* [ ] **Phase 1-4**: Prototyping Core UI Layout (Dual-City Comparison Dashboard)
+- **Phase 2**: Network Layer & Weather Data Integration
+    - [] Phase 2-1: Architect Remote Data Source using Retrofit2 & OkHttp3
+    - [] Phase 2-2: Design Weather Data Transfer Objects (DTO) for OpenWeatherMap API
+    - [] Phase 2-3: Implement Dual-City Weather Fetching Logic (Source: KR / Destination: JP)
+    - [] Phase 2-4: Build Robust Error Handling & Interceptor for Network Stability
 
-### Phase 2: Network Layer & Weather API Integration
-* [ ] **Phase 2-1**: Configure API Environments & Secure Key Management (local.properties)
-* [ ] **Phase 2-2**: Define Retrofit Interfaces & Weather Data Transfer Objects (DTO)
-* [ ] **Phase 2-3**: Implement Weather Fetching Logic (Source: KR / Destination: JP)
-* [ ] **Phase 2-4**: Architect Error Handling Strategy & UI Loading State Management
+- **Phase 3**: Core Logic & Outfit Recommendation Engine
+    - [] Phase 3-1: Develop Temperature-based 8-Stage Smart Outfit Algorithm
+    - [] Phase 3-2: Implement Comparative Analysis Logic (KR vs JP Temperature Gap)
+    - [] Phase 3-3: Build Context-Aware Recommendation Logic (Wind Chill & Humidity)
+    - [] Phase 3-4: Reactive State Management Integration using ViewModel & StateFlow
+    - [] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons)
 
-### Phase 3: Logic Development & Outfit Recommendation Engine
-* [ ] **Phase 3-1**: Implement Temperature-based 8-Stage Outfit Recommendation Algorithm
-* [ ] **Phase 3-2**: Develop KR-JP Temperature Comparison & Contextual Messaging Logic
-* [ ] **Phase 3-3**: Weather Icon Mapping & Visual Data Processing
-* [ ] **Phase 3-4**: Reactive State Management Integration via ViewModel & StateFlow
+- **Phase 4**: Travel Intelligence & Data Persistence
+    - [] Phase 4-1: Implement Japan-Specific Travel Checklist using Room DB or DataStore
+    - [] Phase 4-2: Develop City Search & User Preference Management Features
+    - [] Phase 4-3: Build Background Notification Service for Daily Travel Briefing
+    - [] Phase 4-4: UI Polish & Interactive Elements (Lottie Animations & Dark Mode)
 
-### Phase 4: Advanced Travel Features & UX Enhancement
-* [ ] **Phase 4-1**: Implementation of Japan-Specific Travel Checklist (Local Persistence)
-* [ ] **Phase 4-2**: City Search & Selection Functionality (Google Places API)
-* [ ] **Phase 4-3**: Design & Implementation of Temperature-based Local Notifications
-* [ ] **Phase 4-4**: UI Polish: Dark Mode Support & Lottie Animations
-
-### Phase 5: Quality Assurance & Finalization
-* [ ] **Phase 5-1**: Comprehensive UI/UX Testing (Emulator & Physical Device)
-* [ ] **Phase 5-2**: Code Refactoring & Dependency Injection (Hilt) Optimization
-* [ ] **Phase 5-3**: Final Technical Documentation & Portfolio Structuring
-* [ ] **Phase 5-4**: Production Build (APK) Generation & Project Retrospective
+- **Phase 5**: Quality Assurance & Portfolio Finalization
+    - [] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule
+    - [] Phase 5-2: Code Refactoring & Dependency Injection (Hilt) Optimization
+    - [] Phase 5-3: Comprehensive Technical Documentation (Architecture Diagrams & Flowcharts)
+    - [] Phase 5-4: Final Build Generation (.APK) & Project Post-mortem Summary
 
 ---
 
