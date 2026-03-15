@@ -38,35 +38,35 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 
 ## ✅ Milestone
 - **Phase 1**: Project Foundation & Android Environment Setup
-    - [] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
-    - [] Phase 1-2: Setup Android Studio & Kotlin/Compose Development Environment
-    - [] Phase 1-3: Define Design System (Color Palette, Typography, & Brand Assets)
-    - [] Phase 1-4: Security Configuration (API Key Management & local.properties Setup)
+  - [] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
+  - [] Phase 1-2: Setup Android Studio & Kotlin/Compose Development Environment
+  - [] Phase 1-3: Define Design System (Color Palette, Typography, & Brand Assets)
+  - [] Phase 1-4: Security Configuration (API Key Management & local.properties Setup)
 
 - **Phase 2**: Network Layer & Weather Data Integration
-    - [] Phase 2-1: Architect Remote Data Source using Retrofit2 & OkHttp3
-    - [] Phase 2-2: Design Weather Data Transfer Objects (DTO) for OpenWeatherMap API
-    - [] Phase 2-3: Implement Dual-City Weather Fetching Logic (Source: KR / Destination: JP)
-    - [] Phase 2-4: Build Robust Error Handling & Interceptor for Network Stability
+  - [] Phase 2-1: Architect Remote Data Source using Retrofit2 & OkHttp3
+  - [] Phase 2-2: Design Weather Data Transfer Objects (DTO) for OpenWeatherMap API
+  - [] Phase 2-3: Implement Dual-City Weather Fetching Logic (Source: KR / Destination: JP)
+  - [] Phase 2-4: Build Robust Error Handling & Interceptor for Network Stability
 
 - **Phase 3**: Core Logic & Outfit Recommendation Engine
-    - [] Phase 3-1: Develop Temperature-based 8-Stage Smart Outfit Algorithm
-    - [] Phase 3-2: Implement Comparative Analysis Logic (KR vs JP Temperature Gap)
-    - [] Phase 3-3: Build Context-Aware Recommendation Logic (Wind Chill & Humidity)
-    - [] Phase 3-4: Reactive State Management Integration using ViewModel & StateFlow
-    - [] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons)
+  - [] Phase 3-1: Develop Temperature-based 8-Stage Smart Outfit Algorithm
+  - [] Phase 3-2: Implement Comparative Analysis Logic (KR vs JP Temperature Gap)
+  - [] Phase 3-3: Build Context-Aware Recommendation Logic (Wind Chill & Humidity)
+  - [] Phase 3-4: Reactive State Management Integration using ViewModel & StateFlow
+  - [] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons)
 
 - **Phase 4**: Travel Intelligence & Data Persistence
-    - [] Phase 4-1: Implement Japan-Specific Travel Checklist using Room DB or DataStore
-    - [] Phase 4-2: Develop City Search & User Preference Management Features
-    - [] Phase 4-3: Build Background Notification Service for Daily Travel Briefing
-    - [] Phase 4-4: UI Polish & Interactive Elements (Lottie Animations & Dark Mode)
+  - [] Phase 4-1: Implement Japan-Specific Travel Checklist using Room DB or DataStore
+  - [] Phase 4-2: Develop City Search & User Preference Management Features
+  - [] Phase 4-3: Build Background Notification Service for Daily Travel Briefing
+  - [] Phase 4-4: UI Polish & Interactive Elements (Lottie Animations & Dark Mode)
 
 - **Phase 5**: Quality Assurance & Portfolio Finalization
-    - [] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule
-    - [] Phase 5-2: Code Refactoring & Dependency Injection (Hilt) Optimization
-    - [] Phase 5-3: Comprehensive Technical Documentation (Architecture Diagrams & Flowcharts)
-    - [] Phase 5-4: Final Build Generation (.APK) & Project Post-mortem Summary
+  - [] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule
+  - [] Phase 5-2: Code Refactoring & Dependency Injection (Hilt) Optimization
+  - [] Phase 5-3: Comprehensive Technical Documentation (Architecture Diagrams & Flowcharts)
+  - [] Phase 5-4: Final Build Generation (.APK) & Project Post-mortem Summary
 
 ---
 
