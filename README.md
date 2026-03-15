@@ -71,5 +71,5 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 ---
 
 ## ✨ Contact
-* **GitHub**: [https://github.com/2daKaizen-gun](https://github.com/2daKaizen-gun)
+* **GitHub**: https://github.com/2daKaizen-gun/skywear
 * **Email**: hkys1223@gmail.com
