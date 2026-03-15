@@ -38,7 +38,7 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 
 ## ✅ Milestone
 - **Phase 1**: Project Foundation & Android Environment Setup
-  - [] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
+  - [x] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
   - [] Phase 1-2: Setup Android Studio & Kotlin/Compose Development Environment
   - [] Phase 1-3: Define Design System (Color Palette, Typography, & Brand Assets)
   - [] Phase 1-4: Security Configuration (API Key Management & local.properties Setup)
