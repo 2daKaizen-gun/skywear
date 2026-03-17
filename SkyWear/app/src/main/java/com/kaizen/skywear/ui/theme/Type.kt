@@ -33,6 +33,10 @@ val Typography = Typography(
     ),
     // 4. 부가 정보 (습도나 바람 등 작은 텍스트)
     labelMedium = TextStyle(
-
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
     )
 )
