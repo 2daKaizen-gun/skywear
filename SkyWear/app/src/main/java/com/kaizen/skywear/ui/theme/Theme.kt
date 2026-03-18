@@ -53,3 +53,44 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = SkyBlue80,
 )
 
+// DarkColorScheme
+private val DarkColorScheme = darkColorScheme(
+    // Primary - SkyBlue (다크에선 밝게)
+    primary = SkyBlue80,
+    onPrimary = SkyBlue20,
+    primaryContainer = SkyBlue30,
+    onPrimaryContainer = SkyBlue90,
+
+    // Secondary - WarmCoral
+    secondary = Coral80,
+    onSecondary = Coral20,
+    secondaryContainer = Coral30,
+    onSecondaryContainer = Coral90,
+
+    // Tertiary - SoftGreen
+    tertiary = WarmGreen80,
+    onTertiary = WarmGreen10,
+    tertiaryContainer = WarmGreen20,
+    onTertiaryContainer = WarmGreen90,
+
+    // Error
+    error = Color(0xFFFFB4AB),
+    onError = Color(0xFF690005),
+    errorContainer = Color(0xFF93000A),
+    onErrorContainer = Color(0xFFFFDAD6),
+
+    // Background & Surface
+    background = DarkBackground,
+    onBackground = DarkOnSurface,
+    surface = DarkSurface,
+    onSurface = DarkOnSurface,
+    surfaceVariant = DarkSurfaceVar,
+    onSurfaceVariant = NeutralVariant80,
+    outline = DarkOutline,
+    outlineVariant = NeutralVariant30,
+
+    // Inverse
+    inverseSurface = Neutral90,
+    inverseOnSurface = Neutral20,
+    inversePrimary = SkyBlue40,
+)
