@@ -24,3 +24,85 @@ import androidx.compose.ui.unit.sp
 
 val PretendardFontFamily = FontFamily.Default  // 임시: 빌드 에러 방지
 
+// SkyWear Typography Scale(Material 3 기반)
+
+val SkyWearTypography = Typography(
+
+    // Display
+    // 사용: 메인 온도 숫자(ex: -2°C, 10°C)
+    displayLarge = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 57.sp,
+        lineHeight = 64.sp,
+        letterSpacing = (-0.25).sp
+    ),
+    // 사용: Dual-City 카드 내 대형으로 온도 표시함
+    displayMedium = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 45.sp,
+        lineHeight = 52.sp,
+        letterSpacing = 0.sp
+    ),
+    // 사용: 온도 차이 뱃지 (+12°C)
+    displaySmall = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        letterSpacing = 0.sp
+    ),
+
+    // Headline
+    // 사용: 도시명(Seoul, Tokyo)
+    headlineLarge = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 32.sp,
+        lineHeight = 40.sp,
+        letterSpacing = 0.sp
+    ),
+    // 사용: 섹션 헤더 (코디 추천, 여행 체크리스트)
+    headlineMedium = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp
+    ),
+    // 사용: 카드 제목
+    headlineSmall = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp
+    ),
+
+    //Title
+    // 사용: 앱바 타이틀 "SkyWear"
+    titleLarge = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
+    // 사용: 코디 추천 아이템명 (예: 롱패딩 + 목도리)
+    titleMedium = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
+    ),
+    // 사용: 날씨 상태 텍스트 (맑음, 흐림, 비)
+    titleSmall = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    ),
+)
