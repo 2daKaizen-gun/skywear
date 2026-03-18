@@ -94,3 +94,40 @@ private val DarkColorScheme = darkColorScheme(
     inverseOnSurface = Neutral20,
     inversePrimary = SkyBlue40,
 )
+
+// SkyWear Theme Entry Point
+@Composable
+fun SkyWearTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Android 12+ Dynamic Color (Material You) — 선택적 활성화
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit
+){
+    val colorScheme: ColorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
+        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+
+    // 상태바 색상을 테마에 맞게 동기화
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view)
+                .isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography  = SkyWearTypography,
+        content     = content
+    )
+}
+
