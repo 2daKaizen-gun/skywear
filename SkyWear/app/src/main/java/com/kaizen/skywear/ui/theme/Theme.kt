@@ -3,13 +3,18 @@ package com.kaizen.skywear.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 // LightColorScheme
 private val LightColorScheme = lightColorScheme(
@@ -126,8 +131,54 @@ fun SkyWearTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography  = SkyWearTypography,
-        content     = content
+        typography = SkyWearTypography,
+        content = content
     )
 }
 
+// Custom Color Extensions
+// MaterialTheme에서 직접 접근 불가한 커스텀 컬러 확장
+// 사용 예: MaterialTheme.extraColors.koreaBlue
+
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.CompositionLocalProvider
+
+data class SkyWearExtraColors(
+    val koreaRed: androidx.compose.ui.graphics.Color = KoreaRed,
+    val japanBlue: androidx.compose.ui.graphics.Color = JapanBlue,
+    val tempScorching: androidx.compose.ui.graphics.Color = TempScorching,
+    val tempHot: androidx.compose.ui.graphics.Color = TempHot,
+    val tempWarm: androidx.compose.ui.graphics.Color = TempWarm,
+    val tempMild: androidx.compose.ui.graphics.Color = TempMild,
+    val tempCool: androidx.compose.ui.graphics.Color = TempCool,
+    val tempChilly: androidx.compose.ui.graphics.Color = TempChilly,
+    val tempCold: androidx.compose.ui.graphics.Color = TempCold,
+    val tempFreezing: androidx.compose.ui.graphics.Color = TempFreezing,
+    val successGreen: androidx.compose.ui.graphics.Color = SuccessGreen,
+    val successBg: androidx.compose.ui.graphics.Color = SuccessGreenBg,
+    val warningAmber: androidx.compose.ui.graphics.Color = WarningAmber,
+    val warningBg: androidx.compose.ui.graphics.Color = WarningAmberBg,
+    val infoBlue: androidx.compose.ui.graphics.Color = InfoBlue,
+    val infoBg: androidx.compose.ui.graphics.Color = InfoBlueBg,
+)
+
+val LocalExtraColors = staticCompositionLocalOf { SkyWearExtraColors() }
+
+// MaterialTheme 확장 프로퍼티 — 사용: MaterialTheme.extraColors.koreaBlue
+val MaterialTheme.extraColors: SkyWearExtraColors
+    @Composable get() = LocalExtraColors.current
+
+// Temparature Color Helper
+// 사용: getTemperatureColor(temp) → 해당 온도의 색상 반환
+// Phase 3-1 (Outfit Algorithm) 에서 활용
+
+fun getTemperatureColor(celsius: Double): androidx.compose.ui.graphics.Color = when {
+    celsius >= 28 -> TempScorching
+    celsius >= 23 -> TempHot
+    celsius >= 17 -> TempWarm
+    celsius >= 12 -> TempMild
+    celsius >= 9 -> TempCool
+    celsius >= 5 -> TempChilly
+    celsius >= 0 -> TempCold
+    else -> TempFreezing
+}
