@@ -19,29 +19,26 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SkyWearTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun ThemePreviewScreen() {
+
 }
 
-@Preview(showBackground = true)
+// Android Studio 미리보기
+@Preview(showBackground = true, name = "Light Mode")
 @Composable
-fun GreetingPreview() {
-    SkyWearTheme {
-        Greeting("Android")
-    }
+fun PreviewLight() {
+    SkyWearTheme(darkTheme = false) { ThemePreviewScreen() }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF1A1C1E, name = "Dark Mode")
+@Composable
+fun PreviewDark() {
+    SkyWearTheme(darkTheme = true) { ThemePreviewScreen() }
 }
