@@ -79,7 +79,7 @@ fun ThemePreviewScreen() {
                             Text(
                                 text = "-2°",
                                 style = MaterialTheme.typography.displayMedium,
-                                color = MaterialTheme.extraColors.KoreaRed
+                                color = MaterialTheme.extraColors.koreaRed
                             )
                             Text(
                                 text = "롱패딩 + 목도리",
@@ -106,7 +106,7 @@ fun ThemePreviewScreen() {
                             Text(
                                 text = "10°",
                                 style = MaterialTheme.typography.displayMedium,
-                                color = MaterialTheme.extraColors.JapanBlue
+                                color = MaterialTheme.extraColors.japanBlue
                             )
                             Text(
                                 text = "가벼운 코트",
@@ -118,7 +118,34 @@ fun ThemePreviewScreen() {
                 }
 
                 // 온도 차이 뱃지
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "온도 차이",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                        Text(
+                            text = "+12°C",
+                            style = MaterialTheme.typography.displaySmall,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
+                }
+
                 // 8단계 온도 팔레트
+
                 // Typography 샘플
             }
         }
