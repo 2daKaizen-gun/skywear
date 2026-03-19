@@ -145,6 +145,44 @@ fun ThemePreviewScreen() {
                 }
 
                 // 8단계 온도 팔레트
+                Text(
+                    text = "Temperature Palette",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                val tempColors = listOf(
+                    TempScorching to "28°+",
+                    TempHot to "23°",
+                    TempWarm to "17°",
+                    TempMild to "12°",
+                    TempCool to "9°",
+                    TempChilly to "5°",
+                    TempCold to "0°",
+                    TempFreezing to "-1°"
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    tempColors.forEach { (color, label) ->
+                        Column (
+                            modifier = Modifier.weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Box(
+                               modifier = Modifier
+                                   .fillMaxWidth()
+                                   .height(36.dp)
+                                   .background(color, RoundedCornerShape(6.dp))
+                            )
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+                }
 
                 // Typography 샘플
             }
