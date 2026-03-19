@@ -185,6 +185,15 @@ fun ThemePreviewScreen() {
                 }
 
                 // Typography 샘플
+                Text(
+                    text = "Typography",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text("displaySmall — +12°C", style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.primary)
+                Text("titleLarge — SkyWear", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground)
+                Text("bodyMedium — 맑음, 습도 72%", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground)
+                Text("labelSmall — 최저 -5° / 최고 3°", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
