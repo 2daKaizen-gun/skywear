@@ -116,7 +116,7 @@ val SkyWearTypography = Typography(
         letterSpacing = 0.5sp
     ),
     // 사용: 일반 설명 텍스트, 알림 내용
-    bodyMiddle = TextStyle(
+    bodyMedium = TextStyle(
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,

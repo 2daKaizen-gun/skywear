@@ -11,6 +11,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -140,8 +142,6 @@ fun SkyWearTheme(
 // MaterialTheme에서 직접 접근 불가한 커스텀 컬러 확장
 // 사용 예: MaterialTheme.extraColors.koreaBlue
 
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.runtime.CompositionLocalProvider
 
 data class SkyWearExtraColors(
     val koreaRed: androidx.compose.ui.graphics.Color = KoreaRed,
