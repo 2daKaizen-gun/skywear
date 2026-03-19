@@ -58,8 +58,65 @@ fun ThemePreviewScreen() {
                 }
 
                 // Dual City Card
-                // KR Card
-                // JP Card
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // KR Card
+                    Card(
+                        modifier = Modifier.weight(1f),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "\uD83C\uDDF0\uD83C\uDDF7 Seoul",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                            Text(
+                                text = "-2°",
+                                style = MaterialTheme.typography.displayMedium,
+                                color = MaterialTheme.extraColors.KoreaRed
+                            )
+                            Text(
+                                text = "롱패딩 + 목도리",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
+
+                    // JP Card
+                    Card(
+                        modifier = Modifier.weight(1f),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "\uD83C\uDDEF\uD83C\uDDF5 Tokyo",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            Text(
+                                text = "10°",
+                                style = MaterialTheme.typography.displayMedium,
+                                color = MaterialTheme.extraColors.JapanBlue
+                            )
+                            Text(
+                                text = "가벼운 코트",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                    }
+                }
+
                 // 온도 차이 뱃지
                 // 8단계 온도 팔레트
                 // Typography 샘플
