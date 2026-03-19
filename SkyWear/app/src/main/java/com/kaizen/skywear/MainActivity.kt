@@ -27,7 +27,45 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ThemePreviewScreen() {
+    var isDark by remember { mutableStateOf(false) }
 
+    SkyWearTheme(darkTheme = isDark) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement, spacedBy(20.dp)
+            ) {
+                // DarkMode toggle
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "SkyWear Theme Preview",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Switch(
+                        checked = isDark,
+                        onCheckedChange = { isDark = it }
+                    )
+                }
+
+                // Dual City Card
+                // KR Card
+                // JP Card
+                // 온도 차이 뱃지
+                // 8단계 온도 팔레트
+                // Typography 샘플
+            }
+        }
+    }
 }
 
 // Android Studio 미리보기
