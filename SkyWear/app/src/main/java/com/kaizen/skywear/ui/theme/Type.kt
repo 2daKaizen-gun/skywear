@@ -105,4 +105,16 @@ val SkyWearTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     ),
+
+    //body
+    // 사용: 여행자 체크리스트 아이템 텍스트
+    bodyLarge = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5sp
+    ),
+
+
 )
