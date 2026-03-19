@@ -115,6 +115,46 @@ val SkyWearTypography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5sp
     ),
+    // 사용: 일반 설명 텍스트, 알림 내용
+    bodyMiddle = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.25.sp
+    ),
+    // 사용: 습도, 풍속 등의 자세한 수치
+    bodySmall = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.4sp
+    ),
 
-
+    //label
+    // 사용: 버튼 텍스트
+    labelLarge = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    ),
+    // 사용: 뱃지, 태그(ex KR, JR, 한파주의보 등..)
+    labelMedium = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    ),
+    // 사용: 타임스탬프, 최소 보조 정보들
+    labelSmall = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    )
 )
