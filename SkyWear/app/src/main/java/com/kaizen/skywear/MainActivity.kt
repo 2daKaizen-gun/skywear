@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SkyWearTheme {
-
+                ThemePreviewScreen()
             }
         }
     }
@@ -40,7 +40,7 @@ fun ThemePreviewScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
-                verticalArrangement = Arrangement, spacedBy(20.dp)
+                verticalArrangement = Arrangement. spacedBy(20.dp)
             ) {
                 // DarkMode toggle
                 Row(

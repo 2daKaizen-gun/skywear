@@ -113,7 +113,7 @@ val SkyWearTypography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5sp
+        letterSpacing = 0.5.sp
     ),
     // 사용: 일반 설명 텍스트, 알림 내용
     bodyMedium = TextStyle(
@@ -129,7 +129,7 @@ val SkyWearTypography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 16.sp,
-        letterSpacing = 0.4sp
+        letterSpacing = 0.4.sp
     ),
 
     //label
