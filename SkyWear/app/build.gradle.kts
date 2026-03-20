@@ -1,6 +1,13 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+}
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) load(file.inputStream())
 }
 
 android {
@@ -8,6 +15,12 @@ android {
     compileSdk = 36
 
     defaultConfig {
+        buildConfigField(
+            type = "String",
+            name = "WEATHER_API_KEY",
+            value = "\"${localProperties["WEATHER_API_KEY"] ?: ""}\""
+        )
+
         applicationId = "com.kaizen.skywear"
         minSdk = 26
         targetSdk = 36
