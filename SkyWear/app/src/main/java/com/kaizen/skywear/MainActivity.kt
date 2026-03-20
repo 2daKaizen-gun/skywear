@@ -101,7 +101,7 @@ fun ThemePreviewScreen() {
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                text = "\uD83C\uDDEF\uD83C\uDDF5 Tokyo",
+                                text = "\uD83C\uDDEF\uD83C\uDDF5 Osaka",
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer
                             )
