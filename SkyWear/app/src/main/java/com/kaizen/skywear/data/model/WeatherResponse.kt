@@ -15,21 +15,31 @@ data class WeatherResponse(
 )
 
 data class MainWeather(
-
+    @SerializedName("temp") val temp: Double, // 현재 온도(°C)
+    @SerializedName("feels_like") val feelsLike: Double, // 체감 온도(°C)
+    @SerializedName("temp_min") val tempMin: Double, // 최저 온도(°C)
+    @SerializedName("temp_max") val tempMax: Double, // 최고 온도(°C)
+    @SerializedName("humidity") val humidity: Int, // 습도(%)
+    @SerializedName("pressure") val pressure: Int // 기압(hPa)
 )
 
 data class Weather(
-
+    @SerializedName("id") val id: Int, // 날씨 코드
+    @SerializedName("main") val main: String, // 날씨 그룹(ex: Clear, Rain)
+    @SerializedName("description") val description: String, // 상세 설명 (ex: 맑음, 흐림)
+    @SerializedName("icon") val icon: String // 아이콘 코드(ex: 01d)
 )
 
 data class Wind(
-
+    @SerializedName("speed") val speed: Double, // 풍속(m/s)
+    @SerializedName("deg") val deg: Int // 풍향(도)
 )
 
 data class Sys(
-
+    @SerializedName("country") val country: String // 국가 코드(ex: KR, JP)
 )
 
 data class Coord(
-
+    @SerializedName("lat") val lat: Double, // 위도
+    @SerializedName("lon") val lon: Double // 경도
 )
