@@ -45,7 +45,7 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 
 - **Phase 2**: Network Layer & Weather Data Integration
   - [x] Phase 2-1: Architect Remote Data Source using Retrofit2 & OkHttp3
-  - [] Phase 2-2: Design Weather Data Transfer Objects (DTO) for OpenWeatherMap API
+  - [x] Phase 2-2: Design Weather Data Transfer Objects (DTO) for OpenWeatherMap API
   - [] Phase 2-3: Implement Dual-City Weather Fetching Logic (Source: KR / Destination: JP)
   - [] Phase 2-4: Build Robust Error Handling & Interceptor for Network Stability
 
