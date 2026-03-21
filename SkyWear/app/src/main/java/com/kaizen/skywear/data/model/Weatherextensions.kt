@@ -15,12 +15,22 @@ fun WeatherResponse.weatherDescription(): String =
     weather.firstOrNull()?.description ?: "알 수 없음"
 
 // 날씨 아이콘 코드 (ex: "01d")
+fun WeatherResponse.iconCode(): String =
+    weather.firstOrNull()?.icon ?: "01d"
 
 // 날씨 ID
+fun WeatherResponse.weatherId(): Int =
+    weather.firstOrNull()?.id ?: 800
 
 // KR <-> JP 온도 차이 계산 (ex: +12, -3)
+fun temperatureGap(krWeather: WeatherResponse, jpWeather: WeatherResponse): Int =
+    (jpWeather.main.temp - krWeather.main.temp).roundToInt()
 
 // 온도 차이 표시 문자열 (ex: "+12°C", "-3°C")
+fun temperatureGapLabel(krWeather: WeatherResponse, jpWeather: WeatherResponse): String {
+    val gap = temperatureGap(krWeather, jpWeather)
+    return if (gap>=0) "+${gap}°C" else "${gap}°C"
+}
 
 // 풍속 텍스트 (ex: "3.2 m/s")
 
