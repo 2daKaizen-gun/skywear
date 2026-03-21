@@ -33,7 +33,14 @@ fun temperatureGapLabel(krWeather: WeatherResponse, jpWeather: WeatherResponse):
 }
 
 // 풍속 텍스트 (ex: "3.2 m/s")
+fun WeatherResponse.windSpeedLabel(): String = "${wind.speed} m/s"
 
 // 습도 텍스트 (ex: "습도 60%")
+fun WeatherResponse.humidityLabel(): String = "습도 ${main.humidity}%"
 
 // 국가 코드 -> 이모지 변환 (ex: "KR" -> "🇰🇷", "JP" → "🇯🇵")
+fun WeatherResponse.flagEmoji(): String {
+    return sys.country.uppercase().map {
+        String(Character.toChars(it.code + 0x1F1A5))
+    }.joinToString("")
+}
