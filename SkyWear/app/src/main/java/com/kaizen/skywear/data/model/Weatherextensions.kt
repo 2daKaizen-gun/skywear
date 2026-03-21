@@ -1,12 +1,18 @@
 package com.kaizen.skywear.data.model
 
+import kotlin.math.roundToInt
+
 // DTO -> UI에서 쓰기 편한 형태로 변환하는 확장 함수
 
 // 온도 소수점 반올림 (ex: 10.2 -> 10)
+fun WeatherResponse.tempRounded(): Int = main.temp.roundToInt()
 
 // 체감 온도 소수점 반올림
+fun WeatherResponse.feelsLikeRounded(): Int = main.feelsLike.roundToInt()
 
 // 날씨 상태 텍스트 (ex: "맑음" , "흐림")
+fun WeatherResponse.weatherDescription(): String =
+    weather.firstOrNull()?.description ?: "알 수 없음"
 
 // 날씨 아이콘 코드 (ex: "01d")
 
