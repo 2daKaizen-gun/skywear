@@ -25,4 +25,19 @@ class WeatherRepository {
             Result.failure(e)
         }
     }
+
+    // JP 날씨 조회 (오사카 위치 기반)
+    suspend fun getJpWeather(
+        city: String = Constants.DEFAULT_CITY_JP
+    ): Result<WeatherResponse> {
+        return try {
+            val response = api.getWeatherByCity(
+                cityName = city,
+                lang = Constants.LANG_KR // 한국어로 날씨 설명 받기
+            )
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
