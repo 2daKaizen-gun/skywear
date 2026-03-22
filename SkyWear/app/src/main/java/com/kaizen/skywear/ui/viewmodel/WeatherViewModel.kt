@@ -3,6 +3,7 @@ package com.kaizen.skywear.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.repository.WeatherRepository
+import com.kaizen.skywear.util.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,8 +25,16 @@ class WeatherViewModel: ViewModel() {
 
     // KR + JP 날씨 동시 호출
     fun fetchDualCityWeather(
+        krCity: String = Constants.DEFAULT_CITY_KR,
+        jpCity: String = Constants.DEFAULT_CITY_JP
+    ) {
 
-    )
+    }
+
+    // JP 도시 변경(도시 검색 기능)
+    fun changeJpCity(cityName: String) {
+        fetchDualCityWeather(jpCity = cityName)
+    }
 }
 
 // WeatherUiState
@@ -36,13 +45,13 @@ sealed class WeatherUiState {
     //로딩 중
     data object Loading: WeatherUiState()
 
-    // 성공 — KR + JP 날씨 데이터 보유
+    // 성공: KR + JP 날씨 데이터 보유
     data class Success(
         val krWeather: WeatherResponse,
         val jpWeather: WeatherResponse
     ) : WeatherUiState()
 
-    // 실패 — 에러 메시지 보유
+    // 실패: 에러 메시지 보유
     data class Error(
         val message: String
     ) : WeatherUiState()
