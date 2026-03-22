@@ -1,12 +1,14 @@
 package com.kaizen.skywear.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.util.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 // WeatherViewModel
 // UI State 관리 + Repository 호출
@@ -28,7 +30,22 @@ class WeatherViewModel: ViewModel() {
         krCity: String = Constants.DEFAULT_CITY_KR,
         jpCity: String = Constants.DEFAULT_CITY_JP
     ) {
+        viewModelScope.launch {
+            _uiState.value = WeatherUiState.Loading
 
+            val result = repository.getDualCityWeather(krCity, jpCity)
+
+            _uiState.value = if (result.isSuccess) {
+                WeatherUiState.Success(
+                    krWeather = result.krWeather.getOrNull()!!,
+                    jpWeather = result.jpWeather.getOrNull()!!
+                )
+            } else {
+                WeatherUiState.Error(
+                    message = result.errorMessage ?: "알 수 없는 오류 발생."
+                )
+            }
+        }
     }
 
     // JP 도시 변경(도시 검색 기능)
