@@ -40,4 +40,35 @@ class WeatherRepository {
             Result.failure(e)
         }
     }
+
+    // KR + JP 동시 조회(Dual-City Dashboard 핵심 로직)
+    suspend fun getDualCityWeather(
+        krCity: String = Constants.DEFAULT_CITY_KR,
+        jpCity: String = Constants.DEFAULT_CITY_JP
+    ): DualCityResult {
+        val krResult = getKrWeather(krCity)
+        val jpResult = getJpWeather(jpCity)
+
+        return DualCityResult(
+            krWeather = krResult,
+            jpWeather = jpResult
+        )
+    }
+}
+
+// DualCityResult
+// KR/JP 날씨 결과를 한번에 담는 데이터 클래스
+
+data class DualCityResult(
+    val krWeather: Result<WeatherResponse>,
+    val jpWeather: Result<WeatherResponse>
+) {
+    // 둘 다 성공 시 true
+    val isSuccess: Boolean
+        get() = krWeather.isSuccess && jpWeather.isSuccess
+
+    // 둘 중 하나라도 실패 시 반환
+    val errorMessage: String?
+        get() = krWeather.exceptionOrNull()?.message
+            ?: jpWeather.exceptionOrNull()?.message
 }
