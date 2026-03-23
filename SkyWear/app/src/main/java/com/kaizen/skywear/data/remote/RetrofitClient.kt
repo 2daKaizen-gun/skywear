@@ -10,16 +10,19 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // Logging Interceptor: 디버그 빌드에서 APi 요청/응답 로그 작성
+    // Logging Interceptor: 디버그 빌드에서 APi 요청/응답 로그 작성 -> 배포 시에는 제거 권장함
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
+    // Network Interceptor (커스텀 에러 처리)
 
     // OkHttpClient : 타임아웃 및 로깅 설정
     private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS) // 연결 타임아웃
         .readTimeout(15, TimeUnit.SECONDS) // 읽기 타임아웃
         .writeTimeout(15, TimeUnit.SECONDS) // 쓰기 타임아웃
+        // 커스텀 에러 인터럽터
         .addInterceptor(loggingInterceptor) // 로그 인터셉터
         .build()
 
