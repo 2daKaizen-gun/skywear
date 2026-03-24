@@ -1,6 +1,12 @@
 package com.kaizen.skywear.domain
 
+import android.R
+import com.kaizen.skywear.ui.theme.TempChilly
+import com.kaizen.skywear.ui.theme.TempCold
+import com.kaizen.skywear.ui.theme.TempCool
+import com.kaizen.skywear.ui.theme.TempFreezing
 import com.kaizen.skywear.ui.theme.TempHot
+import com.kaizen.skywear.ui.theme.TempMild
 import com.kaizen.skywear.ui.theme.TempScorching
 import com.kaizen.skywear.ui.theme.TempWarm
 
@@ -56,11 +62,59 @@ fun getOutfitRecommendation(celsius: Double): OutfitRecommendation {
         )
 
         // 4단계 - 선선함 (12~16°C)
-        // 5단계 - 쌀쌀함 (9~11°C)
-        // 6단계 - 추움 (5~8°C)
-        // 7단계 - 많이 추움 (0~4°C)
-        // 8단계 - 혹한 (-1°C 이하)
+        celsius >= 12 -> OutfitRecommendation(
+            stage = 4,
+            tempRange = "12~16°C",
+            mainOutfit = "니트 + 재킷",
+            subOutfit = "얇은 스카프도 OK",
+            essentialItems = listOf("재킷", "얇은 스카프"),
+            colorHex = TempMild,
+            emoji = "\uD83C\uDF42"
+        )
 
+        // 5단계 - 쌀쌀함 (9~11°C)
+        celsius >= 9 -> OutfitRecommendation(
+            stage = 5,
+            tempRange = "9~11°C",
+            mainOutfit = "가벼운 코드 + 니트",
+            subOutfit = "일본 여행 시 히트텍 추천",
+            essentialItems = listOf("코트", "히트텍", "스카프"),
+            colorHex = TempCool,
+            emoji = "\uD83C\uDF41"
+        )
+
+        // 6단계 - 추움 (5~8°C)
+        celsius >= 5 -> OutfitRecommendation(
+            stage = 6,
+            tempRange = "5~8°C",
+            mainOutfit = "두꺼운 코트 + 레이어링",
+            subOutfit = "히트텍 필수",
+            essentialItems = listOf("두꺼운 코드", "히트텍", "장갑", "목도리"),
+            colorHex = TempChilly,
+            emoji = "\uD83E\uDDE5"
+        )
+
+        // 7단계 - 많이 추움 (0~4°C)
+        celsius >= 0 -> OutfitRecommendation(
+            stage = 7,
+            tempRange = "0~4°C",
+            mainOutfit = "롱패딩 + 목도리",
+            subOutfit = "내복 착용 추천",
+            essentialItems = listOf("롱패딩", "목도리", "장갑", "히트텍", "내복"),
+            colorHex = TempCold,
+            emoji = "\uD83E\uDD76"
+        )
+
+        // 8단계 - 혹한 (-1°C 이하)
+        else -> OutfitRecommendation(
+            stage = 8,
+            tempRange = "-1°C 이하",
+            mainOutfit = "롱패딩 + 목도리 + 핫팩",
+            subOutfit = "외출 자제 권고",
+            essentialItems = listOf("롱패딩", "목도리", "장갑", "핫팩", "히트텍", "내복"),
+            colorHex = TempFreezing,
+            emoji = "❄\uFE0F"
+        )
     }
 }
 
