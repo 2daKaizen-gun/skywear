@@ -9,7 +9,6 @@ import java.net.UnknownHostException
 // 모든 API 요청 및 응답을 가로채 공통 에러 처리
 
 // 앱 전체에서 사용하는 커스텀 네트워크 에러
-
 sealed class NetworkException(message: String) : IOException(message) {
 
     // 인터넷 연결 없음
@@ -43,5 +42,7 @@ sealed class NetworkException(message: String) : IOException(message) {
     )
 
     // 알 수 없는 오류
-
+    data class Unknown(val code: Int) : NetworkException(
+        "알 수 없는 오류가 발생했습니다. (code: $code)"
+    )
 }
