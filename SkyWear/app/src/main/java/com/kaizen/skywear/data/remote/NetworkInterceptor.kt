@@ -28,10 +28,20 @@ sealed class NetworkException(message: String) : IOException(message) {
     )
 
     // 도시를 찾을 수 없음(404)
+    data object CityNotFound : NetworkException(
+        "도시를 찾을 수 없습니다. 도시명을 확인해주세요."
+    )
 
     // API 호출 한도 초과(429)
+    data object RateLimitExceeded : NetworkException(
+        "API 호출 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+    )
 
     // 서버 오류(5xx)
+    data object ServerError : NetworkException(
+        "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+    )
 
     // 알 수 없는 오류
+
 }
