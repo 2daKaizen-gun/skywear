@@ -25,6 +25,14 @@ class NetworkInterceptor : Interceptor {
                 else -> throw NetworkException.Unknown(response.code)
             }
 
+        } catch (e: SocketTimeoutException) {
+            throw NetworkException.Timeout // 타임아웃
+        } catch (e: UnknownHostException) {
+            throw NetworkException.NoInternet // 인터넷 연결 없음
+        } catch (e: NetworkException) {
+            throw e // 이미 처리된 에러는 그대로 전달
+        } catch (e: IOException) {
+            throw NetworkException.Unknown(-1) // 그 외 IO 에러
         }
     }
 }
