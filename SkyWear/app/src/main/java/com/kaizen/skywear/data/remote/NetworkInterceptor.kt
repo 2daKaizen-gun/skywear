@@ -7,6 +7,27 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 // 모든 API 요청 및 응답을 가로채 공통 에러 처리
+class NetworkInterceptor : Interceptor {
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+
+        return try {
+            val response = chain.proceed(request)
+
+            // HTTP 상태코드별 에러 처리
+            when (response.code) {
+                200 -> response // 성공(그대로 반환)
+                401 -> throw NetworkException.Unauthorized // API Key 오류
+                404 -> throw NetworkException.CityNotFound // 도시를 찾을 수 없음
+                429 -> throw NetworkException.RateLimitExceeded // API 호출 한도 초과
+                in 500..599 -> throw NetworkException.ServerError // 서버 오류
+                else -> throw NetworkException.Unknown(response.code)
+            }
+
+        }
+    }
+}
 
 // 앱 전체에서 사용하는 커스텀 네트워크 에러
 sealed class NetworkException(message: String) : IOException(message) {
