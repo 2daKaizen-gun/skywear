@@ -1,6 +1,5 @@
 package com.kaizen.skywear.domain
 
-import android.R
 import com.kaizen.skywear.ui.theme.TempChilly
 import com.kaizen.skywear.ui.theme.TempCold
 import com.kaizen.skywear.ui.theme.TempCool
