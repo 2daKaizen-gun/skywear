@@ -5,7 +5,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
@@ -16,13 +15,14 @@ object RetrofitClient {
     }
 
     // Network Interceptor (커스텀 에러 처리)
+    private val networkException = NetworkInterceptor()
 
     // OkHttpClient : 타임아웃 및 로깅 설정
     private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS) // 연결 타임아웃
         .readTimeout(15, TimeUnit.SECONDS) // 읽기 타임아웃
         .writeTimeout(15, TimeUnit.SECONDS) // 쓰기 타임아웃
-        // 커스텀 에러 인터럽터
+        .addInterceptor(networkException) // 커스텀 에러 인터럽터
         .addInterceptor(loggingInterceptor) // 로그 인터셉터
         .build()
 
