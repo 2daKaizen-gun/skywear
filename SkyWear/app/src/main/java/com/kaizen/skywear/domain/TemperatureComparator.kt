@@ -3,6 +3,7 @@ package com.kaizen.skywear.domain
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.model.temperatureGap
+import com.kaizen.skywear.data.model.temperatureGapLabel
 import kotlin.math.abs
 
 // KR vs JP 온도 비교 분석 로직
@@ -55,7 +56,24 @@ fun analyzeTempComparison(
     )
 
     // 여행 조언 생성
+    val travelAdvice = buildTravelAdvice(
+        gap = gap,
+        gapLevel = gapLevel,
+        krTemp = krTemp,
+        jpTemp = jpTemp
+    )
 
+    return TempComparisonResult(
+        krTemp = krTemp,
+        jpTemp = jpTemp,
+        gapLabel = temperatureGapLabel(krWeather, jpWeather),
+        gapDegree = gap,
+        comparisonMessage = comparisonMessage,
+        travelAdvice = travelAdvice,
+        outfitGapLevel = gapLevel,
+        krOutfit = getOutfitRecommendation(krWeather.main.temp),
+        jpOutfit = getOutfitRecommendation(jpWeather.main.temp)
+    )
 }
 
 // 비교 메시지 생성 로직
@@ -101,6 +119,9 @@ private fun buildTravelAdvice(
 }
 
 // 코디 차이 요약 (ex: "롱패딩 → 가벼운 코트")
-
+fun TempComparisonResult.outfitTransitionLabel(): String =
+    "${krOutfit.mainOutfit} -> ${jpOutfit.mainOutfit}"
 
 // 코디가 달라지는지 여부 (같은 단계면 false)
+fun TempComparisonResult.isOutfitDifferent(): Boolean =
+    krOutfit.stage != jpOutfit.stage
