@@ -1,5 +1,7 @@
 package com.kaizen.skywear.domain
 
+import com.kaizen.skywear.data.model.WeatherResponse
+
 // KR vs JP 온도 비교 분석 로직
 // Dual-City Dashboard 핵심 비교 엔진
 
@@ -18,30 +20,40 @@ data class TempComparisonResult(
 
 // 온도 차이 단계(UI 강조 표시 활용)
 enum class OutfitGapLevel {
-
+    SIMILAR, // 차이 3°C 이하 — 비슷해요
+    MODERATE, // 차이 4~9°C — 약간 달라요
+    SIGNIFICANT // 차이 10°C 이상 — 많이 달라요!
 }
 
 // KR vs JP 온도 비교 분석 메인 함수
 fun analyzeTempComparison(
-
+    krWeather: WeatherResponse,
+    jrWeather: WeatherResponse
 ): TempComparisonResult {
 
 }
 
 // 비교 메시지 생성 로직
 private fun buildComparisonMessage(
-
+    krTemp: Int,
+    jpTemp: Int,
+    gap: Int,
+    jpCityName: String
 ): String{
 
 }
 
 // 여행 조언 생성 로직
 private fun buildTravelAdvice(
-
+    gap: Int,
+    gapLevel: OutfitGapLevel,
+    krTemp: Int,
+    jpTemp: Int
 ): String {
 
 }
 
 // 코디 차이 요약 (ex: "롱패딩 → 가벼운 코트")
+
 
 // 코디가 달라지는지 여부 (같은 단계면 false)
