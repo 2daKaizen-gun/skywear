@@ -1,6 +1,7 @@
 package com.kaizen.skywear.domain
 
 import com.kaizen.skywear.data.model.WeatherResponse
+import kotlin.math.abs
 
 // KR vs JP 온도 비교 분석 로직
 // Dual-City Dashboard 핵심 비교 엔진
@@ -40,7 +41,11 @@ private fun buildComparisonMessage(
     gap: Int,
     jpCityName: String
 ): String{
-
+    return when {
+        gap > 0 -> "${jpCityName}이(가) 서울보다 ${abs(gap)}°C 더 따뜻해요! \uD83C\uDF24\uFE0F"
+        gap < 0 -> "${jpCityName}이(가) 서울보다 ${abs(gap)}°C 더 추워요! \uD83E\uDD76"
+        else -> "서울과 ${jpCityName}의 기온이 똑같아요! \uD83C\uDF21\uFE0F"
+    }
 }
 
 // 여행 조언 생성 로직
