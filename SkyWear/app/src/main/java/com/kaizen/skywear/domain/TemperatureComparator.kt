@@ -55,7 +55,25 @@ private fun buildTravelAdvice(
     krTemp: Int,
     jpTemp: Int
 ): String {
+    return when (gapLevel) {
 
+        OutfitGapLevel.SIMILAR -> when {
+            jpTemp <= 0 -> "서울과 비슷하게 두껍게 입으세요. ❄\uFE0F"
+            jpTemp <= 10 -> "서울과 비슷한 날씨에요. 코트를 챙기세요. \uD83E\uDDE5"
+            jpTemp <= 20 -> "서울과 비슷한 날씨에요. 가볍게 입어도 돼요. \uD83C\uDF24\uFE0F"
+            else -> "서울과 비슷하게 가볍게 입으세요. ☀\uFE0F"
+        }
+
+        OutfitGapLevel.MODERATE -> when {
+            gap > 0 -> "서울보다 따뜻하니 한 겹 정도 가볍게 입으세요. \uD83C\uDF24\uFE0F"
+            else -> "서울보다 추우니 한 겹 더 챙기세요. \uD83E\uDDE3"
+        }
+
+        OutfitGapLevel.SIGNIFICANT -> when {
+            gap > 0 -> "서울보다 많이 따뜻해요! 서울 옷차림은 너무 두꺼울 수 있어요. \uD83C\uDF1E"
+            else -> "서울보다 많이 추워요! 서울보다 훨씬 두껍게 입으세요. ❄\uFE0F"
+        }
+    }
 }
 
 // 코디 차이 요약 (ex: "롱패딩 → 가벼운 코트")
