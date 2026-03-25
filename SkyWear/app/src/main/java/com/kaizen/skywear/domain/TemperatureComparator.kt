@@ -40,8 +40,19 @@ fun analyzeTempComparison(
     val absGap = abs(gap)
 
     // 온도 차이 단계 계산
+    val gapLevel = when {
+        absGap <= 3 -> OutfitGapLevel.SIMILAR
+        absGap <= 9 -> OutfitGapLevel.MODERATE
+        else -> OutfitGapLevel.SIGNIFICANT
+    }
 
     // 비교 메시지 생성
+    val comparisonMessage = buildComparisonMessage(
+        krTemp = krTemp,
+        jpTemp = jpTemp,
+        gap = gap,
+        jpCityName = jpWeather.cityName
+    )
 
     // 여행 조언 생성
 
