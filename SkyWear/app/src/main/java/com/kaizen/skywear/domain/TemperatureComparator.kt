@@ -1,6 +1,8 @@
 package com.kaizen.skywear.domain
 
 import com.kaizen.skywear.data.model.WeatherResponse
+import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.data.model.temperatureGap
 import kotlin.math.abs
 
 // KR vs JP 온도 비교 분석 로직
@@ -29,8 +31,19 @@ enum class OutfitGapLevel {
 // KR vs JP 온도 비교 분석 메인 함수
 fun analyzeTempComparison(
     krWeather: WeatherResponse,
-    jrWeather: WeatherResponse
+    jpWeather: WeatherResponse
 ): TempComparisonResult {
+
+    val krTemp = krWeather.tempRounded()
+    val jpTemp = jpWeather.tempRounded()
+    val gap = temperatureGap(krWeather, jpWeather) // JP - KR
+    val absGap = abs(gap)
+
+    // 온도 차이 단계 계산
+
+    // 비교 메시지 생성
+
+    // 여행 조언 생성
 
 }
 
