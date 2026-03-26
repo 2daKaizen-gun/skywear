@@ -49,12 +49,18 @@ private fun calculateFeelsLike (
 
 // 습도 단계 분류
 private fun classifyHumidity(humidity: Int): HumidityLevel = when {
-
+    humidity < 40 -> HumidityLevel.DRY
+    humidity <= 60 -> HumidityLevel.COMFORTABLE
+    humidity <= 80 -> HumidityLevel.HUMID
+    else -> HumidityLevel.VERY_HUMID
 }
 
 // 바람 단계 분류
-private fun classifyWind(wind: Double): WindLevel = when {
-
+private fun classifyWind(windSpeed: Double): WindLevel = when {
+    windSpeed < 3.0 -> WindLevel.CALM
+    windSpeed < 6.0 -> WindLevel.BREEZY
+    windSpeed < 10.0 -> WindLevel.WINDY
+    else -> WindLevel.VERY_WINDY
 }
 
 // 보정 메시지 생성
