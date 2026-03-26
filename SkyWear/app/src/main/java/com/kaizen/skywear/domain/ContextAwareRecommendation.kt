@@ -18,12 +18,18 @@ data class ContextAwareResult (
 
 // 습도 단계
 enum class HumidityLevel {
-
+    DRY, // 40% 미만 - 건조
+    COMFORTABLE, // 40~60% - 쾌적
+    HUMID, // 61~80% - 습함
+    VERY_HUMID // 81% 초과 - 매우 습함
 }
 
 // 바람 단계
 enum class WindLevel {
-
+    CALM, // 3 m/s 미만 - 잔잔함
+    BREEZY, // 3 m/s ~ 6 m/s - 약간 바람
+    WINDY, // 6 m/s ~ 10 m/s - 강한 바람
+    VERY_WINDY // 10 m/s 초과 - 매우 강한 바람
 }
 
 // 체감 온도, 습도 보정 메인 함수
