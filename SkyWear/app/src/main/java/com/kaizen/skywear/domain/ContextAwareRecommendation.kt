@@ -7,7 +7,13 @@ import com.kaizen.skywear.data.model.WeatherResponse
 
 // 보정된 최종 추천 결과
 data class ContextAwareResult (
-
+    val baseOutfit: OutfitRecommendation, // 기온 기반 기본 코디
+    val adjustedOutfit: OutfitRecommendation, // 체감 온도 보정 후 코디
+    val feelsLikeTemp: Double, // 계산된 체감 온도
+    val humidityLevel: HumidityLevel, // 습도 단계
+    val windLevel: WindLevel, // 온도 단계
+    val contextMessage: String, // 보정 메시지 (ex: "바람이 강해서 더 춥게 느껴져요")
+    val extraItems: List<String> // 추가 아이템 (ex: ["우산", "방풍 재킷"])
 )
 
 // 습도 단계
