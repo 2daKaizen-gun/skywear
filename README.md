@@ -9,7 +9,7 @@
 ## 🎯 Background & Motivation
 
 ### The Context: "Seamless Travel Experience"
-Although Korea and Japan are neighboring countries, their perceived temperatures vary significantly due to differences in latitude and geography. Travelers often struggle with the uncertainty of whether their current attire is suitable for their destination (e.g., freezing in Seoul vs. mild in Tokyo).
+Although Korea and Japan are neighboring countries, their perceived temperatures vary significantly due to differences in latitude and geography. Travelers often struggle with the uncertainty of whether their current attire is suitable for their destination (e.g., freezing in Seoul vs. mild in Osaka).
 
 ### The Problem
 * **Tedious Comparison**: Users must manually toggle between different weather apps to compare temperatures.
