@@ -210,7 +210,9 @@ private fun buildExtraItems(
 }
 
 // 체감 온도 표시 텍스트 (ex: "체감 -5°C")
-
+fun ContextAwareResult.feelsLikeLabel(): String =
+    "체감 ${String.format("%.0f", feelsLikeTemp)}°C"
 
 // 기온과 체감 온도 차이가 큰지 여부 (2°C 이상 차이나면 UI에서 강조)
-
+fun ContextAwareResult.hasSignificantFeelsLikeDiff(actualTemp: Double): Boolean =
+    kotlin.math.abs(feelsLikeTemp - actualTemp) >= 2.0
