@@ -103,13 +103,25 @@ private fun buildContextMessage(
 
     return when {
         // 바람이 강해서 훨씬 춥게 느껴질 때
+        windLevel == WindLevel.VERY_WINDY && tempDiff >= 5 ->
+            "바람이 매우 강해 체감온도가 ${String.format("%.1f", tempDiff)}°C 낮아요! 방풍 재킷을 꼭 챙기세요. 🌬️"
+
+        windLevel == WindLevel.WINDY && tempDiff >= 3 ->
+            "바람이 강해서 실제보다 춥게 느껴져요. 한 겹 더 챙기세요. \uD83D\uDCA8"
 
         // 습도가 높아서 더 덥게 느껴질 때
+        humidityLevel == HumidityLevel.VERY_HUMID && feelsLikeTemp > actualTemp ->
+            "습도가 매우 높아서 체감온도가 더 높아요. 통풍이 잘 되는 옷을 입으세요. \uD83D\uDCA7"
+
+        humidityLevel == HumidityLevel.HUMID ->
+            "습도가 높은 편이에요. 습한 날씨에 주의하세요. \uD83C\uDF2B\uFE0F"
 
         // 건조할 때
+        humidityLevel == HumidityLevel.DRY ->
+            "건조한 날씨에요. 보습에 신경 쓰세요. \uD83C\uDFDC\uFE0F"
 
         // 쾌적할 때
-
+        else -> "쾌적한 날씨예요. 기온에 맞게 입으면 돼요. \uD83D\uDE0A"
     }
 }
 
