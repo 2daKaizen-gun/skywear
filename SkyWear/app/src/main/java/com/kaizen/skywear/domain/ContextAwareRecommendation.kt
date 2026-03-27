@@ -1,6 +1,7 @@
 package com.kaizen.skywear.domain
 
 import com.kaizen.skywear.data.model.WeatherResponse
+import kotlin.math.pow
 
 // 체감 온도, 습도 기반 코디 보정 로직
 // OutfitAlgorithm 결과를 보정해서 더 정확한 추천 제공
@@ -42,9 +43,37 @@ fun buildContextAwareRecommendation (weather: WeatherResponse): ContextAwareResu
 // 27°이상: Head Index 공식 적용 (습도에 의한 체감 상승)
 // 그 외: 실제 기온을 그대로 적용
 private fun calculateFeelsLike (
-
+    temp: Double,
+    windSpeed: Double, // m/s
+    humidity: Int
 ): Double {
+    return when {
+        // Wind Chill - 추울 때 바람이 체감온도 낮춤
+        temp <= 10.0 -> {
+            val windKmh = windSpeed * 3.6 // m/s를 km/h로 변환
+            if (windKmh >= 4.8) {
+                // Canadian Wind Chill 공식
+                // 체감 온도 = 13.12 + 0.6215*실제 기온 - 11.37*풍속.pow(0.16) + 0.3965*기온*풍속.pow(0.16)
+                13.12 + 0.6215 * temp -
+                        11.37 * windKmh.pow(0.16) +
+                        0.3965 * temp * windKmh.pow(0.16)
+            } else {
+                temp // 바람 약하면 실제 기온과 동일
+            }
+        }
 
+        // Heat Index - 더울 때 습도가 체감 온도 높임
+        temp >= 27.0 -> {
+            // Steadman Heat Index 간략 공식
+            val f = temp * 1.8 + 32 // 섭씨 -> 화씨 변환
+            // HI = 0.5 * {T + 61.0 + [(T-68.0) * 1.2] + (RH * 0.094)}
+            val hi =  0.5 * (f + 61.0 + ((f - 68.0) * 1.2) + (humidity * 0.094))
+
+            (hi - 32) / 1.8 // 화씨 -> 섭씨 변환
+        }
+        // 그 외 - 실제 기온 사용
+        else -> temp
+    }
 }
 
 // 습도 단계 분류
