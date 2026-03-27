@@ -127,9 +127,19 @@ private fun buildContextMessage(
 
 // 날씨 상황별 추가 아이템 추천
 private fun buildExtraItems(
-
+    humidityLevel: HumidityLevel,
+    windLevel: WindLevel,
+    feelsLikeTemp: Double
 ): List<String> {
+    val items = mutableListOf<String>()
 
+    // 습도별 추가 아이템
+
+    // 바람별 추가 아이템
+
+    // 체감온도별 추가 아이템
+
+    return items.distinct()
 }
 
 // 체감 온도 표시 텍스트 (ex: "체감 -5°C")
