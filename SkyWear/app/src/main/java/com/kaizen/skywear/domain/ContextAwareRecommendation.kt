@@ -36,6 +36,22 @@ enum class WindLevel {
 // 체감 온도, 습도 보정 메인 함수
 fun buildContextAwareRecommendation (weather: WeatherResponse): ContextAwareResult {
 
+    val actualTemp = weather.main.temp
+    val humidity = weather.main.humidity
+    val windSpeed = weather.wind.speed
+
+    // 체감온도 계산
+    val feelsLikeTemp = calculateFeelsLike(actualTemp, windSpeed, humidity)
+
+    // 습도/바람 단계 분류
+
+    // 기본 코디 (실제 기온 기반)
+
+    // 보정 코디 (체감온도 기반)
+
+    // 보정 메시지 생성
+
+    // 추가 아이템 생성
 }
 
 // 체감 온도 계산 (Wind Chill + Heat Index 통합)
