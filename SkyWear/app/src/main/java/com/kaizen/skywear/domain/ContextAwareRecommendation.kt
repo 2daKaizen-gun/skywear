@@ -44,14 +44,39 @@ fun buildContextAwareRecommendation (weather: WeatherResponse): ContextAwareResu
     val feelsLikeTemp = calculateFeelsLike(actualTemp, windSpeed, humidity)
 
     // 습도/바람 단계 분류
+    val humidityLevel = classifyHumidity(humidity)
+    val windLevel = classifyWind(windSpeed)
 
     // 기본 코디 (실제 기온 기반)
+    val baseOutfit = getOutfitRecommendation(actualTemp)
 
     // 보정 코디 (체감온도 기반)
+    val adjustedOutfit = getOutfitRecommendation(feelsLikeTemp)
 
     // 보정 메시지 생성
+    val contextMessage = buildContextMessage(
+        actualTemp = actualTemp,
+        feelsLikeTemp = feelsLikeTemp,
+        humidityLevel = humidityLevel,
+        windLevel = windLevel
+    )
 
     // 추가 아이템 생성
+    val extraItems = buildExtraItems(
+        humidityLevel = humidityLevel,
+        windLevel = windLevel,
+        feelsLikeTemp = feelsLikeTemp
+    )
+
+    return ContextAwareResult(
+        baseOutfit = baseOutfit,
+        adjustedOutfit = adjustedOutfit,
+        feelsLikeTemp = feelsLikeTemp,
+        humidityLevel = humidityLevel,
+        windLevel = windLevel,
+        contextMessage = contextMessage,
+        extraItems = extraItems
+    )
 }
 
 // 체감 온도 계산 (Wind Chill + Heat Index 통합)
