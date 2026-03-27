@@ -94,9 +94,23 @@ private fun classifyWind(windSpeed: Double): WindLevel = when {
 
 // 보정 메시지 생성
 private fun buildContextMessage(
-
+    actualTemp: Double,
+    feelsLikeTemp: Double,
+    humidityLevel: HumidityLevel,
+    windLevel: WindLevel
 ): String {
+    val tempDiff = actualTemp - feelsLikeTemp
 
+    return when {
+        // 바람이 강해서 훨씬 춥게 느껴질 때
+
+        // 습도가 높아서 더 덥게 느껴질 때
+
+        // 건조할 때
+
+        // 쾌적할 때
+
+    }
 }
 
 // 날씨 상황별 추가 아이템 추천
