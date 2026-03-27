@@ -134,10 +134,36 @@ private fun buildExtraItems(
     val items = mutableListOf<String>()
 
     // 습도별 추가 아이템
+    when (humidityLevel) {
+        HumidityLevel.VERY_HUMID, HumidityLevel.HUMID -> {
+            items.add("우산 (습한 날씨)")
+            items.add("제습 기능 의류")
+        }
+        HumidityLevel.DRY -> {
+            items.add("보습 크림")
+            items.add("립밤")
+        }
+        else -> {}
+    }
 
     // 바람별 추가 아이템
+    when (windLevel) {
+        WindLevel.VERY_WINDY -> {
+            items.add("방풍 재킷")
+            items.add("넥워머")
+        }
+        WindLevel.WINDY -> items.add("바람막이")
+        else -> {}
+    }
 
     // 체감온도별 추가 아이템
+    when {
+        feelsLikeTemp < 0 -> items.add("핫팩")
+        feelsLikeTemp > 30 -> {
+            items.add("손 선풍기")
+            items.add("쿨링 타월")
+        }
+    }
 
     return items.distinct()
 }
