@@ -1,11 +1,18 @@
 package com.kaizen.skywear.domain
 
+import android.graphics.Color
+
 // WeatherIconMapper
 // OpenWeatherMap 날씨 코드 -> 이모지, 색상, 배경 매핑 엔진
 // 3-1(OutfitAlgorithm), 3-3(ContextAware)과 연동
 
 // 날씨 아이콘 매핑 결과
-
+data class WeatherVisual(
+    val emoji: String,              // 날씨 이모지 (ex: "☀️")
+    val label: String,              // 날씨 텍스트 (ex: "맑음")
+    val backgroundColor: Color,     // 카드 배경색 (온도 팔레트 연동)
+    val isNight: Boolean            // 야간 여부 (아이콘 코드 "n" 포함 시)
+)
 
 // OpenWeatherMap 날씨 코드 -> WeatherVisual 매핑
 // 날씨 코드 참고: https://openweathermap.org/weather-conditions
