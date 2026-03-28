@@ -35,46 +35,67 @@ fun mapWeatherCodeToVisual(
 
     return when (weatherId) {
         // Thunderstorm(200번대)
-        in 200..202 -> WeatherVisual("⛈\uFE0F", "뇌우(비)", bgColor, isNight)
-        in 210..212 -> WeatherVisual("⛈\uFE0F", "뇌우", bgColor, isNight)
-        in 221..221 -> WeatherVisual("⛈\uFE0F", "심한 뇌우", bgColor, isNight)
-        in 230..232 -> WeatherVisual("⛈\uFE0F", "뇌우(이슬비)", bgColor, isNight)
+        in 200..202 -> WeatherVisual("⛈️", "뇌우 (비)", bgColor, isNight)
+        in 210..212 -> WeatherVisual("🌩️", "뇌우", bgColor, isNight)
+        in 221..221 -> WeatherVisual("🌩️", "심한 뇌우", bgColor, isNight)
+        in 230..232 -> WeatherVisual("⛈️", "뇌우 (이슬비)", bgColor, isNight)
 
         // Drizzle (300번대)
-        in 300..301 -> WeatherVisual("\uD83C\uDF26\uFE0F", "이슬비", bgColor, isNight)
-        in 302..302 -> WeatherVisual("\uD83C\uDF26\uFE0F", "강한 이슬비", bgColor, isNight)
-        in 310..311 -> WeatherVisual("\uD83C\uDF26\uFE0F", "이슬비", bgColor, isNight)
-        in 312..314 -> WeatherVisual("\uD83C\uDF26\uFE0F", "강한 이슬비", bgColor, isNight)
-        in 321..321 -> WeatherVisual("\uD83C\uDF26\uFE0F", "소나기성 이슬비", bgColor, isNight)
+        in 300..301 -> WeatherVisual("🌦️", "이슬비", bgColor, isNight)
+        in 302..302 -> WeatherVisual("🌧️", "강한 이슬비", bgColor, isNight)
+        in 310..311 -> WeatherVisual("🌦️", "이슬비", bgColor, isNight)
+        in 312..314 -> WeatherVisual("🌧️", "강한 이슬비", bgColor, isNight)
+        in 321..321 -> WeatherVisual("🌦️", "소나기성 이슬비", bgColor, isNight)
 
         // Rain (500번대)
-
+        500 -> WeatherVisual("🌧️", "약한 비", bgColor, isNight)
+        501 -> WeatherVisual("🌧️", "보통 비", bgColor, isNight)
+        502 -> WeatherVisual("🌧️", "강한 비", bgColor, isNight)
+        503 -> WeatherVisual("🌧️", "매우 강한 비", bgColor, isNight)
+        504 -> WeatherVisual("🌧️", "폭우", bgColor, isNight)
+        511 -> WeatherVisual("🌨️", "진눈깨비", bgColor, isNight)
+        in 520..522 -> WeatherVisual("🌦️", "소나기", bgColor, isNight)
+        531 -> WeatherVisual("🌦️", "불규칙 소나기", bgColor, isNight)
 
         // Snow (600번대)
-
+        600 -> WeatherVisual("🌨️", "약한 눈", bgColor, isNight)
+        601 -> WeatherVisual("❄️", "눈", bgColor, isNight)
+        602 -> WeatherVisual("❄️", "강한 눈", bgColor, isNight)
+        611 -> WeatherVisual("🌨️", "진눈깨비", bgColor, isNight)
+        in 612..613 -> WeatherVisual("🌨️", "소나기성 진눈깨비", bgColor, isNight)
+        in 615..616 -> WeatherVisual("🌨️", "비와 눈", bgColor, isNight)
+        in 620..622 -> WeatherVisual("❄️", "소나기성 눈", bgColor, isNight)
 
         // Atmosphere (700번대)
-
+        701 -> WeatherVisual("🌫️", "안개", bgColor, isNight)
+        711 -> WeatherVisual("💨", "연기", bgColor, isNight)
+        721 -> WeatherVisual("🌫️", "옅은 안개", bgColor, isNight)
+        731 -> WeatherVisual("💨", "모래 먼지", bgColor, isNight)
+        741 -> WeatherVisual("🌫️", "짙은 안개", bgColor, isNight)
+        751 -> WeatherVisual("💨", "모래", bgColor, isNight)
+        761 -> WeatherVisual("💨", "먼지", bgColor, isNight)
+        762 -> WeatherVisual("🌋", "화산재", bgColor, isNight)
+        771 -> WeatherVisual("🌬️", "돌풍", bgColor, isNight)
+        781 -> WeatherVisual("🌪️", "토네이도", bgColor, isNight)
 
         // Clear (800)
         800 -> if (isNight) {
-            WeatherVisual("\uD83C\uDF19", "맑은 밤", bgColor, true)
+            WeatherVisual("🌙", "맑은 밤", bgColor, true)
         } else {
-            WeatherVisual("☀\uFE0F", "맑음", bgColor, false)
+            WeatherVisual("☀️", "맑음", bgColor, false)
         }
 
         // Clouds (801~804)
         801 -> if (isNight) {
             WeatherVisual("🌙", "구름 조금", bgColor, true)
         } else {
-            WeatherVisual("\uD83C\uDF24\uFE0F", "구름 조금", bgColor, false)
+            WeatherVisual("🌤️", "구름 조금", bgColor, false)
         }
         802 -> WeatherVisual("⛅", "구름 많음", bgColor, isNight)
-        803 -> WeatherVisual("\uD83C\uDF25\uFE0F", "흐림", bgColor, isNight)
-        804 -> WeatherVisual("☁\uFE0F", "매우 흐림", bgColor, isNight)
-
+        803 -> WeatherVisual("🌥️", "흐림", bgColor, isNight)
+        804 -> WeatherVisual("☁️", "매우 흐림", bgColor, isNight)
         // Unknown
-        else -> WeatherVisual("\uD83C\uDF21\uFE0F", "알 수 없음", bgColor, isNight)
+        else -> WeatherVisual("🌡️", "알 수 없음", bgColor, isNight)
     }
 }
 
