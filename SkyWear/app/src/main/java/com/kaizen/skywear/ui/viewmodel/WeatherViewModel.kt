@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.repository.WeatherRepository
+import com.kaizen.skywear.domain.ContextAwareResult
+import com.kaizen.skywear.domain.TempComparisonResult
 import com.kaizen.skywear.domain.analyzeTempComparison
 import com.kaizen.skywear.domain.buildContextAwareRecommendation
 import com.kaizen.skywear.util.Constants
@@ -27,6 +29,10 @@ class WeatherViewModel: ViewModel() {
     private val _selectedJpCity = MutableStateFlow(Constants.DEFAULT_CITY_JP)
     val selectedJpCity: StateFlow<String> = _selectedJpCity.asStateFlow()
 
+    init {
+        fetchDualCityWeather()
+    }
+
     // KR + JP 날씨 동시 호출 -> 코디/ 비교 분석까지 한번에 처리
     fun fetchDualCityWeather(
         krCity: String = Constants.DEFAULT_CITY_KR,
@@ -37,7 +43,6 @@ class WeatherViewModel: ViewModel() {
 
             val result = repository.getDualCityWeather(krCity, jpCity)
 
-
             _uiState.value = if (result.isSuccess) {
                 val krWeather = result.krWeather.getOrNull()!!
                 val jpWeather = result.jpWeather.getOrNull()!!
@@ -45,7 +50,10 @@ class WeatherViewModel: ViewModel() {
                 // phase 3 로직 통합 실행
                 WeatherUiState.Success(
                     krWeather = krWeather,
-                    jpWeather = jpWeather
+                    jpWeather = jpWeather,
+                    krContextResult = buildContextAwareRecommendation(krWeather),
+                    jpContextResult = buildContextAwareRecommendation(jpWeather),
+                    comparisonResult = analyzeTempComparison(krWeather, jpWeather)
                 )
             } else {
                 WeatherUiState.Error(
@@ -67,7 +75,7 @@ class WeatherViewModel: ViewModel() {
     }
 }
 
-// WeatherUiState
+// WeatherUiState Update
 // UI 상태를 3가지로 구분 (Loading / Success / Error)
 
 sealed class WeatherUiState {
@@ -75,10 +83,13 @@ sealed class WeatherUiState {
     //로딩 중
     data object Loading: WeatherUiState()
 
-    // 성공: KR + JP 날씨 데이터 보유
+    // 성공: 날씨, 코디, 비교, 체감온도 전부 포함
     data class Success(
-        val krWeather: WeatherResponse,
-        val jpWeather: WeatherResponse
+        val krWeather: WeatherResponse, // kr 날씨 원본 데이터
+        val jpWeather: WeatherResponse, // jp 날씨 원본 데이터
+        val krContextResult: ContextAwareResult, // kr 체감온도/코디 보정 결과
+        val jpContextResult: ContextAwareResult, // jp 체감온도/코디 보정 결과
+        val comparisonResult: TempComparisonResult // KRvsJP 비교 분석 결과
     ) : WeatherUiState()
 
     // 실패: 에러 메시지 보유
