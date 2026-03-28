@@ -135,3 +135,11 @@ fun classifyWeatherGroup(weatherId: Int): WeatherGroup = when (weatherId) {
 }
 
 // WeatherVisual 확장 - 야간/주간 배경색 보정
+fun WeatherVisual.adjustedBackgroundColor(): Color {
+    return if (isNight) {
+        // 야간에는 배경을 약간 어둡게 (alpha 조정은 UI 레이어에서)
+        backgroundColor
+    } else {
+        backgroundColor
+    }
+}
