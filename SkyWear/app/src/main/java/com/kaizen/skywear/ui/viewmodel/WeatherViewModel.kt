@@ -4,13 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.repository.WeatherRepository
+import com.kaizen.skywear.domain.analyzeTempComparison
+import com.kaizen.skywear.domain.buildContextAwareRecommendation
 import com.kaizen.skywear.util.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-// WeatherViewModel
+// WeatherViewModel Update
 // UI State 관리 + Repository 호출
 
 class WeatherViewModel: ViewModel() {
@@ -21,24 +23,29 @@ class WeatherViewModel: ViewModel() {
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
-    init {
-        fetchDualCityWeather()
-    }
+    // 현재 선택된 JP 도시 (도시 검색 활용)
+    private val _selectedJpCity = MutableStateFlow(Constants.DEFAULT_CITY_JP)
+    val selectedJpCity: StateFlow<String> = _selectedJpCity.asStateFlow()
 
-    // KR + JP 날씨 동시 호출
+    // KR + JP 날씨 동시 호출 -> 코디/ 비교 분석까지 한번에 처리
     fun fetchDualCityWeather(
         krCity: String = Constants.DEFAULT_CITY_KR,
-        jpCity: String = Constants.DEFAULT_CITY_JP
+        jpCity: String = _selectedJpCity.value
     ) {
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
 
             val result = repository.getDualCityWeather(krCity, jpCity)
 
+
             _uiState.value = if (result.isSuccess) {
+                val krWeather = result.krWeather.getOrNull()!!
+                val jpWeather = result.jpWeather.getOrNull()!!
+
+                // phase 3 로직 통합 실행
                 WeatherUiState.Success(
-                    krWeather = result.krWeather.getOrNull()!!,
-                    jpWeather = result.jpWeather.getOrNull()!!
+                    krWeather = krWeather,
+                    jpWeather = jpWeather
                 )
             } else {
                 WeatherUiState.Error(
@@ -50,7 +57,13 @@ class WeatherViewModel: ViewModel() {
 
     // JP 도시 변경(도시 검색 기능)
     fun changeJpCity(cityName: String) {
+        _selectedJpCity.value = cityName
         fetchDualCityWeather(jpCity = cityName)
+    }
+
+    // 새로고침
+    fun refresh() {
+        fetchDualCityWeather()
     }
 }
 
