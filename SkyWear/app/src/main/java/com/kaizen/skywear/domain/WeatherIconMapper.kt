@@ -24,7 +24,19 @@ data class WeatherVisual(
 
 // OpenWeatherMap 날씨 코드 -> WeatherVisual 매핑
 // 날씨 코드 참고: https://openweathermap.org/weather-conditions
+fun mapWeatherCodeToVisual(
+    weatherId: Int,
+    iconCode: String, // ex: "01d", "01n"..
+    temp: Double // 온도 기반 배경색 결정
+): WeatherVisual {
 
+    val isNight = iconCode.endsWith("n")
+    val bgColor = getTempBackgroundColor(temp)
+
+    return when (weatherId) {
+
+    }
+}
 
 // 온도 기반 배경색 (Color.kt 팔레트 연동)
 private fun getTempBackgroundColor(celsius: Double): Color = when {
