@@ -50,4 +50,15 @@ enum class WeatherGroup {
     UNKNOWN
 }
 
+fun classifyWeatherGroup(weatherId: Int): WeatherGroup = when (weatherId) {
+    800 -> WeatherGroup.CLEAR
+    in 801..804 -> WeatherGroup.CLOUDS
+    in 500..531 -> WeatherGroup.RAIN
+    in 600..622 -> WeatherGroup.SNOW
+    in 200..232 -> WeatherGroup.THUNDERSTORM
+    in 300..321 -> WeatherGroup.DRIZZLE
+    in 700..781 -> WeatherGroup.ATMOSPHERE
+    else -> WeatherGroup.UNKNOWN
+}
+
 // WeatherVisual 확장 - 야간/주간 배경색 보정
