@@ -34,7 +34,22 @@ fun mapWeatherCodeToVisual(
     val bgColor = getTempBackgroundColor(temp)
 
     return when (weatherId) {
+        // Thunderstorm(200번대)
 
+        // Drizzle (300번대)
+
+        // Rain (500번대)
+
+        // Snow (600번대)
+
+        // Atmosphere (700번대)
+
+        // Clear (800)
+
+        // Clouds (801~804)
+
+        // Unknown
+        else -> WeatherVisual("\uD83C\uDF21\uFE0F", "알 수 없음", bgColor, isNight)
     }
 }
 
