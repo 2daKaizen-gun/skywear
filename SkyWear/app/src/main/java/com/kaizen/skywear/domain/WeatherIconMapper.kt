@@ -39,6 +39,15 @@ private fun getTempBackgroundColor(celsius: Double): Color = when {
 }
 
 // 날씨 코드 그룹 분류 (배경 gradient 등 UI 처리에 활용)
-
+enum class WeatherGroup {
+    CLEAR, // 맑음
+    CLOUDS, // 구름
+    RAIN, // 비
+    SNOW, // 눈
+    THUNDERSTORM, // 뇌우
+    DRIZZLE, // 이슬비
+    ATMOSPHERE, // 안개/먼지
+    UNKNOWN
+}
 
 // WeatherVisual 확장 - 야간/주간 배경색 보정
