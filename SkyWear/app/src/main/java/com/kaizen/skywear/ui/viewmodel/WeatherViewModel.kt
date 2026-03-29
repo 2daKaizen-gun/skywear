@@ -3,11 +3,15 @@ package com.kaizen.skywear.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.WeatherResponse
+import com.kaizen.skywear.data.model.iconCode
+import com.kaizen.skywear.data.model.weatherId
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.ContextAwareResult
 import com.kaizen.skywear.domain.TempComparisonResult
+import com.kaizen.skywear.domain.WeatherVisual
 import com.kaizen.skywear.domain.analyzeTempComparison
 import com.kaizen.skywear.domain.buildContextAwareRecommendation
+import com.kaizen.skywear.domain.mapWeatherCodeToVisual
 import com.kaizen.skywear.util.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -53,7 +57,19 @@ class WeatherViewModel: ViewModel() {
                     jpWeather = jpWeather,
                     krContextResult = buildContextAwareRecommendation(krWeather),
                     jpContextResult = buildContextAwareRecommendation(jpWeather),
-                    comparisonResult = analyzeTempComparison(krWeather, jpWeather)
+                    comparisonResult = analyzeTempComparison(krWeather, jpWeather),
+
+                    krVisual = mapWeatherCodeToVisual(
+                        weatherId = krWeather.weatherId(),
+                        iconCode = krWeather.iconCode(),
+                        temp = krWeather.main.temp
+                    ),
+
+                    jpVisual = mapWeatherCodeToVisual(
+                        weatherId = jpWeather.weatherId(),
+                        iconCode = jpWeather.iconCode(),
+                        temp = jpWeather.main.temp
+                    )
                 )
             } else {
                 WeatherUiState.Error(
@@ -89,7 +105,10 @@ sealed class WeatherUiState {
         val jpWeather: WeatherResponse, // jp 날씨 원본 데이터
         val krContextResult: ContextAwareResult, // kr 체감온도/코디 보정 결과
         val jpContextResult: ContextAwareResult, // jp 체감온도/코디 보정 결과
-        val comparisonResult: TempComparisonResult // KRvsJP 비교 분석 결과
+        val comparisonResult: TempComparisonResult, // KRvsJP 비교 분석 결과
+
+        val krVisual: WeatherVisual,
+        val jpVisual: WeatherVisual
     ) : WeatherUiState()
 
     // 실패: 에러 메시지 보유
