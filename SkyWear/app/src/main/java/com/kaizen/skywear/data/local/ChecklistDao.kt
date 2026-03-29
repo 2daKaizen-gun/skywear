@@ -1,6 +1,8 @@
 package com.kaizen.skywear.data.local
 
 import androidx.room.Dao
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 // Room DB 접근 인터페이스 - CRUD 쿼리 정의
 
@@ -8,10 +10,14 @@ import androidx.room.Dao
 interface ChecklistDao {
 
     // 전체 아이템 조회 (카테고리 정리 -> 체크 안 된 것부터)
+    @Query("SELECT * FROM checklist_items ORDER BY category ASC, isChecked ASC")
+    fun getAllItems(): Flow<List<ChecklistItem>>
 
     // 카테고리별 조회
 
     // 체크 안 된 아이템만 조회
+    @Query("SELECT * FROM checklist_items WHERE isChecked = 0")
+    fun getUncheckedItems(): Flow<List<ChecklistItem>>
 
     // 완료된 아이템 수 조회
 
