@@ -46,16 +46,19 @@ interface ChecklistDao {
     suspend fun updateItem(item: ChecklistItem)
 
     // 체크 상태만 토글
-
+    @Query("UPDATE checklist_items SET isChecked = isChecked WHERE id = id")
+    suspend fun updateChecked(id: Int, isChecked: Boolean)
 
     // 아이템 삭제
     @Delete
     suspend fun deleteItem(item: ChecklistItem)
 
     // 체크된 아이템 전체 삭제
-
+    @Query("DELETE FROM checklist_items WHERE isChecked = 1")
+    suspend fun deleteCheckedItems()
 
     // 전체 초기화 (기본 아이템만 남기기)
-
+    @Query("DELETE FROM checklist_items WHERE isDefault = 0")
+    suspend fun deleteCustomItems()
 
 }
