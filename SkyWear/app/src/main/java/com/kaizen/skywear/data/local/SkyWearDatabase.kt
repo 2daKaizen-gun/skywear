@@ -35,5 +35,11 @@ fun getDefaultChecklistItems(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "보조 배터리", category = ChecklistCategory.ELECTRONIC),
     ChecklistItem(title = "이심 or 유심 or 도시락 와이파이", category = ChecklistCategory.ELECTRONIC),
 
+    // 의류
+    ChecklistItem(title = "현지 날씨에 맞는 옷", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "편한 신발 (도보 이동)", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "우산 or 우비", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "선글라스 등 기타 악세서리", category = ChecklistCategory.CLOTHING),
+
 
     )
