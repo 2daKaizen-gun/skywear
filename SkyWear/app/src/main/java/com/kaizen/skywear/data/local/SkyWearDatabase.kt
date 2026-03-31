@@ -29,5 +29,11 @@ fun getDefaultChecklistItems(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "교통 카드", category = ChecklistCategory.MONEY),
     ChecklistItem(title = "트레블 카드", category = ChecklistCategory.MONEY),
 
+    // 전자
+    ChecklistItem(title = "110V 어댑터 (일본 전압)", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "스마트폰 충전기", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "보조 배터리", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "이심 or 유심 or 도시락 와이파이", category = ChecklistCategory.ELECTRONIC),
+
 
     )
