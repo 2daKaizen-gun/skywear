@@ -1,9 +1,11 @@
 package com.kaizen.skywear.data.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 // Room DB 접근 인터페이스 - CRUD 쿼리 정의
@@ -40,13 +42,15 @@ interface ChecklistDao {
     suspend fun insertItems(items: List<ChecklistItem>)
 
     // 아이템 수정
-
+    @Update
+    suspend fun updateItem(item: ChecklistItem)
 
     // 체크 상태만 토글
 
 
     // 아이템 삭제
-
+    @Delete
+    suspend fun deleteItem(item: ChecklistItem)
 
     // 체크된 아이템 전체 삭제
 
