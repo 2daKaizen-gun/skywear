@@ -41,5 +41,14 @@ fun getDefaultChecklistItems(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "우산 or 우비", category = ChecklistCategory.CLOTHING),
     ChecklistItem(title = "선글라스 등 기타 악세서리", category = ChecklistCategory.CLOTHING),
 
+    // 건강
+    ChecklistItem(title = "상비약 (두통약, 소화제 등)", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "마스크", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "손 소독제, 향수 등 기타 액체류", category = ChecklistCategory.HEALTH),
 
+    // 기타
+    ChecklistItem(title = "일본어 번역 앱", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "구글맵 오프라인 저장", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "비상 연락처 메모", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "여행 플래너 확인", category = ChecklistCategory.MISC),
     )
