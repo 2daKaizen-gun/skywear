@@ -1,6 +1,8 @@
 package com.kaizen.skywear.data.local
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
@@ -30,10 +32,12 @@ interface ChecklistDao {
     fun getTotalCount(): Flow<Int>
 
     // 아이템 추가
-
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertItem(item: ChecklistItem)
 
     // 여러 아이템 한 번에 추가 (기본 아이템 초기화에 사용)
-
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertItems(items: List<ChecklistItem>)
 
     // 아이템 수정
 
