@@ -23,6 +23,11 @@ fun getDefaultChecklistItems(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "숙소 예약 확인", category = ChecklistCategory.DOCUMENT),
     ChecklistItem(title = "여행자 보험 확인", category = ChecklistCategory.DOCUMENT),
 
+    // 금융
+    ChecklistItem(title = "엔화 환전", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "해외 결제 가능 카드", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "교통 카드", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "트레블 카드", category = ChecklistCategory.MONEY),
 
 
     )
