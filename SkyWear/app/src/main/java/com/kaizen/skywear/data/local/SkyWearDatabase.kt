@@ -1,7 +1,13 @@
 package com.kaizen.skywear.data.local
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // Room DB 싱글톤 인스턴스 + 기본 체크리스트 데이터 초기화
 
@@ -11,7 +17,29 @@ import androidx.room.RoomDatabase
     exportSchema = false
 )
 abstract class SkyWearDatabase : RoomDatabase() {
+    abstract fun checklistDao(): ChecklistDao
 
+    companion object {
+        @Volatile
+        private var INSTANCE: SkyWearDatabase?=null
+
+
+    }
+
+    // DB 최초 생성 시 기본 체크리스트 아이템 자동 삽입
+    private class DatabaseCallback: Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            // 싱글톤 DB 인스턴스가 null 아닐 때 실행
+            INSTANCE?.let { database ->
+                // DB 작업은 IO thread에서 비동기 실행
+                CoroutineScope(Dispatchers.IO).launch {
+                    // 기본 아이템 한번에 삽입
+                    database.checklistDao().insertItems(getDefaultChecklistItems())
+                }
+            }
+        }
+    }
 }
 
 // 일본 여행 기본 체크리스트 아이템
