@@ -23,14 +23,21 @@ class ChecklistRepository(private val dao: ChecklistDao) {
         dao.getItemsByCategory(category)
 
     // 아이템 추가
+    suspend fun addItem(item: ChecklistItem) = dao.insertItem(item)
 
     // 체크 상태 토글
+    suspend fun toggleCheck(item: ChecklistItem) =
+        dao.updateChecked(item.id, !item.isChecked)
 
     // 아이템 수정
+    suspend fun updateItem(item: ChecklistItem) = dao.updateItem(item)
 
     // 아이템 삭제
+    suspend fun deleteItem(item: ChecklistItem) = dao.deleteItem(item)
 
     // 체크된 아이템 전체 삭제
+    suspend fun deleteCheckedItems() = dao.deleteCheckedItems()
 
     // 커스텀 아이템만 삭제 (기본 아이템은 유지)
+    suspend fun resetToDefault() = dao.deleteCustomItems()
 }
