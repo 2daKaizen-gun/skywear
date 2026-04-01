@@ -23,6 +23,21 @@ abstract class SkyWearDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: SkyWearDatabase?=null
 
+        fun getDatabase(context: Context): SkyWearDatabase {
+            // 한 번에 하나의 스레드만 접근 가능
+            return INSTANCE?:synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    SkyWearDatabase::class.java,
+                    "skywear_database"
+                )
+                    .addCallback(DatabaseCallback())
+                    .build()
+                // 만든 인스턴스 저장해 다음 호출부터 재사용
+                INSTANCE = instance
+                instance
+            }
+        }
 
     }
 
