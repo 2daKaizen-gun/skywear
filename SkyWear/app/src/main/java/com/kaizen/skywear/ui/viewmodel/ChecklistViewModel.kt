@@ -59,12 +59,35 @@ class ChecklistViewModel (application: Application) : AndroidViewModel(applicati
     }
 
     // 커스텀 아이템 추가
+    fun addItem(title: String, category: ChecklistCategory, memo: String = "") {
+        viewModelScope.launch {
+            repository.addItem(
+                ChecklistItem(
+                    title = title,
+                    category = category,
+                    isDefault = false,
+                    memo = memo
+                )
+            )
+        }
+    }
 
     // 아이템 삭제
+    fun deleteItem(item: ChecklistItem) {
+        viewModelScope.launch {
+            repository.deleteItem(item)
+        }
+    }
 
     // 체크된 아이템 전체 삭제
+    fun deleteCheckedItems() {
+        viewModelScope.launch {
+            repository.deleteCheckedItems()
+        }
+    }
 
     // 기본 아이템으로 초기화
+
 
     // 카테고리 필터 변경
 
