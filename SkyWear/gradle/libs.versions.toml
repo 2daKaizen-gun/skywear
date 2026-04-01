@@ -12,6 +12,7 @@ retrofit = "2.11.0"
 okhttp = "4.12.0"
 room = "2.6.1"
 ksp = "2.2.10-2.0.2"
+datastore = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,7 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
 room-ktx = { group = "androidx.room", name = "room-ktx",  version.ref = "room"}
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

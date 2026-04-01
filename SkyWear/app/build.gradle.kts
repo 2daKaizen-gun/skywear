@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.datastore.preferences)
     ksp(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
