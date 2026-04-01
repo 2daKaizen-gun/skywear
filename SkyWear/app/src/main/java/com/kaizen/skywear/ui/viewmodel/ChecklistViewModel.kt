@@ -4,12 +4,16 @@ import android.app.Application
 import androidx.compose.runtime.State
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.data.local.ChecklistItem
 import com.kaizen.skywear.data.local.SkyWearDatabase
 import com.kaizen.skywear.data.repository.ChecklistRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 // 일본 여행 체크리스트 상태 관리
 
@@ -44,9 +48,15 @@ class ChecklistViewModel (application: Application) : AndroidViewModel(applicati
         )
 
     // 선택된 카테고리 필터
-
+    private val _selectedCategory = MutableStateFlow<ChecklistCategory?>(null)
+    val selectedCategory: StateFlow<ChecklistCategory?> = _selectedCategory.asStateFlow()
 
     // 체크 토글
+    fun toggleCheck(item: ChecklistItem) {
+        viewModelScope.launch {
+            repository.toggleCheck(item)
+        }
+    }
 
     // 커스텀 아이템 추가
 
