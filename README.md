@@ -57,7 +57,7 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
   - [x] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons)
 
 - **Phase 4**: Travel Intelligence & Data Persistence
-  - [] Phase 4-1: Implement Japan-Specific Travel Checklist using Room DB or DataStore
+  - [x] Phase 4-1: Implement Japan-Specific Travel Checklist using Room DB or DataStore
   - [] Phase 4-2: Develop City Search & User Preference Management Features
   - [] Phase 4-3: Build Background Notification Service for Daily Travel Briefing
   - [] Phase 4-4: UI Polish & Interactive Elements (Lottie Animations & Dark Mode)
