@@ -87,9 +87,19 @@ class ChecklistViewModel (application: Application) : AndroidViewModel(applicati
     }
 
     // 기본 아이템으로 초기화
-
+    fun resetToDefault() {
+        viewModelScope.launch {
+            repository.resetToDefault()
+        }
+    }
 
     // 카테고리 필터 변경
+    fun filterByCategory(category: ChecklistCategory?) {
+        _selectedCategory.value = category
+    }
 
     // 진행률 계산 (%)
+    fun getProgress(checked: Int, total: Int): Float {
+        return if (total == 0) 0f else checked.toFloat() / total.toFloat()
+    }
 }
