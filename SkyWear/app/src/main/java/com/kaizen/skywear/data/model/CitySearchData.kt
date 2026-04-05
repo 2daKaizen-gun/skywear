@@ -1,7 +1,5 @@
 package com.kaizen.skywear.data.model
 
-import androidx.room.Query
-
 // 사전 정의된 한국/일본 주요 도시 리스트
 // 도시 검색 기능에서 활용됨
 
@@ -40,5 +38,10 @@ val JP_CITIES = listOf(
 
 // 도시명 검색
 fun searchCities(query: String, country: String): List<City> {
+    if (query.isBlank()) return if (country == "KR") KR_CITIES else JP_CITIES
 
+    val cities = if (country == "KR") KR_CITIES else JP_CITIES
+    return cities.filter {
+        it.nameKo.contains(query, ignoreCase = true) || it.nameEn.contains(query, ignoreCase = true)
+    }
 }
