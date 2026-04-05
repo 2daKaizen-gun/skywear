@@ -1,9 +1,11 @@
 package com.kaizen.skywear.data.repository
 
 import android.content.Context
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.kaizen.skywear.util.Constants
@@ -49,12 +51,30 @@ class UserPreferencesRepository(private val context: Context) {
     }
 
     // 한국 도시 저장
+    suspend fun saveKrCity(cityName: String) {
+        context.dataStore.edit { prefs ->
+            prefs[Keys.SELECTED_KR_CITY] = cityName
+        }
+    }
 
     // 일본 도시 저장
+    suspend fun saveJpCity(cityName: String) {
+        context.dataStore.edit { prefs ->
+            prefs[Keys.SELECTED_JP_CITY] = cityName
+        }
+    }
 
     // 다크 모드 저장
+    suspend fun saveDarkMode(isDark: Boolean) {
+        context.dataStore.edit { prefs ->
+            prefs[Keys.IS_DARK_MODE] = isDark
+        }
+    }
 
     // 온도 단위 저장
-
-
+    suspend fun saveTempUnit(unit: String) {
+        context.dataStore.edit { prefs ->
+            prefs[Keys.TEMP_UNIT] = unit
+        }
+    }
 }
