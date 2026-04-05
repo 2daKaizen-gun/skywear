@@ -14,12 +14,14 @@ data class City(
 
 // 한국 주요 도시 리스트
 val KR_CITIES = listOf(
-
+    City("Seoul", "서울", "KR", ""),
+    City("Busan", "부산", "KR", ""),
 )
 
 // 일본 주요 도시 리스트
 val JP_CITIES = listOf(
-
+    City("Osaka", "오사카", "JP", ""),
+    City("Tokyo", "도쿄", "JP", ""),
 )
 
 // 도시명 검색
