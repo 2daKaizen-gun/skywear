@@ -2,7 +2,12 @@ package com.kaizen.skywear.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.stateIn
 
 // 도시 검색 + 사용자 설정 상태 관리
 
@@ -11,10 +16,20 @@ class CitySearchViewModel(application: Application) : AndroidViewModel(applicati
     private val prefsRepository = UserPreferencesRepository(application)
 
     // 저장된 한국 도시
-
+    val savedKrCity: StateFlow<String> = prefsRepository.selectedKrCity
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = "Seoul"
+        )
 
     // 저장된 일본 도시
-
+    val savedJpCity: StateFlow<String> = prefsRepository.selectedJpCity
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = "Osaka"
+        )
 
     // 한국 검색어
 
