@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.City
 import com.kaizen.skywear.data.model.JP_CITIES
 import com.kaizen.skywear.data.model.KR_CITIES
+import com.kaizen.skywear.data.model.searchCities
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -62,10 +62,16 @@ class CitySearchViewModel(application: Application) : AndroidViewModel(applicati
     val jpSearchResults: StateFlow<List<City>> = _jpSearchResults.asStateFlow()
 
     // 한국 도시 검색
-
+    fun searchKrCity(query: String) {
+        _krSearchQuery.value = query
+        _krSearchResults.value = searchCities(query, "KR")
+    }
 
     // 일본 도시 검색
-
+    fun searchJpCity(query: String) {
+        _jpSearchQuery.value = query
+        _jpSearchResults.value = searchCities(query, "JP")
+    }
 
     // 한국 도시 선택 -> DataStore 저장 -> WeatherViewModel에 전달
 
