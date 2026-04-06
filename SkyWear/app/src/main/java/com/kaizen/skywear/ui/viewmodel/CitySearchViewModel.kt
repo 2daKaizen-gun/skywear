@@ -3,10 +3,15 @@ package com.kaizen.skywear.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.kaizen.skywear.data.model.City
+import com.kaizen.skywear.data.model.JP_CITIES
+import com.kaizen.skywear.data.model.KR_CITIES
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -41,16 +46,20 @@ class CitySearchViewModel(application: Application) : AndroidViewModel(applicati
         )
 
     // 한국 검색어
-
+    private val _krSearchQuery = MutableStateFlow("")
+    val krSearchQuery: StateFlow<String> = _krSearchQuery.asStateFlow()
 
     // 일본 검색어
-
+    private val _jpSearchQuery = MutableStateFlow("")
+    val jpSearchQuery: StateFlow<String> = _jpSearchQuery.asStateFlow()
 
     // 한국 검색 결과
-
+    private val _krSearchResults = MutableStateFlow<List<City>>(KR_CITIES)
+    val krSearchResults: StateFlow<List<City>> = _krSearchResults.asStateFlow()
 
     // 일본 검색 결과
-
+    private val _jpSearchResults = MutableStateFlow<List<City>>(JP_CITIES)
+    val jpSearchResults: StateFlow<List<City>> = _jpSearchResults.asStateFlow()
 
     // 한국 도시 검색
 
