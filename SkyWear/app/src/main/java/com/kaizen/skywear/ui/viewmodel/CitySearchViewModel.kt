@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 // 도시 검색 + 사용자 설정 상태 관리
 
@@ -29,6 +30,14 @@ class CitySearchViewModel(application: Application) : AndroidViewModel(applicati
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = "Osaka"
+        )
+
+    // 다크 모드 설정
+    val isDarkMode: StateFlow<Boolean> = prefsRepository.isDarkMode
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false
         )
 
     // 한국 검색어
@@ -56,6 +65,9 @@ class CitySearchViewModel(application: Application) : AndroidViewModel(applicati
 
 
     // 다크 모드 토글
-
-
+    fun toggleDarkMode() {
+        viewModelScope.launch {
+            prefsRepository.saveDarkMode(!isDarkMode.value)
+        }
+    }
 }
