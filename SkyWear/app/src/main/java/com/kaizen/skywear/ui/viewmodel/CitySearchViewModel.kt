@@ -74,10 +74,20 @@ class CitySearchViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     // 한국 도시 선택 -> DataStore 저장 -> WeatherViewModel에 전달
-
+    fun selectKrCity(city: City, weatherViewModel: WeatherViewModel) {
+        viewModelScope.launch {
+            prefsRepository.saveKrCity(city.nameEn)
+            weatherViewModel.fetchDualCityWeather(krCity = city.nameEn)
+        }
+    }
 
     // 일본 도시 선택 -> DataStore 저장 -> WeatherViewModel에 전달
-
+    fun selectJpCity(city: City, weatherViewModel: WeatherViewModel) {
+        viewModelScope.launch {
+            prefsRepository.saveJpCity(city.nameEn)
+            weatherViewModel.fetchDualCityWeather(jpCity = city.nameEn)
+        }
+    }
 
     // 다크 모드 토글
     fun toggleDarkMode() {
