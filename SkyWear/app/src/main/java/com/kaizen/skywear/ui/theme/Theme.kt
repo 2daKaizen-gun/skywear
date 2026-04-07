@@ -132,42 +132,37 @@ fun SkyWearTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = SkyWearTypography,
-        content = content
-    )
+    // [핵심 수정] CompositionLocalProvider를 추가하여 커스텀 컬러를 하위 뷰에 전달
+    CompositionLocalProvider(LocalExtraColors provides SkyWearExtraColors()) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = SkyWearTypography,
+            content = content
+        )
+    }
 }
 
-// Custom Color Extensions
-// MaterialTheme에서 직접 접근 불가한 커스텀 컬러 확장
-// 사용 예: MaterialTheme.extraColors.koreaBlue
-
-
+// Custom Color Extensions 데이터 구조
 data class SkyWearExtraColors(
-    val koreaRed: androidx.compose.ui.graphics.Color = KoreaRed,
-    val japanBlue: androidx.compose.ui.graphics.Color = JapanBlue,
-    val tempScorching: androidx.compose.ui.graphics.Color = TempScorching,
-    val tempHot: androidx.compose.ui.graphics.Color = TempHot,
-    val tempWarm: androidx.compose.ui.graphics.Color = TempWarm,
-    val tempMild: androidx.compose.ui.graphics.Color = TempMild,
-    val tempCool: androidx.compose.ui.graphics.Color = TempCool,
-    val tempChilly: androidx.compose.ui.graphics.Color = TempChilly,
-    val tempCold: androidx.compose.ui.graphics.Color = TempCold,
-    val tempFreezing: androidx.compose.ui.graphics.Color = TempFreezing,
-    val successGreen: androidx.compose.ui.graphics.Color = SuccessGreen,
-    val successBg: androidx.compose.ui.graphics.Color = SuccessGreenBg,
-    val warningAmber: androidx.compose.ui.graphics.Color = WarningAmber,
-    val warningBg: androidx.compose.ui.graphics.Color = WarningAmberBg,
-    val infoBlue: androidx.compose.ui.graphics.Color = InfoBlue,
-    val infoBg: androidx.compose.ui.graphics.Color = InfoBlueBg,
+    val koreaRed: Color = KoreaRed,
+    val japanBlue: Color = JapanBlue,
+    val tempScorching: Color = TempScorching,
+    val tempHot: Color = TempHot,
+    val tempWarm: Color = TempWarm,
+    val tempMild: Color = TempMild,
+    val tempCool: Color = TempCool,
+    val tempChilly: Color = TempChilly,
+    val tempCold: Color = TempCold,
+    val tempFreezing: Color = TempFreezing,
+    val successGreen: Color = SuccessGreen,
+    val successBg: Color = SuccessGreenBg,
+    val warningAmber: Color = WarningAmber,
+    val warningBg: Color = WarningAmberBg,
+    val infoBlue: Color = InfoBlue,
+    val infoBg: Color = InfoBlueBg,
 )
 
 val LocalExtraColors = staticCompositionLocalOf { SkyWearExtraColors() }
-
-// MaterialTheme 확장 프로퍼티 — 사용: MaterialTheme.extraColors.koreaBlue
-val MaterialTheme.extraColors: SkyWearExtraColors
-    @Composable get() = LocalExtraColors.current
 
 // Temparature Color Helper
 // 사용: getTemperatureColor(temp) → 해당 온도의 색상 반환

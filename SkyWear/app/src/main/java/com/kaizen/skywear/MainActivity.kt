@@ -32,6 +32,9 @@ fun ThemePreviewScreen() {
     var isDark by remember { mutableStateOf(false) }
 
     SkyWearTheme(darkTheme = isDark) {
+        // 현재 테마에 주입된 커스텀 컬러를 직접 가져옴
+        val colors = LocalExtraColors.current
+
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -40,7 +43,7 @@ fun ThemePreviewScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
-                verticalArrangement = Arrangement. spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 // DarkMode toggle
                 Row(
@@ -81,7 +84,7 @@ fun ThemePreviewScreen() {
                             Text(
                                 text = "-2°",
                                 style = MaterialTheme.typography.displayMedium,
-                                color = MaterialTheme.extraColors.koreaRed
+                                color = colors.koreaRed // [변경!]
                             )
                             Text(
                                 text = "롱패딩 + 목도리",
@@ -108,7 +111,7 @@ fun ThemePreviewScreen() {
                             Text(
                                 text = "10°",
                                 style = MaterialTheme.typography.displayMedium,
-                                color = MaterialTheme.extraColors.japanBlue
+                                color = colors.japanBlue // [변경!]
                             )
                             Text(
                                 text = "가벼운 코트",
@@ -152,15 +155,16 @@ fun ThemePreviewScreen() {
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
+
                 val tempColors = listOf(
-                    TempScorching to "28°+",
-                    TempHot to "23°",
-                    TempWarm to "17°",
-                    TempMild to "12°",
-                    TempCool to "9°",
-                    TempChilly to "5°",
-                    TempCold to "0°",
-                    TempFreezing to "-1°"
+                    colors.tempScorching to "28°+",
+                    colors.tempHot to "23°",
+                    colors.tempWarm to "17°",
+                    colors.tempMild to "12°",
+                    colors.tempCool to "9°",
+                    colors.tempChilly to "5°",
+                    colors.tempCold to "0°",
+                    colors.tempFreezing to "-1°"
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
