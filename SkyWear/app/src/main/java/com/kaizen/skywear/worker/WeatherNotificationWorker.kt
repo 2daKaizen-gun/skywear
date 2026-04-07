@@ -5,6 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
+import com.kaizen.skywear.domain.getOutfitRecommendation
 import kotlinx.coroutines.flow.first
 
 // WorkManager 기반 백그라운드 날씨 알림 서비스
@@ -32,9 +33,14 @@ class WeatherNotificationWorker (
             val weatherRepo = WeatherRepository()
             val dualResult = weatherRepo.getDualCityWeather(krCity, jpCity)
 
+            if (!dualResult.isSuccess) return Result.retry()
 
+            val krWeather = dualResult.krWeather.getOrNull()!!
+            val jpWeather = dualResult.jpWeather.getOrNull()!!
 
             // 코디 추천
+            val krOutfit = getOutfitRecommendation(krWeather.main.temp)
+            val jpOutfit = getOutfitRecommendation(jpWeather.main.temp)
 
             // 알림 메시지 구성하기
 
