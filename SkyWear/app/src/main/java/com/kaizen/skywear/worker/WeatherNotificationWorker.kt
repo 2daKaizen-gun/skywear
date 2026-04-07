@@ -3,6 +3,9 @@ package com.kaizen.skywear.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.kaizen.skywear.data.repository.UserPreferencesRepository
+import com.kaizen.skywear.data.repository.WeatherRepository
+import kotlinx.coroutines.flow.first
 
 // WorkManager 기반 백그라운드 날씨 알림 서비스
 // 매일 지정 시간에 한국/일본 날씨와 코디 브리핑 알림 발송
@@ -21,8 +24,15 @@ class WeatherNotificationWorker (
     override suspend fun doWork(): Result {
         return try {
             // DataStore에서 저장된 도시 불러오기
+            val prefsRepo = UserPreferencesRepository(context)
+            val krCity = prefsRepo.selectedKrCity.first()
+            val jpCity = prefsRepo.selectedJpCity.first()
 
             // 날씨 데이터 호출
+            val weatherRepo = WeatherRepository()
+            val dualResult = weatherRepo.getDualCityWeather(krCity, jpCity)
+
+
 
             // 코디 추천
 
