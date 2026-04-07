@@ -38,6 +38,23 @@ class WeatherNotificationWorker (
     }
 
     // 알림 메시지 빌드
+    private fun buildNotificationMessage(
+        krCity: String,
+        jpCity: String,
+        krTemp: Int,
+        jpTemp: Int,
+        krOutfit: String,
+        jpOutfit: String
+    ): String {
+        val gap = jpTemp - krTemp
+        val gapText = if (gap >= 0) "+${gap}°C" else "${gap}°C"
+
+        return """
+            🇰🇷 ${'$'}krCity ${'$'}{krTemp}°C → ${'$'}krOutfit
+            🇯🇵 ${'$'}jpCity ${'$'}{jpTemp}°C → ${'$'}jpOutfit
+            온도 차이: ${'$'}gapText
+        """.trimIndent()
+    }
 
     // 알림 채널 생성 및 발송
 
