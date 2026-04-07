@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
 // WorkManager 알림 스케줄 관리
@@ -37,6 +38,9 @@ object NotificationScheduler {
     }
 
     // 알림 취소
+    fun cancelDailyBriefing(context: Context) {
+        WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
+    }
 
     // 다음 목표 시각까지 남은 밀리초 계산
 
