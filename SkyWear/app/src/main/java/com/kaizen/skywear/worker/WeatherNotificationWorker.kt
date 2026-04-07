@@ -3,6 +3,7 @@ package com.kaizen.skywear.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.getOutfitRecommendation
@@ -43,9 +44,18 @@ class WeatherNotificationWorker (
             val jpOutfit = getOutfitRecommendation(jpWeather.main.temp)
 
             // 알림 메시지 구성하기
+            val title = "\uD83C\uDF24\uFE0F SkyWear 오늘의 여행 브리핑"
+            val message = buildNotificationMessage(
+                krCity = krCity,
+                jpCity = jpCity,
+                krTemp = krWeather.tempRounded(),
+                jpTemp = jpWeather.tempRounded(),
+                krOutfit = krOutfit.mainOutfit,
+                jpOutfit = jpOutfit.mainOutfit
+            )
 
             // 알림 발송
-
+            sendNotification(title, message)
 
             Result.success()
         } catch (e: Exception) {
@@ -73,6 +83,9 @@ class WeatherNotificationWorker (
     }
 
     // 알림 채널 생성 및 발송
+    private fun sendNotification(title: String, message: String) {
 
+
+    }
 
 }
