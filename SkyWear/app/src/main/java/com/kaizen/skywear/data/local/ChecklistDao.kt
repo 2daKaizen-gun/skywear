@@ -18,7 +18,7 @@ interface ChecklistDao {
     fun getAllItems(): Flow<List<ChecklistItem>>
 
     // 카테고리별 조회
-    @Query("SELECT * FROM checklist_items ")
+    @Query("SELECT * FROM checklist_items WHERE category = :category")
     fun getItemsByCategory(category: ChecklistCategory): Flow<List<ChecklistItem>>
 
     // 체크 안 된 아이템만 조회
@@ -26,11 +26,11 @@ interface ChecklistDao {
     fun getUncheckedItems(): Flow<List<ChecklistItem>>
 
     // 완료된 아이템 수 조회
-    @Query("SELECT * FROM checklist_items WHERE isChecked = 1")
+    @Query("SELECT COUNT(*) FROM checklist_items WHERE isChecked = 1")
     fun getCheckedCount(): Flow<Int>
 
     // 전체 아이템 수 조회
-    @Query("SELECT * FROM checklist_items")
+    @Query("SELECT COUNT(*) FROM checklist_items")
     fun getTotalCount(): Flow<Int>
 
     // 아이템 추가
@@ -46,7 +46,7 @@ interface ChecklistDao {
     suspend fun updateItem(item: ChecklistItem)
 
     // 체크 상태만 토글
-    @Query("UPDATE checklist_items SET isChecked = isChecked WHERE id = id")
+    @Query("UPDATE checklist_items SET isChecked = :isChecked WHERE id = :id")
     suspend fun updateChecked(id: Int, isChecked: Boolean)
 
     // 아이템 삭제
