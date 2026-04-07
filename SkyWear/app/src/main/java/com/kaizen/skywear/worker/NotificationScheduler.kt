@@ -5,6 +5,7 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 // WorkManager 알림 스케줄 관리
@@ -43,6 +44,17 @@ object NotificationScheduler {
     }
 
     // 다음 목표 시각까지 남은 밀리초 계산
+    private fun calculateInitialDelay(targetHour: Int, targetMinute: Int): Long {
+        val now = Calendar.getInstance()
+        val target = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, targetHour)
+            set(Calendar.MINUTE, targetMinute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
 
+        // 이미 오전 8시 지나면 다음 날 오전 8시로 설정함
+
+    }
 
 }
