@@ -12,7 +12,6 @@ import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.getOutfitRecommendation
 import kotlinx.coroutines.flow.first
-import okhttp3.internal.notify
 
 // WorkManager 기반 백그라운드 날씨 알림 서비스
 // 매일 지정 시간에 한국/일본 날씨와 코디 브리핑 알림 발송
