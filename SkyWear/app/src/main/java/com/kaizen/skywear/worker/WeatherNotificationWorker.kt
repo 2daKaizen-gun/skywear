@@ -1,6 +1,9 @@
 package com.kaizen.skywear.worker
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kaizen.skywear.data.model.tempRounded
@@ -84,6 +87,20 @@ class WeatherNotificationWorker (
 
     // 알림 채널 생성 및 발송
     private fun sendNotification(title: String, message: String) {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // 알림 채널 필수
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "매일 여행 날씨와 코디를 알려드립니다"
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
 
 
     }
