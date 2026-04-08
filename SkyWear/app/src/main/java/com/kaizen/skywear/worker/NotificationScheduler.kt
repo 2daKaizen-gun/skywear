@@ -54,7 +54,11 @@ object NotificationScheduler {
         }
 
         // 이미 오전 8시 지나면 다음 날 오전 8시로 설정함
+        if (target.before(now)) {
+            target.add(Calendar.DAY_OF_MONTH, 1)
+        }
 
+        return target.timeInMillis - now.timeInMillis
     }
 
 }
