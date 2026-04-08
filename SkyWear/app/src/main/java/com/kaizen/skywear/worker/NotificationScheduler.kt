@@ -2,6 +2,7 @@ package com.kaizen.skywear.worker
 
 import android.content.Context
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -23,7 +24,7 @@ object NotificationScheduler {
             .build()
 
         // 다음 오전 8시까지 남은 시간 계산
-        val initialDelay
+        val initialDelay = calculateInitialDelay(targetHour = 8, targetMinute = 0)
 
         // 24시간마다 반복 작업 등록
         val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(
@@ -35,7 +36,11 @@ object NotificationScheduler {
             .build()
 
         // KEEP: 이미 등록된 작업 있으면 유지 (중복 방지)
-
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
     }
 
     // 알림 취소
