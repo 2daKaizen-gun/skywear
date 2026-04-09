@@ -1,9 +1,16 @@
 package com.kaizen.skywear.ui.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kaizen.skywear.R
 import com.kaizen.skywear.domain.WeatherGroup
+import com.kaizen.skywear.domain.classifyWeatherGroup
 
 // 날씨 상태에 따라 Lottie 애니메이션 자동 선택 + 재생
 // WeatherIconMapper의 WeatherGroup과 연동됨
@@ -14,8 +21,23 @@ fun WeatherAnimation(
     modifier: Modifier = Modifier,
     isNight: Boolean = false
 ) {
+    val weatherGroup = classifyWeatherGroup(weatherId)
+    val rawRes = getWeatherLottieRes(weatherGroup, isNight)
 
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(rawRes)
+    )
 
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever // 무한 반복
+    )
+
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = modifier
+    )
 }
 
 // WeatherGroup -> Lottie Raw Resource 매핑
