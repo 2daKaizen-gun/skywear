@@ -28,5 +28,11 @@ private fun getWeatherLottieRes(
             else R.raw.weather_sunny
 
         WeatherGroup.CLOUDS -> R.raw.weather_cloudy
+        WeatherGroup.RAIN -> R.raw.weather_rainy
+        WeatherGroup.DRIZZLE -> R.raw.weather_drizzle
+        WeatherGroup.SNOW -> R.raw.weather_snow
+        WeatherGroup.THUNDERSTORM -> R.raw.weather_thunder
+        WeatherGroup.ATMOSPHERE -> R.raw.weather_foggy
+        WeatherGroup.UNKNOWN -> R.raw.weather_sunny
     }
 }
