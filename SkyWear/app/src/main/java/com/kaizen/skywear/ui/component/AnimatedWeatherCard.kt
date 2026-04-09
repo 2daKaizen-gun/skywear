@@ -6,6 +6,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.data.model.WeatherResponse
@@ -58,7 +61,21 @@ fun AnimatedWeatherCard(
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // 국가 플래그 + 도시명
 
+                // Lottie 날씨 애니메이션
+
+                // 온도 (스케일 애니메이션)
+
+                // 코디 추천
+
+                // 습도 + 풍속
+
+            }
         }
     }
 
