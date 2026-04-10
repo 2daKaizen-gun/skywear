@@ -143,3 +143,6 @@ fun AnimatedWeatherCard(
     }
 }
 
+// WeatherResponse 확장 - weatherId 접근
+private fun WeatherResponse.weatherId(): Int =
+    weather.firstOrNull()?.id ?: 800
