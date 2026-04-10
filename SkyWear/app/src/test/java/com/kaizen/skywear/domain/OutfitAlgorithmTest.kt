@@ -76,9 +76,25 @@ class OutfitAlgorithmTest {
     }
 
     // 필수 아이템 포함 여부
+    @Test
+    fun `폭염일 때 선크림 포함`() {
+        val result = getOutfitRecommendation(30.0)
+        assertTrue(result.essentialItems.contains("선크림"))
+    }
 
+    @Test
+    fun `혹한일 때 핫팩과 히트텍 포함`() {
+        val result = getOutfitRecommendation(-10.0)
+        assertTrue(result.essentialItems.contains("핫팩"))
+        assertTrue(result.essentialItems.contains("히트텍"))
+    }
 
     // 이모지 비어있는지 안 비어있는지
-
-
+    @Test
+    fun `모든 단계의 이모지가 비어있지 않음`() {
+        val temps = listOf(30.0, 25.0, 20.0, 14.0, 10.0, 6.0, 2.0, -5.0)
+        temps.forEach { temp ->
+            assertTrue(getOutfitRecommendation(temp).emoji.isNotEmpty())
+        }
+    }
 }
