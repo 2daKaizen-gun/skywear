@@ -60,7 +60,20 @@ class OutfitAlgorithmTest {
     }
 
     // 경계값 테스트
+    @Test
+    fun `정확히 28도면 stage 1 반환`() {
+        assertEquals(1, getOutfitRecommendation(28.0).stage)
+    }
 
+    @Test
+    fun `정확히 0도면 stage 7 반환`() {
+        assertEquals(7, getOutfitRecommendation(0.0).stage)
+    }
+
+    @Test
+    fun `정확히 영하 1도면 stage 8 반환`() {
+        assertEquals(8, getOutfitRecommendation(-1.0).stage)
+    }
 
     // 필수 아이템 포함 여부
 
