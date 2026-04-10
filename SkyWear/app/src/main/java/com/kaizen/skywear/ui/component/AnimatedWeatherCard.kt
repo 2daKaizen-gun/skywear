@@ -30,8 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.data.model.WeatherResponse
+import com.kaizen.skywear.data.model.humidityLabel
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.model.weatherId
+import com.kaizen.skywear.data.model.windSpeedLabel
 import com.kaizen.skywear.domain.WeatherVisual
 import com.kaizen.skywear.domain.getOutfitRecommendation
 
@@ -121,10 +123,23 @@ fun AnimatedWeatherCard(
                 )
 
                 // 습도 + 풍속
-
-
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Text(
+                        text = weather.humidityLabel(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = weather.windSpeedLabel(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
-
 }
+
