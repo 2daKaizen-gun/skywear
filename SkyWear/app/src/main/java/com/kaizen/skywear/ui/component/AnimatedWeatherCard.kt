@@ -27,10 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.data.model.WeatherResponse
+import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.model.weatherId
 import com.kaizen.skywear.domain.WeatherVisual
+import com.kaizen.skywear.domain.getOutfitRecommendation
 
 // 날씨 카드 - Lottie 애니메이션 + 등장 애니메이션 포함
 // Dual-City Dashboard 메인 카드 컴포넌트
@@ -103,10 +106,19 @@ fun AnimatedWeatherCard(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // 온도 (스케일 애니메이션)
-
+                Text(
+                    text = "${weather.tempRounded()}°",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = countryColor,
+                    modifier = Modifier.scale(scale)
+                )
 
                 // 코디 추천
-
+                Text(
+                    text = getOutfitRecommendation(weather.main.temp).mainOutfit,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
                 // 습도 + 풍속
 
