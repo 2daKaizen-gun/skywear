@@ -7,6 +7,7 @@ import com.kaizen.skywear.data.model.Weather
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.Wind
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -87,7 +88,21 @@ class TemperatureComparatorTest {
     }
 
     // 코디 차이 여부 검증
+    @Test
+    fun `온도 차이로 코디 단계 달라지면 isOutfitDifferent가 true`() {
+        val kr = makeWeather("Seoul", -2.0)
+        val jp = makeWeather("Osaka", 20.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertTrue(result.isOutfitDifferent())
+    }
 
+    @Test
+    fun `온도 차이가 없으면 isOutfitDifferent가 false`() {
+        val kr = makeWeather("Seoul", 15.0)
+        val jp = makeWeather("Osaka", 15.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertFalse(result.isOutfitDifferent())
+    }
 
     // gapLabel 형식 검증
 
