@@ -7,6 +7,7 @@ import com.kaizen.skywear.data.model.Weather
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.Wind
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 // Phase 3-2 TemperatureComparator 단위 테스트
@@ -44,7 +45,21 @@ class TemperatureComparatorTest {
         assertEquals(12, result.gapDegree)
     }
 
+    @Test
+    fun `JP가 KR보다 낮으면 gapDegree가 음수`() {
+        val kr = makeWeather("Seoul", 10.0, "KR")
+        val jp = makeWeather("Osaka", 5.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertTrue(result.gapDegree < 0)
+    }
 
+    @Test
+    fun `온도가 같으면 gapDegree가 0`() {
+        val kr = makeWeather("Seoul", 10.0)
+        val jp = makeWeather("Osaka", 10.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertEquals(0, result.gapDegree)
+    }
 
     // OutfitGapLevel 단계 검증
 
