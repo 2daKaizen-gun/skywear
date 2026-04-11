@@ -1,5 +1,6 @@
 package com.kaizen.skywear.domain
 
+import androidx.collection.arrayMapOf
 import com.kaizen.skywear.data.model.Coord
 import com.kaizen.skywear.data.model.MainWeather
 import com.kaizen.skywear.data.model.Sys
@@ -105,6 +106,19 @@ class TemperatureComparatorTest {
     }
 
     // gapLabel 형식 검증
+    @Test
+    fun `JP가 높으면 gapLabel이 플러스 기호 포함`() {
+        val kr = makeWeather("Seoul", 0.0)
+        val jp = makeWeather("Osaka", 10.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertTrue(result.gapLabel.startsWith("+"))
+    }
 
-
+    @Test
+    fun `JP가 낮으면 gapLabel이 마이너스 기호 포함`() {
+        val kr = makeWeather("Seoul", 10.0)
+        val jp = makeWeather("Osaka", 0.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertTrue(result.gapLabel.startsWith("-"))
+    }
 }
