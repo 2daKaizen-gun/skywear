@@ -62,7 +62,29 @@ class TemperatureComparatorTest {
     }
 
     // OutfitGapLevel 단계 검증
+    @Test
+    fun `3도 이하 차이면 SIMILAR`() {
+        val kr = makeWeather("Seoul", 10.0)
+        val jp = makeWeather("Osaka", 12.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertEquals(OutfitGapLevel.SIMILAR, result.outfitGapLevel)
+    }
 
+    @Test
+    fun `4도에서 9도 차이면 MODERATE`() {
+        val kr = makeWeather("Seoul", 10.0)
+        val jp = makeWeather("Osaka", 16.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertEquals(OutfitGapLevel.MODERATE, result.outfitGapLevel)
+    }
+
+    @Test
+    fun `10도 이상 차이나면 SIGNIFICANT`() {
+        val kr = makeWeather("Seoul", -2.0)
+        val jp = makeWeather("Osaka", 10.0, "JP")
+        val result = analyzeTempComparison(kr, jp)
+        assertEquals(OutfitGapLevel.SIGNIFICANT, result.outfitGapLevel)
+    }
 
     // 코디 차이 여부 검증
 
