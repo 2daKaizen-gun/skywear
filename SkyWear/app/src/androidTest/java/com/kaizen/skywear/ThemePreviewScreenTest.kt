@@ -1,6 +1,5 @@
 package com.kaizen.skywear
 
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -17,7 +16,7 @@ class ThemePreviewScreenTest {
 
     // 기본 UI 요소 표시 여부
     @Test
-    fun `ThemePreviewScreen이 정상적으로 렌더링됨`() {
+    fun ThemePreviewScreen이_정상적으로_렌더링됨() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
@@ -31,7 +30,7 @@ class ThemePreviewScreenTest {
     }
 
     @Test
-    fun `서울 카드 표시됨`() {
+    fun 서울_카드_표시됨() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
@@ -44,7 +43,7 @@ class ThemePreviewScreenTest {
     }
 
     @Test
-    fun `오사카 카드가 표시됨`() {
+    fun 오사카_카드가_표시됨() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
@@ -57,7 +56,7 @@ class ThemePreviewScreenTest {
     }
 
     @Test
-    fun `온도 차이 뱃지가 표시됨`() {
+    fun 온도_차이_뱃지가_표시됨() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
@@ -70,7 +69,7 @@ class ThemePreviewScreenTest {
     }
 
     @Test
-    fun `온도 팔레트 섹션이 표시됨`() {
+    fun 온도_팔레트_섹션이_표시됨() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
@@ -84,7 +83,7 @@ class ThemePreviewScreenTest {
 
     // 다크 모드 스위치 동작 검증
     @Test
-    fun `다크 모드 스위치 클릭 시 상태 변경`() {
+    fun 다크_모드_스위치_클릭_시_상태_변경() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
@@ -104,7 +103,7 @@ class ThemePreviewScreenTest {
 
     // Typography 샘플 표시 여부
     @Test
-    fun `Typography 섹션 표시`() {
+    fun Typography_섹션_표시() {
         composeTestRule.setContent {
             SkyWearTheme {
                 ThemePreviewScreen()
