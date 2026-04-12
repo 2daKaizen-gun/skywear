@@ -63,7 +63,7 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
   - [x] Phase 4-4: UI Polish & Interactive Elements (Lottie Animations & Dark Mode)
 
 - **Phase 5**: Quality Assurance & Portfolio Finalization
-  - [] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule
+  - [x] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule
   - [] Phase 5-2: Code Refactoring & Dependency Injection (Hilt) Optimization
   - [] Phase 5-3: Comprehensive Technical Documentation (Architecture Diagrams & Flowcharts)
   - [] Phase 5-4: Final Build Generation (.APK) & Project Post-mortem Summary
