@@ -103,6 +103,16 @@ class ThemePreviewScreenTest {
     }
 
     // Typography 샘플 표시 여부
+    @Test
+    fun `Typography 섹션 표시`() {
+        composeTestRule.setContent {
+            SkyWearTheme {
+                ThemePreviewScreen()
+            }
+        }
 
-
+        composeTestRule
+            .onNodeWithText("Typography")
+            .assertIsDisplayed()
+    }
 }
