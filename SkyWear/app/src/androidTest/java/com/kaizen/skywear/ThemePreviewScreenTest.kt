@@ -42,6 +42,31 @@ class ThemePreviewScreenTest {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `오사카 카드가 표시됨`() {
+        composeTestRule.setContent {
+            SkyWearTheme {
+                ThemePreviewScreen()
+            }
+        }
+
+        composeTestRule
+            .onNodeWithText("10°")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `온도 차이 뱃지가 표시됨`() {
+        composeTestRule.setContent {
+            SkyWearTheme {
+                ThemePreviewScreen()
+            }
+        }
+
+        composeTestRule
+            .onNodeWithText("+12°C")
+            .assertIsDisplayed()
+    }
 
     // 다크 모드 스위치 동작 검증
 
