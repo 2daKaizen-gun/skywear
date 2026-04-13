@@ -13,17 +13,20 @@ import com.kaizen.skywear.domain.analyzeTempComparison
 import com.kaizen.skywear.domain.buildContextAwareRecommendation
 import com.kaizen.skywear.domain.mapWeatherCodeToVisual
 import com.kaizen.skywear.util.Constants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // WeatherViewModel Update
 // UI State 관리 + Repository 호출
 
-class WeatherViewModel: ViewModel() {
-
-    private val repository = WeatherRepository()
+@HiltViewModel
+class WeatherViewModel @Inject constructor(
+    private val repository: WeatherRepository
+): ViewModel() {
 
     // UI State: 화면에 보여줄 데이터 상태
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
