@@ -1,25 +1,27 @@
 package com.kaizen.skywear.ui.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.City
 import com.kaizen.skywear.data.model.JP_CITIES
 import com.kaizen.skywear.data.model.KR_CITIES
 import com.kaizen.skywear.data.model.searchCities
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // 도시 검색 + 사용자 설정 상태 관리
 
-class CitySearchViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val prefsRepository = UserPreferencesRepository(application)
+@HiltViewModel
+class CitySearchViewModel @Inject constructor(
+    private val prefsRepository: UserPreferencesRepository
+) : ViewModel() {
 
     // 저장된 한국 도시
     val savedKrCity: StateFlow<String> = prefsRepository.selectedKrCity
