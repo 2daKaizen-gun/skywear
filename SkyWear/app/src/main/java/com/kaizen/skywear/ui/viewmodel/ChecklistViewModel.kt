@@ -1,27 +1,25 @@
 package com.kaizen.skywear.ui.viewmodel
 
-import android.app.Application
-import androidx.compose.runtime.State
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.data.local.ChecklistItem
-import com.kaizen.skywear.data.local.SkyWearDatabase
 import com.kaizen.skywear.data.repository.ChecklistRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // 일본 여행 체크리스트 상태 관리
 
-class ChecklistViewModel (application: Application) : AndroidViewModel(application) {
-
-    private val repository = ChecklistRepository(
-        SkyWearDatabase.getDatabase(application).checklistDao()
-    )
+@HiltViewModel
+class ChecklistViewModel @Inject constructor(
+    private val repository: ChecklistRepository
+) : ViewModel() {
 
     // 전체 아이템 (Flow에서 StateFlow 변환)
     val allItems: StateFlow<List<ChecklistItem>> = repository.allItems
