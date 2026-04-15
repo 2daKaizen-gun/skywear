@@ -73,6 +73,12 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
   - [] Phase 6-3: City Search Screen
   - [] Phase 6-4: Japan Travel Checklist Screen
 
+- **Phase 7**: Product Optimization & Professional Portfolio
+  - [] Phase 7-1: Advanced Localization (Internationalization)
+  - [] Phase 7-2: Performance & Monitoring
+  - [] Phase 7-3: Project Retrospective & Feedback
+  - [] Phase 7-4: Technical Documentation
+
 ---
 
 ## ✨ Contact
