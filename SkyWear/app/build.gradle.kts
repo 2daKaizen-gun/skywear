@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.androidx.startup)
     implementation(libs.lottie.compose)
     implementation(libs.hilt.android)
+    implementation(libs.navigation.compose)
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
