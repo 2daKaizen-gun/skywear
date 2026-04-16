@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.domain.OutfitRecommendation
 import com.kaizen.skywear.domain.isOutfitDifferent
 import com.kaizen.skywear.ui.theme.LocalExtraColors
 import com.kaizen.skywear.ui.viewmodel.WeatherUiState
@@ -221,3 +222,110 @@ fun DashboardScreen(
 }
 
 // 날씨 카드 컴포넌트
+@Composable
+private fun WeatherCard(
+    modifier: Modifier = Modifier,
+    flag: String,
+    cityName: String,
+    temp: Int,
+    weatherDesc: String,
+    outfit: OutfitRecommendation,
+    feelsLike: Int,
+    humidity: Int,
+    tempColor: androidx.compose.ui.graphics.Color,
+    cardColor: androidx.compose.ui.graphics.Color,
+    onCardColor: androidx.compose.ui.graphics.Color
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = cardColor),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            // 국기 + 도시명
+            Text(
+                text = "$flag $cityName",
+                style = MaterialTheme.typography.labelLarge,
+                color = onCardColor
+            )
+
+            // 온도
+            Text(
+                text = "$temp°",
+                style = MaterialTheme.typography.displayMedium,
+                color = tempColor
+            )
+
+            // 날씨 설명
+            Text(
+                text = weatherDesc,
+                style = MaterialTheme.typography.labelSmall,
+                color = onCardColor
+            )
+
+            Divider(
+                modifier = Modifier.padding(vertical = 4.dp),
+                color = onCardColor.copy(alpha = 0.2f)
+            )
+
+            // 코디 추천
+            Text(
+                text = outfit.mainOutfit,
+                style = MaterialTheme.typography.bodySmall,
+                color = onCardColor
+            )
+
+            // 체감온도 + 습도
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "체감 $feelsLike°",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = onCardColor.copy(alpha = 0.7f)
+                )
+                Text(
+                    text = "습도 $humidity%",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = onCardColor.copy(alpha = 0.7f)
+                )
+            }
+        }
+    }
+}
+
+// 코디 전환 요약 카드
+@Composable
+private fun OutfitTransitionCard(
+    krOutfit: OutfitRecommendation,
+    jpOutfit: OutfitRecommendation
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "🇰🇷 서울", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = krOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
+                Text(text = krOutfit.mainOutfit, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            }
+            Text(text = "→", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "🇯🇵 오사카", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(text = jpOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
+                Text(text = jpOutfit.mainOutfit, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+            }
+        }
+    }
+}
