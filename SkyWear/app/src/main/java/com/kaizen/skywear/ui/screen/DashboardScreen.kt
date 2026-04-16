@@ -5,7 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -23,7 +23,6 @@ import com.kaizen.skywear.ui.viewmodel.WeatherUiState
 import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 
 // Dual-City 날씨 대시보드 메인 화면
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -51,7 +50,7 @@ fun DashboardScreen(
                         Icon(Icons.Default.Search, contentDescription = "도서 검색")
                     }
                     IconButton(onClick = onNavigateToChecklist) {
-                        Icon(Icons.Default.Checklist, contentDescription = "체크 리스트")
+                        Icon(Icons.Default.List, contentDescription = "체크 리스트")
                     }
                 }
             )
@@ -102,7 +101,7 @@ fun DashboardScreen(
                             cityName = state.krWeather.cityName,
                             temp = state.krWeather.tempRounded(),
                             weatherDesc = state.krContextResult.adjustedOutfit.emoji + " " +
-                            state.krWeather.weather.firstOrNull()?.description ?: "",
+                            state.krWeather.weather.firstOrNull()?.description,
                             outfit = state.krContextResult.adjustedOutfit,
                             feelsLike = state.krContextResult.feelsLikeTemp.toInt(),
                             humidity = state.krWeather.main.humidity,
@@ -118,7 +117,7 @@ fun DashboardScreen(
                             cityName = state.jpWeather.cityName,
                             temp = state.jpWeather.tempRounded(),
                             weatherDesc = state.jpContextResult.adjustedOutfit.emoji + " " +
-                            state.jpWeather.weather.firstOrNull()?.description ?: "",
+                            state.jpWeather.weather.firstOrNull()?.description,
                             outfit = state.jpContextResult.adjustedOutfit,
                             feelsLike = state.jpContextResult.feelsLikeTemp.toInt(),
                             humidity = state.jpWeather.main.humidity,
@@ -182,7 +181,7 @@ fun DashboardScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Icon(Icons.Default.Checklist, contentDescription = null)
+                        Icon(Icons.Default.List, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("일본 여행 체크리스트 보기")
                     }
@@ -266,7 +265,7 @@ private fun WeatherCard(
                 color = onCardColor
             )
 
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.padding(vertical = 4.dp),
                 color = onCardColor.copy(alpha = 0.2f)
             )

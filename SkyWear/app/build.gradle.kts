@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.hilt.android)
     implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
