@@ -1,28 +1,15 @@
 package com.kaizen.skywear.ui.screen
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,12 +27,82 @@ fun SearchScreen(
     searchViewModel: CitySearchViewModel = hiltViewModel(),
     weatherViewModel: WeatherViewModel = hiltViewModel()
 ) {
+    val krQuery by searchViewModel.krSearchQuery.collectAsState()
+    val jpQuery by searchViewModel.jpSearchQuery.collectAsState()
+    val krResults by searchViewModel.krSearchResults.collectAsState()
+    val jpResults by searchViewModel.jpSearchResults.collectAsState()
+    val savedKrCity by searchViewModel.savedKrCity.collectAsState()
+    val savedJpCity by searchViewModel.savedJpCity.collectAsState()
 
+    var activeTab by remember { mutableIntStateOf(1) } // 0 = KR, 1 = JP
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("🔍 도시 검색") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            // 탭 (KR / JP)
+            TabRow(selectedTabIndex = activeTab) {
+                Tab(
+                    selected = activeTab == 0,
+                    onClick = { activeTab = 0 },
+                    text = { Text("🇰🇷 출발지 (KR)") }
+                )
+                Tab(
+                    selected = activeTab == 1,
+                    onClick = { activeTab = 1 },
+                    text = { Text("🇯🇵 목적지 (JP)") }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (activeTab == 0) {
+                // KR 검색
+                CitySearchContent(
+                    query = krQuery,
+                    onQueryChange = { searchViewModel.searchKrCity(it) },
+                    cities = krResults,
+                    savedCity = savedKrCity,
+                    placeholder = "한국 도시 검색 (예: 서울, Seoul)",
+                    onCitySelected = { city ->
+                        searchViewModel.selectKrCity(city, weatherViewModel)
+                        onBack()
+                    }
+                )
+            } else {
+                // JP 검색
+                CitySearchContent(
+                    query = jpQuery,
+                    onQueryChange = { searchViewModel.searchJpCity(it) },
+                    cities = jpResults,
+                    savedCity = savedJpCity,
+                    placeholder = "일본 도시 검색 (예: 오사카, Osaka)",
+                    onCitySelected = { city ->
+                        searchViewModel.selectJpCity(city, weatherViewModel)
+                        onBack()
+                    }
+                )
+            }
+        }
+    }
 }
 
 // 도시 검색 콘텐츠
 @Composable
-private fun CitySearchContext(
+private fun CitySearchContent(
     query: String,
     onQueryChange: (String) -> Unit,
     cities: List<City>,
