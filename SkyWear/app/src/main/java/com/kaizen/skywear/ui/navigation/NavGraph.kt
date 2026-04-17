@@ -1,9 +1,11 @@
 package com.kaizen.skywear.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kaizen.skywear.ui.screen.DashboardScreen
 
 // SkyWear 앱 네비게이션 라우트 정의
 
@@ -17,7 +19,7 @@ sealed class Screen(val route: String) {
 // NavGraph 진입점
 @Composable
 fun SkyWearNavGraph(
-    navController: NavController = rememberNavController()
+    navController: NavHostController = rememberNavController()
 ) {
     NavHost(
         navController = navController,
