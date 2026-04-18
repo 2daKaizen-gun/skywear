@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kaizen.skywear.ui.screen.DashboardScreen
+import com.kaizen.skywear.ui.screen.SearchScreen
 
 // SkyWear 앱 네비게이션 라우트 정의
 
