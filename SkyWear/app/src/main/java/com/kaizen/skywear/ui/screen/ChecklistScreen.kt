@@ -1,7 +1,12 @@
 package com.kaizen.skywear.ui.screen
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.ui.viewmodel.ChecklistViewModel
@@ -19,6 +24,48 @@ fun ChecklistScreen(
 // 체크리스트 아이템 카드
 
 // 항목 추가 다이얼로그
+@Composable
+private fun AddItemDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (String, ChecklistCategory) -> Unit
+) {
+    var title by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf(ChecklistCategory.MISC) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("항목 추가") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("항목 이름") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text("카테고리", style = MaterialTheme.typography.labelMedium)
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(ChecklistCategory.entries) { category ->
+                        FilterChip(
+                            selected = selectedCategory == category,
+                            onClick = { selectedCategory = category },
+                            label = { Text(category.toKorean()) }
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { if (title.isNotBlank()) onConfirm(title, selectedCategory) },
+                enabled = title.isNotBlank()
+            ) { Text("추가") }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("취소") }
+        }
+    )
+}
 
 // 카테고리 한국어 변환
 fun ChecklistCategory.toKorean(): String = when(this) {
