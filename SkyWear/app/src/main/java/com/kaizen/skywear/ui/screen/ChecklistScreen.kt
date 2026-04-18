@@ -1,10 +1,13 @@
 package com.kaizen.skywear.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,7 +27,126 @@ fun ChecklistScreen(
     onBack: () -> Unit,
     viewModel: ChecklistViewModel = hiltViewModel()
 ) {
+    val allItems by viewModel.allItems.collectAsState()
+    val checkedCount by viewModel.checkedCount.collectAsState()
+    val totalCount by viewModel.totalCount.collectAsState()
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
 
+    var showAddDialog by remember { mutableStateOf(false) }
+
+    // 카테고리 필터링
+    val displayItems = if (selectedCategory == null) {
+        allItems
+    } else {
+        allItems.filter { it.category == selectedCategory }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("🗺️ 일본 여행 체크리스트") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { viewModel.deleteCheckedItems() }) {
+                        Icon(Icons.Default.Delete, contentDescription = "완료 항목 삭제")
+                    }
+                }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showAddDialog = true }) {
+                Icon(Icons.Default.Add, contentDescription = "항목 추가")
+            }
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            // 진행률 바
+            if (totalCount > 0) {
+                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "준비 완료",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "$checkedCount / $totalCount",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    LinearProgressIndicator(
+                        progress = { viewModel.getProgress(checkedCount, totalCount) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .padding(0.dp),
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    )
+                }
+            }
+
+            // 카테고리 필터
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    FilterChip(
+                        selected = selectedCategory == null,
+                        onClick = { viewModel.filterByCategory(null) },
+                        label = { Text("전체") }
+                    )
+                }
+                items(ChecklistCategory.entries) { category ->
+                    FilterChip(
+                        selected = selectedCategory == category,
+                        onClick = { viewModel.filterByCategory(category) },
+                        label = { Text(category.toKorean()) }
+                    )
+                }
+            }
+
+            // 체크리스트
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(displayItems, key = { it.id }) { item ->
+                    ChecklistItemCard(
+                        item = item,
+                        onToggle = { viewModel.toggleCheck(item) },
+                        onDelete = {
+                            if (!item.isDefault) viewModel.deleteItem(item)
+                        }
+                    )
+                }
+            }
+        }
+
+        // 항목 추가 다이얼로그
+        if (showAddDialog) {
+            AddItemDialog(
+                onDismiss = { showAddDialog = false },
+                onConfirm = { title, category ->
+                    viewModel.addItem(title, category)
+                    showAddDialog = false
+                }
+            )
+        }
+    }
 }
 
 // 체크리스트 아이템 카드
