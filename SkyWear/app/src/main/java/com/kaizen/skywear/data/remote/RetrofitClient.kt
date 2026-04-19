@@ -1,5 +1,6 @@
 package com.kaizen.skywear.data.remote
 
+import com.kaizen.skywear.BuildConfig
 import com.kaizen.skywear.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +12,10 @@ object RetrofitClient {
 
     // Logging Interceptor: 디버그 빌드에서 APi 요청/응답 로그 작성 -> 배포 시에는 제거 권장함
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = if (BuildConfig.DEBUG)
+            HttpLoggingInterceptor.Level.BODY
+        else
+            HttpLoggingInterceptor.Level.NONE
     }
 
     // Network Interceptor (커스텀 에러 처리)
