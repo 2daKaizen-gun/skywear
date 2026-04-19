@@ -32,6 +32,10 @@ class WeatherViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
+    // 현재 선택된 KR 도시
+    private val _selectedKrCity = MutableStateFlow(Constants.DEFAULT_CITY_KR)
+    val selectedKrCity: StateFlow<String> = _selectedKrCity.asStateFlow()
+
     // 현재 선택된 JP 도시 (도시 검색 활용)
     private val _selectedJpCity = MutableStateFlow(Constants.DEFAULT_CITY_JP)
     val selectedJpCity: StateFlow<String> = _selectedJpCity.asStateFlow()
@@ -42,7 +46,7 @@ class WeatherViewModel @Inject constructor(
 
     // KR + JP 날씨 동시 호출 -> 코디/ 비교 분석까지 한번에 처리
     fun fetchDualCityWeather(
-        krCity: String = Constants.DEFAULT_CITY_KR,
+        krCity: String = _selectedKrCity.value,
         jpCity: String = _selectedJpCity.value
     ) {
         viewModelScope.launch {
@@ -80,6 +84,12 @@ class WeatherViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    // KR 도시 변경
+    fun changeKrCity(cityName: String) {
+        _selectedKrCity.value = cityName
+        fetchDualCityWeather(krCity = cityName)
     }
 
     // JP 도시 변경(도시 검색 기능)

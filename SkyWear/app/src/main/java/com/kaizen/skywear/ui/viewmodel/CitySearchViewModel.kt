@@ -79,7 +79,7 @@ class CitySearchViewModel @Inject constructor(
     fun selectKrCity(city: City, weatherViewModel: WeatherViewModel) {
         viewModelScope.launch {
             prefsRepository.saveKrCity(city.nameEn)
-            weatherViewModel.fetchDualCityWeather(krCity = city.nameEn)
+            weatherViewModel.changeKrCity(city.nameEn)
         }
     }
 
@@ -87,7 +87,7 @@ class CitySearchViewModel @Inject constructor(
     fun selectJpCity(city: City, weatherViewModel: WeatherViewModel) {
         viewModelScope.launch {
             prefsRepository.saveJpCity(city.nameEn)
-            weatherViewModel.fetchDualCityWeather(jpCity = city.nameEn)
+            weatherViewModel.changeJpCity(city.nameEn)
         }
     }
 
