@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.iconCode
 import com.kaizen.skywear.data.model.weatherId
+import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.ContextAwareResult
 import com.kaizen.skywear.domain.TempComparisonResult
@@ -17,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val repository: WeatherRepository
+    private val repository: WeatherRepository,
+    private val prefsRepository: UserPreferencesRepository
 ): ViewModel() {
 
     // UI State: 화면에 보여줄 데이터 상태
@@ -41,7 +44,40 @@ class WeatherViewModel @Inject constructor(
     val selectedJpCity: StateFlow<String> = _selectedJpCity.asStateFlow()
 
     init {
-        fetchDualCityWeather()
+        viewModelScope.launch {
+            // DataStore에서 저장된 도시 먼저 로드
+            val savedKr = prefsRepository.selectedKrCity.first()
+            val savedJp = prefsRepository.selectedJpCity.first()
+            _selectedKrCity.value = savedKr
+            _selectedJpCity.value = savedJp
+            fetchDualCityWeather(savedKr, savedJp)
+        }
+    }
+
+    // 새로고침
+    fun refresh() {
+        fetchDualCityWeather(
+            krCity = _selectedKrCity.value,
+            jpCity = _selectedJpCity.value
+        )
+    }
+
+    // KR 도시 변경
+    fun changeKrCity(cityName: String) {
+        _selectedKrCity.value = cityName
+        viewModelScope.launch {
+            prefsRepository.saveKrCity(cityName)
+        }
+        fetchDualCityWeather(krCity = cityName)
+    }
+
+    // JP 도시 변경(도시 검색 기능)
+    fun changeJpCity(cityName: String) {
+        _selectedJpCity.value = cityName
+        viewModelScope.launch {
+            prefsRepository.saveJpCity(cityName)
+        }
+        fetchDualCityWeather(jpCity = cityName)
     }
 
     // KR + JP 날씨 동시 호출 -> 코디/ 비교 분석까지 한번에 처리
@@ -51,7 +87,6 @@ class WeatherViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
-
             val result = repository.getDualCityWeather(krCity, jpCity)
 
             _uiState.value = if (result.isSuccess) {
@@ -85,25 +120,7 @@ class WeatherViewModel @Inject constructor(
             }
         }
     }
-
-    // KR 도시 변경
-    fun changeKrCity(cityName: String) {
-        _selectedKrCity.value = cityName
-        fetchDualCityWeather(krCity = cityName)
-    }
-
-    // JP 도시 변경(도시 검색 기능)
-    fun changeJpCity(cityName: String) {
-        _selectedJpCity.value = cityName
-        fetchDualCityWeather(jpCity = cityName)
-    }
-
-    // 새로고침
-    fun refresh() {
-        fetchDualCityWeather()
-    }
 }
-
 // WeatherUiState Update
 // UI 상태를 3가지로 구분 (Loading / Success / Error)
 
