@@ -1,6 +1,7 @@
 package com.kaizen.skywear.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.kaizen.skywear.ui.screen.ChecklistScreen
 import com.kaizen.skywear.ui.screen.DashboardScreen
 import com.kaizen.skywear.ui.screen.SearchScreen
+import com.kaizen.skywear.ui.viewmodel.CitySearchViewModel
+import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 
 // SkyWear 앱 네비게이션 라우트 정의
 
@@ -23,6 +26,9 @@ sealed class Screen(val route: String) {
 fun SkyWearNavGraph(
     navController: NavHostController = rememberNavController()
 ) {
+    val weatherViewModel: WeatherViewModel = hiltViewModel()
+    val citySearchViewModel: CitySearchViewModel = hiltViewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Dashboard.route
@@ -34,7 +40,8 @@ fun SkyWearNavGraph(
                 },
                 onNavigateToSearch = {
                     navController.navigate(Screen.Search.route)
-                }
+                },
+                viewModel = weatherViewModel
             )
         }
         composable(Screen.Checklist.route) {
@@ -44,7 +51,9 @@ fun SkyWearNavGraph(
         }
         composable(Screen.Search.route) {
             SearchScreen(
-                onBack = {navController.popBackStack()}
+                onBack = {navController.popBackStack()},
+                searchViewModel = citySearchViewModel,
+                weatherViewModel = weatherViewModel
             )
         }
     }
