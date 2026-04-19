@@ -70,8 +70,9 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 - **Phase 6**: Main UI Implementation
   - [x] Phase 6-1: Navigation & Screen Integration
   - [x] Phase 6-2: Dual-City Weather Dashboard Screen
-  - [] Phase 6-3: City Search Screen
-  - [] Phase 6-4: Japan Travel Checklist Screen
+  - [x] Phase 6-3: City Search Screen
+  - [x] Phase 6-4: Japan Travel Checklist Screen
+  - [] Phase 6-5: Bug Fixes & Code Quality Improvements
 
 - **Phase 7**: Product Optimization & Professional Portfolio
   - [] Phase 7-1: Advanced Localization (Internationalization)
