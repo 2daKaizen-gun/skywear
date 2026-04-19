@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaizen.skywear.data.model.City
 import com.kaizen.skywear.ui.viewmodel.CitySearchViewModel
 import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
@@ -24,8 +23,8 @@ import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 @Composable
 fun SearchScreen(
     onBack: () -> Unit,
-    searchViewModel: CitySearchViewModel = hiltViewModel(),
-    weatherViewModel: WeatherViewModel = hiltViewModel()
+    searchViewModel: CitySearchViewModel,
+    weatherViewModel: WeatherViewModel
 ) {
     val krQuery by searchViewModel.krSearchQuery.collectAsState()
     val jpQuery by searchViewModel.jpSearchQuery.collectAsState()

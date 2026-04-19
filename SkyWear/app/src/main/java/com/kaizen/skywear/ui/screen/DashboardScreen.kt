@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.domain.OutfitRecommendation
 import com.kaizen.skywear.domain.isOutfitDifferent
@@ -28,7 +27,7 @@ import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 fun DashboardScreen(
     onNavigateToChecklist:() -> Unit,
     onNavigateToSearch:() -> Unit,
-    viewModel: WeatherViewModel = hiltViewModel()
+    viewModel: WeatherViewModel
 ) {
    val uiState by viewModel.uiState.collectAsState()
    val colors = LocalExtraColors.current
