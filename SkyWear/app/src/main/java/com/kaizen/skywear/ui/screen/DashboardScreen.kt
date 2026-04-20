@@ -5,15 +5,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.domain.OutfitRecommendation
 import com.kaizen.skywear.domain.isOutfitDifferent
@@ -37,19 +39,19 @@ fun DashboardScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "\uD83C\uDF24\uFE0F SkyWear",
+                        text = stringResource(R.string.dashboard_title),
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
                 actions = {
                     IconButton(onClick = { viewModel.refresh() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = "새로고침")
+                        Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.dashboard_refresh))
                     }
                     IconButton(onClick = onNavigateToSearch) {
-                        Icon(Icons.Default.Search, contentDescription = "도서 검색")
+                        Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search_title))
                     }
                     IconButton(onClick = onNavigateToChecklist) {
-                        Icon(Icons.Default.List, contentDescription = "체크 리스트")
+                        Icon(Icons.AutoMirrored.Filled.List, contentDescription = stringResource(R.string.checklist_title))
                     }
                 }
             )
@@ -69,7 +71,7 @@ fun DashboardScreen(
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "날씨 정보를 불러오는 중..",
+                            text = stringResource(R.string.dashboard_loading),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -141,7 +143,7 @@ fun DashboardScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "온도 차이",
+                                    text = stringResource(R.string.dashboard_temp_gap),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
@@ -180,9 +182,9 @@ fun DashboardScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Icon(Icons.Default.List, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.List, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("일본 여행 체크리스트 보기")
+                        Text(stringResource(R.string.dashboard_checklist_button))
                     }
                 }
             }
@@ -210,7 +212,7 @@ fun DashboardScreen(
                             textAlign = TextAlign.Center
                         )
                         Button(onClick = { viewModel.refresh() }) {
-                            Text("다시 시도")
+                            Text(stringResource(R.string.dashboard_retry))
                         }
                     }
                 }
@@ -279,12 +281,12 @@ private fun WeatherCard(
             // 체감온도 + 습도
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "체감 $feelsLike°",
+                    text = stringResource(R.string.dashboard_feels_like, feelsLike),
                     style = MaterialTheme.typography.labelSmall,
                     color = onCardColor.copy(alpha = 0.7f)
                 )
                 Text(
-                    text = "습도 $humidity%",
+                    text = stringResource(R.string.dashboard_humidity, humidity),
                     style = MaterialTheme.typography.labelSmall,
                     color = onCardColor.copy(alpha = 0.7f)
                 )
@@ -314,13 +316,13 @@ private fun OutfitTransitionCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "🇰🇷 서울", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("🇰🇷", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = krOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
                 Text(text = krOutfit.mainOutfit, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
-            Text(text = "→", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("→", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "🇯🇵 오사카", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("🇯🇵", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = jpOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
                 Text(text = jpOutfit.mainOutfit, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }

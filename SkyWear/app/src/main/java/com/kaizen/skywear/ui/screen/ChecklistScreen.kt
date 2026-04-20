@@ -13,9 +13,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kaizen.skywear.R
 import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.data.local.ChecklistItem
 import com.kaizen.skywear.ui.viewmodel.ChecklistViewModel
@@ -44,22 +46,22 @@ fun ChecklistScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("🗺️ 일본 여행 체크리스트") },
+                title = { Text(stringResource(R.string.checklist_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { viewModel.deleteCheckedItems() }) {
-                        Icon(Icons.Default.Delete, contentDescription = "완료 항목 삭제")
+                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.checklist_delete_checked))
                     }
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Default.Add, contentDescription = "항목 추가")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.checklist_add))
             }
         }
     ) { padding ->
@@ -76,7 +78,7 @@ fun ChecklistScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "준비 완료",
+                            text = stringResource(R.string.checklist_progress),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -107,14 +109,14 @@ fun ChecklistScreen(
                     FilterChip(
                         selected = selectedCategory == null,
                         onClick = { viewModel.filterByCategory(null) },
-                        label = { Text("전체") }
+                        label = { Text(stringResource(R.string.checklist_all)) }
                     )
                 }
                 items(ChecklistCategory.entries) { category ->
                     FilterChip(
                         selected = selectedCategory == category,
                         onClick = { viewModel.filterByCategory(category) },
-                        label = { Text(category.toKorean()) }
+                        label = { Text(category.toLocalizedString()) }
                     )
                 }
             }
@@ -188,7 +190,7 @@ private fun ChecklistItemCard(
                     textDecoration = if (item.isChecked) TextDecoration.LineThrough else null
                 )
                 Text(
-                    text = item.category.toKorean(),
+                    text = item.category.toLocalizedString(),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -218,22 +220,22 @@ private fun AddItemDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("항목 추가") },
+        title = { Text(stringResource(R.string.checklist_add_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("항목 이름") },
+                    label = { Text(stringResource(R.string.checklist_add_name)) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Text("카테고리", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.checklist_add_category), style = MaterialTheme.typography.labelMedium)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(ChecklistCategory.entries) { category ->
                         FilterChip(
                             selected = selectedCategory == category,
                             onClick = { selectedCategory = category },
-                            label = { Text(category.toKorean()) }
+                            label = { Text(category.toLocalizedString()) }
                         )
                     }
                 }
@@ -243,20 +245,23 @@ private fun AddItemDialog(
             TextButton(
                 onClick = { if (title.isNotBlank()) onConfirm(title, selectedCategory) },
                 enabled = title.isNotBlank()
-            ) { Text("추가") }
+            ) { Text(stringResource(R.string.checklist_confirm)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("취소") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.checklist_cancel)) }
         }
     )
 }
 
-// 카테고리 한국어 변환
-fun ChecklistCategory.toKorean(): String = when(this) {
-    ChecklistCategory.DOCUMENT -> "📄 서류"
-    ChecklistCategory.MONEY -> "💴 금융"
-    ChecklistCategory.ELECTRONIC -> "🔌 전자기기"
-    ChecklistCategory.CLOTHING -> "👕 의류"
-    ChecklistCategory.HEALTH -> "💊 건강"
-    ChecklistCategory.MISC -> "📦 기타"
-}
+// stringResource 를 Composable 밖에서 쓸 수 없어서 enum 확장함수로 분리
+@Composable
+fun ChecklistCategory.toLocalizedString(): String = stringResource(
+    when (this) {
+        ChecklistCategory.DOCUMENT   -> R.string.category_document
+        ChecklistCategory.MONEY      -> R.string.category_money
+        ChecklistCategory.ELECTRONIC -> R.string.category_electronic
+        ChecklistCategory.CLOTHING   -> R.string.category_clothing
+        ChecklistCategory.HEALTH     -> R.string.category_health
+        ChecklistCategory.MISC       -> R.string.category_misc
+    }
+)

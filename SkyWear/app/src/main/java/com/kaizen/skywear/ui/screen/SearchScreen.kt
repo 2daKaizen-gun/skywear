@@ -6,13 +6,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.City
 import com.kaizen.skywear.ui.viewmodel.CitySearchViewModel
 import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
@@ -38,10 +41,10 @@ fun SearchScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("🔍 도시 검색") },
+                title = { Text(stringResource(R.string.search_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -57,12 +60,12 @@ fun SearchScreen(
                 Tab(
                     selected = activeTab == 0,
                     onClick = { activeTab = 0 },
-                    text = { Text("🇰🇷 출발지 (KR)") }
+                    text = { Text(stringResource(R.string.search_tab_kr)) }
                 )
                 Tab(
                     selected = activeTab == 1,
                     onClick = { activeTab = 1 },
-                    text = { Text("🇯🇵 목적지 (JP)") }
+                    text = { Text(stringResource(R.string.search_tab_jp)) }
                 )
             }
 
@@ -75,7 +78,7 @@ fun SearchScreen(
                     onQueryChange = { searchViewModel.searchKrCity(it) },
                     cities = krResults,
                     savedCity = savedKrCity,
-                    placeholder = "한국 도시 검색 (예: 서울, Seoul)",
+                    placeholder = stringResource(R.string.search_hint_kr),
                     onCitySelected = { city ->
                         searchViewModel.selectKrCity(city, weatherViewModel)
                         onBack()
@@ -88,7 +91,7 @@ fun SearchScreen(
                     onQueryChange = { searchViewModel.searchJpCity(it) },
                     cities = jpResults,
                     savedCity = savedJpCity,
-                    placeholder = "일본 도시 검색 (예: 오사카, Osaka)",
+                    placeholder = stringResource(R.string.search_hint_jp),
                     onCitySelected = { city ->
                         searchViewModel.selectJpCity(city, weatherViewModel)
                         onBack()
@@ -130,7 +133,7 @@ private fun CitySearchContent(
 
         // 현재 선택된 도시 표시
         Text(
-            text = "현재 선택: $savedCity",
+            text = stringResource(R.string.search_selected, savedCity),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -204,7 +207,7 @@ private fun CityItem(
             }
             if (isSelected) {
                 Text(
-                    text = "✓ 선택됨",
+                    text = stringResource(R.string.search_selected_label),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
