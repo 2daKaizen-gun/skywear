@@ -1,2 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <!-- App Basics -->
+    <string name="app_name">SkyWear</string>
+    <string name="app_subtitle">KR-JP Smart Travel Outfit Guide</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">🌤️ SkyWear</string>
+    <string name="dashboard_loading">Loading weather data…</string>
+    <string name="dashboard_refresh">Refresh</string>
+    <string name="dashboard_retry">Try Again</string>
+    <string name="dashboard_temp_gap">Temperature Gap</string>
+    <string name="dashboard_checklist_button">View Japan Travel Checklist</string>
+    <string name="dashboard_feels_like">Feels %1$d°</string>
+    <string name="dashboard_humidity">Humidity %1$d%%</string>
+
+    <!-- Weather -->
+    <string name="weather_clear">Clear</string>
+    <string name="weather_clouds">Cloudy</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_thunderstorm">Thunderstorm</string>
+    <string name="weather_drizzle">Drizzle</string>
+    <string name="weather_fog">Fog</string>
+    <string name="weather_unknown">Unknown</string>
+
+    <!-- Outfit Algorithm -->
+    <string name="outfit_stage1">T-shirt + Shorts</string>
+    <string name="outfit_stage2">T-shirt + Light Top</string>
+    <string name="outfit_stage3">Cardigan or Long Sleeve</string>
+    <string name="outfit_stage4">Knit + Jacket</string>
+    <string name="outfit_stage5">Light Coat + Knit</string>
+    <string name="outfit_stage6">Heavy Coat + Layers</string>
+    <string name="outfit_stage7">Long Puffer + Scarf</string>
+    <string name="outfit_stage8">Long Puffer + Scarf + Hand Warmers</string>
+
+    <!-- City Search -->
+    <string name="search_title">🔍 City Search</string>
+    <string name="search_tab_kr">🇰🇷 Departure (KR)</string>
+    <string name="search_tab_jp">🇯🇵 Destination (JP)</string>
+    <string name="search_hint_kr">Search Korean city (e.g. Seoul)</string>
+    <string name="search_hint_jp">Search Japanese city (e.g. Osaka)</string>
+    <string name="search_selected">Selected: %1$s</string>
+    <string name="search_selected_label">✓ Selected</string>
+
+    <!-- Checklist -->
+    <string name="checklist_title">🗺️ Japan Travel Checklist</string>
+    <string name="checklist_progress">Ready</string>
+    <string name="checklist_add">Add Item</string>
+    <string name="checklist_delete_checked">Delete Checked Items</string>
+    <string name="checklist_add_title">Add Item</string>
+    <string name="checklist_add_name">Item Name</string>
+    <string name="checklist_add_category">Category</string>
+    <string name="checklist_confirm">Add</string>
+    <string name="checklist_cancel">Cancel</string>
+    <string name="checklist_all">All</string>
+
+    <!-- Categories -->
+    <string name="category_document">📄 Documents</string>
+    <string name="category_money">💴 Money</string>
+    <string name="category_electronic">🔌 Electronics</string>
+    <string name="category_clothing">👕 Clothing</string>
+    <string name="category_health">💊 Health</string>
+    <string name="category_misc">📦 Misc</string>
+
+    <!-- Notification -->
+    <string name="notification_title">🌤️ SkyWear Daily Briefing</string>
+    <string name="notification_channel_name">SkyWear Daily Briefing</string>
+    <string name="notification_channel_desc">Daily weather and outfit tips for your trip</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="error_unknown">An unknown error occurred.</string>
+    <string name="error_no_internet">Please check your internet connection.</string>
+    <string name="error_timeout">Request timed out. Please try again.</string>
+    <string name="error_city_not_found">City not found.</string>
+</resources>
