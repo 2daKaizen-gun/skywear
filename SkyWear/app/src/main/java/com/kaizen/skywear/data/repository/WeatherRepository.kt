@@ -1,6 +1,7 @@
 package com.kaizen.skywear.data.repository
 
 import com.kaizen.skywear.data.model.WeatherResponse
+import com.kaizen.skywear.data.remote.NetworkException
 import com.kaizen.skywear.data.remote.RetrofitClient
 import com.kaizen.skywear.util.Constants
 
@@ -36,6 +37,8 @@ class WeatherRepository {
                 lang = Constants.LANG_KR // 한국어로 날씨 설명 받기
             )
             Result.success(response)
+        } catch (e: NetworkException) {
+            Result.failure(e)
         } catch (e: Exception) {
             Result.failure(e)
         }
