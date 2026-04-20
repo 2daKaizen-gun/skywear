@@ -1,2 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <!-- アプリ基本 -->
+    <string name="app_name">SkyWear</string>
+    <string name="app_subtitle">韓日気温比較スマートコーディガイド</string>
+
+    <!-- ダッシュボード -->
+    <string name="dashboard_title">🌤️ SkyWear</string>
+    <string name="dashboard_loading">天気情報を読み込み中…</string>
+    <string name="dashboard_refresh">更新</string>
+    <string name="dashboard_retry">もう一度試す</string>
+    <string name="dashboard_temp_gap">気温差</string>
+    <string name="dashboard_checklist_button">日本旅行チェックリストを見る</string>
+    <string name="dashboard_feels_like">体感 %1$d°</string>
+    <string name="dashboard_humidity">湿度 %1$d%%</string>
+
+    <!-- 天気 -->
+    <string name="weather_clear">晴れ</string>
+    <string name="weather_clouds">曇り</string>
+    <string name="weather_rain">雨</string>
+    <string name="weather_snow">雪</string>
+    <string name="weather_thunderstorm">雷雨</string>
+    <string name="weather_drizzle">霧雨</string>
+    <string name="weather_fog">霧</string>
+    <string name="weather_unknown">不明</string>
+
+    <!-- コーディアルゴリズム -->
+    <string name="outfit_stage1">半袖 + ショートパンツ</string>
+    <string name="outfit_stage2">半袖 + 薄い長袖</string>
+    <string name="outfit_stage3">カーディガン or 長袖</string>
+    <string name="outfit_stage4">ニット + ジャケット</string>
+    <string name="outfit_stage5">軽いコート + ニット</string>
+    <string name="outfit_stage6">厚手コート + レイヤード</string>
+    <string name="outfit_stage7">ロングダウン + マフラー</string>
+    <string name="outfit_stage8">ロングダウン + マフラー + カイロ</string>
+
+    <!-- 都市検索 -->
+    <string name="search_title">🔍 都市検索</string>
+    <string name="search_tab_kr">🇰🇷 出発地 (KR)</string>
+    <string name="search_tab_jp">🇯🇵 目的地 (JP)</string>
+    <string name="search_hint_kr">韓国の都市を検索 (例: ソウル、Seoul)</string>
+    <string name="search_hint_jp">日本の都市を検索 (例: 大阪、Osaka)</string>
+    <string name="search_selected">現在の選択: %1$s</string>
+    <string name="search_selected_label">✓ 選択済み</string>
+
+    <!-- チェックリスト -->
+    <string name="checklist_title">🗺️ 日本旅行チェックリスト</string>
+    <string name="checklist_progress">準備完了</string>
+    <string name="checklist_add">項目を追加</string>
+    <string name="checklist_delete_checked">完了項目を削除</string>
+    <string name="checklist_add_title">項目を追加</string>
+    <string name="checklist_add_name">項目名</string>
+    <string name="checklist_add_category">カテゴリ</string>
+    <string name="checklist_confirm">追加</string>
+    <string name="checklist_cancel">キャンセル</string>
+    <string name="checklist_all">すべて</string>
+
+    <!-- カテゴリ -->
+    <string name="category_document">📄 書類</string>
+    <string name="category_money">💴 お金</string>
+    <string name="category_electronic">🔌 電子機器</string>
+    <string name="category_clothing">👕 服</string>
+    <string name="category_health">💊 健康</string>
+    <string name="category_misc">📦 その他</string>
+
+    <!-- 通知 -->
+    <string name="notification_title">🌤️ SkyWear 本日の旅行ブリーフィング</string>
+    <string name="notification_channel_name">SkyWear デイリーブリーフィング</string>
+    <string name="notification_channel_desc">毎日の旅行天気とコーディをお知らせします</string>
+
+    <!-- 共通 -->
+    <string name="back">戻る</string>
+    <string name="error_unknown">不明なエラーが発生しました。</string>
+    <string name="error_no_internet">インターネット接続を確認してください。</string>
+    <string name="error_timeout">リクエストがタイムアウトしました。もう一度試してください。</string>
+    <string name="error_city_not_found">都市が見つかりません。</string>
+</resources>
