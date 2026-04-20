@@ -1,3 +1,76 @@
 <resources>
+    <!-- 앱 기본 -->
     <string name="app_name">SkyWear</string>
+    <string name="app_subtitle">한·일 온도 비교 스마트 코디 가이드</string>
+
+    <!-- 대시보드 -->
+    <string name="dashboard_title">🌤️ SkyWear</string>
+    <string name="dashboard_loading">날씨 정보를 불러오는 중…</string>
+    <string name="dashboard_refresh">새로고침</string>
+    <string name="dashboard_retry">다시 시도</string>
+    <string name="dashboard_temp_gap">온도 차이</string>
+    <string name="dashboard_checklist_button">일본 여행 체크리스트 보기</string>
+    <string name="dashboard_feels_like">체감 %1$d°</string>
+    <string name="dashboard_humidity">습도 %1$d%%</string>
+
+    <!-- 날씨 상태 -->
+    <string name="weather_clear">맑음</string>
+    <string name="weather_clouds">구름 많음</string>
+    <string name="weather_rain">비</string>
+    <string name="weather_snow">눈</string>
+    <string name="weather_thunderstorm">뇌우</string>
+    <string name="weather_drizzle">이슬비</string>
+    <string name="weather_fog">안개</string>
+    <string name="weather_unknown">알 수 없음</string>
+
+    <!-- 코디 알고리즘 -->
+    <string name="outfit_stage1">반팔 + 반바지</string>
+    <string name="outfit_stage2">반팔 + 얇은 긴팔</string>
+    <string name="outfit_stage3">가디건 or 긴팔</string>
+    <string name="outfit_stage4">니트 + 재킷</string>
+    <string name="outfit_stage5">가벼운 코트 + 니트</string>
+    <string name="outfit_stage6">두꺼운 코트 + 레이어링</string>
+    <string name="outfit_stage7">롱패딩 + 목도리</string>
+    <string name="outfit_stage8">롱패딩 + 목도리 + 핫팩</string>
+
+    <!-- 도시 검색 -->
+    <string name="search_title">🔍 도시 검색</string>
+    <string name="search_tab_kr">🇰🇷 출발지 (KR)</string>
+    <string name="search_tab_jp">🇯🇵 목적지 (JP)</string>
+    <string name="search_hint_kr">한국 도시 검색 (예: 서울, Seoul)</string>
+    <string name="search_hint_jp">일본 도시 검색 (예: 오사카, Osaka)</string>
+    <string name="search_selected">현재 선택: %1$s</string>
+    <string name="search_selected_label">✓ 선택됨</string>
+
+    <!-- 체크리스트 -->
+    <string name="checklist_title">🗺️ 일본 여행 체크리스트</string>
+    <string name="checklist_progress">준비 완료</string>
+    <string name="checklist_add">항목 추가</string>
+    <string name="checklist_delete_checked">완료 항목 삭제</string>
+    <string name="checklist_add_title">항목 추가</string>
+    <string name="checklist_add_name">항목 이름</string>
+    <string name="checklist_add_category">카테고리</string>
+    <string name="checklist_confirm">추가</string>
+    <string name="checklist_cancel">취소</string>
+    <string name="checklist_all">전체</string>
+
+    <!-- 카테고리 -->
+    <string name="category_document">📄 서류</string>
+    <string name="category_money">💴 금융</string>
+    <string name="category_electronic">🔌 전자기기</string>
+    <string name="category_clothing">👕 의류</string>
+    <string name="category_health">💊 건강</string>
+    <string name="category_misc">📦 기타</string>
+
+    <!-- 알림 -->
+    <string name="notification_title">🌤️ SkyWear 오늘의 여행 브리핑</string>
+    <string name="notification_channel_name">SkyWear 데일리 브리핑</string>
+    <string name="notification_channel_desc">매일 여행 날씨와 코디를 알려드려요</string>
+
+    <!-- 공통 -->
+    <string name="back">뒤로</string>
+    <string name="error_unknown">알 수 없는 오류가 발생했습니다.</string>
+    <string name="error_no_internet">인터넷 연결을 확인해주세요.</string>
+    <string name="error_timeout">요청 시간이 초과되었습니다. 다시 시도해주세요.</string>
+    <string name="error_city_not_found">도시를 찾을 수 없습니다.</string>
 </resources>
