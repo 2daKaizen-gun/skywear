@@ -3,17 +3,12 @@ package com.kaizen.skywear.domain
 import com.kaizen.skywear.data.model.WeatherResponse
 import kotlin.math.pow
 
-// 체감 온도, 습도 기반 코디 보정 로직
-// OutfitAlgorithm 결과를 보정해서 더 정확한 추천 제공
-
-// 보정된 최종 추천 결과
 data class ContextAwareResult (
     val baseOutfit: OutfitRecommendation, // 기온 기반 기본 코디
     val adjustedOutfit: OutfitRecommendation, // 체감 온도 보정 후 코디
     val feelsLikeTemp: Double, // 계산된 체감 온도
     val humidityLevel: HumidityLevel, // 습도 단계
     val windLevel: WindLevel, // 온도 단계
-    val contextMessage: String, // 보정 메시지 (ex: "바람이 강해서 더 춥게 느껴져요")
     val extraItems: List<String> // 추가 아이템 (ex: ["우산", "방풍 재킷"])
 )
 
@@ -41,41 +36,15 @@ fun buildContextAwareRecommendation (weather: WeatherResponse): ContextAwareResu
     val windSpeed = weather.wind.speed
 
     // 체감온도 계산
-    val feelsLikeTemp = calculateFeelsLike(actualTemp, windSpeed, humidity)
-
-    // 습도/바람 단계 분류
-    val humidityLevel = classifyHumidity(humidity)
-    val windLevel = classifyWind(windSpeed)
-
-    // 기본 코디 (실제 기온 기반)
-    val baseOutfit = getOutfitRecommendation(actualTemp)
-
-    // 보정 코디 (체감온도 기반)
-    val adjustedOutfit = getOutfitRecommendation(feelsLikeTemp)
-
-    // 보정 메시지 생성
-    val contextMessage = buildContextMessage(
-        actualTemp = actualTemp,
-        feelsLikeTemp = feelsLikeTemp,
-        humidityLevel = humidityLevel,
-        windLevel = windLevel
-    )
-
-    // 추가 아이템 생성
-    val extraItems = buildExtraItems(
-        humidityLevel = humidityLevel,
-        windLevel = windLevel,
-        feelsLikeTemp = feelsLikeTemp
-    )
+    val feelsLike = calculateFeelsLike(actualTemp, windSpeed, humidity)
 
     return ContextAwareResult(
-        baseOutfit = baseOutfit,
-        adjustedOutfit = adjustedOutfit,
-        feelsLikeTemp = feelsLikeTemp,
-        humidityLevel = humidityLevel,
-        windLevel = windLevel,
-        contextMessage = contextMessage,
-        extraItems = extraItems
+        baseOutfit     = getOutfitRecommendation(actualTemp),
+        adjustedOutfit = getOutfitRecommendation(feelsLike),
+        feelsLikeTemp  = feelsLike,
+        humidityLevel  = classifyHumidity(humidity),
+        windLevel      = classifyWind(windSpeed),
+        extraItems     = buildExtraItems(classifyHumidity(humidity), classifyWind(windSpeed), feelsLike)
     )
 }
 
@@ -133,39 +102,6 @@ private fun classifyWind(windSpeed: Double): WindLevel = when {
     else -> WindLevel.VERY_WINDY
 }
 
-// 보정 메시지 생성
-private fun buildContextMessage(
-    actualTemp: Double,
-    feelsLikeTemp: Double,
-    humidityLevel: HumidityLevel,
-    windLevel: WindLevel
-): String {
-    val tempDiff = actualTemp - feelsLikeTemp
-
-    return when {
-        // 바람이 강해서 훨씬 춥게 느껴질 때
-        windLevel == WindLevel.VERY_WINDY && tempDiff >= 5 ->
-            "바람이 매우 강해 체감온도가 ${String.format("%.1f", tempDiff)}°C 낮아요! 방풍 재킷을 꼭 챙기세요. 🌬️"
-
-        windLevel == WindLevel.WINDY && tempDiff >= 3 ->
-            "바람이 강해서 실제보다 춥게 느껴져요. 한 겹 더 챙기세요. \uD83D\uDCA8"
-
-        // 습도가 높아서 더 덥게 느껴질 때
-        humidityLevel == HumidityLevel.VERY_HUMID && feelsLikeTemp > actualTemp ->
-            "습도가 매우 높아서 체감온도가 더 높아요. 통풍이 잘 되는 옷을 입으세요. \uD83D\uDCA7"
-
-        humidityLevel == HumidityLevel.HUMID ->
-            "습도가 높은 편이에요. 습한 날씨에 주의하세요. \uD83C\uDF2B\uFE0F"
-
-        // 건조할 때
-        humidityLevel == HumidityLevel.DRY ->
-            "건조한 날씨에요. 보습에 신경 쓰세요. \uD83C\uDFDC\uFE0F"
-
-        // 쾌적할 때
-        else -> "쾌적한 날씨예요. 기온에 맞게 입으면 돼요. \uD83D\uDE0A"
-    }
-}
-
 // 날씨 상황별 추가 아이템 추천
 private fun buildExtraItems(
     humidityLevel: HumidityLevel,
@@ -208,10 +144,6 @@ private fun buildExtraItems(
 
     return items.distinct()
 }
-
-// 체감 온도 표시 텍스트 (ex: "체감 -5°C")
-fun ContextAwareResult.feelsLikeLabel(): String =
-    "체감 ${String.format("%.0f", feelsLikeTemp)}°C"
 
 // 기온과 체감 온도 차이가 큰지 여부 (2°C 이상 차이나면 UI에서 강조)
 fun ContextAwareResult.hasSignificantFeelsLikeDiff(actualTemp: Double): Boolean =
