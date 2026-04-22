@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.domain.OutfitGapLevel
 import com.kaizen.skywear.domain.OutfitRecommendation
 import com.kaizen.skywear.domain.TempComparisonResult
 import com.kaizen.skywear.domain.isOutfitDifferent
@@ -238,6 +239,29 @@ private fun buildComparisonMessage(result: TempComparisonResult): String = when 
     )
     else -> stringResource(R.string.comparison_same, result.jpCityName)
 }
+
+// 여행 조인
+@Composable
+private fun buildTravelAdvice(result: TempComparisonResult): String =
+    when (result.outfitGapLevel) {
+        OutfitGapLevel.SIMILAR -> when {
+            result.jpTemp <= 0  -> stringResource(R.string.advice_similar_freezing)
+            result.jpTemp <= 10 -> stringResource(R.string.advice_similar_cold)
+            result.jpTemp <= 20 -> stringResource(R.string.advice_similar_mild)
+            else                -> stringResource(R.string.advice_similar_hot)
+        }
+        OutfitGapLevel.MODERATE -> when {
+            result.gapDegree > 0 -> stringResource(R.string.advice_moderate_warmer)
+            else                 -> stringResource(R.string.advice_moderate_colder)
+        }
+        OutfitGapLevel.SIGNIFICANT -> when {
+            result.gapDegree > 0 -> stringResource(R.string.advice_significant_warmer)
+            else                 -> stringResource(R.string.advice_significant_colder)
+        }
+    }
+
+// 체감온도 컨텍스트 메시지
+
 
 // Outfit stage → stringResource
 @Composable
