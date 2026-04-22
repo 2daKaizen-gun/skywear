@@ -17,9 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.domain.ContextAwareResult
+import com.kaizen.skywear.domain.HumidityLevel
 import com.kaizen.skywear.domain.OutfitGapLevel
 import com.kaizen.skywear.domain.OutfitRecommendation
 import com.kaizen.skywear.domain.TempComparisonResult
+import com.kaizen.skywear.domain.WindLevel
+import com.kaizen.skywear.domain.hasSignificantFeelsLikeDiff
 import com.kaizen.skywear.domain.isOutfitDifferent
 import com.kaizen.skywear.ui.theme.LocalExtraColors
 import com.kaizen.skywear.ui.viewmodel.WeatherUiState
@@ -84,6 +88,15 @@ fun DashboardScreen(
 
             // 성공
             is WeatherUiState.Success -> {
+
+                // UI 에서 문자열 생성 (stringResource 사용)
+                val comparisonMessage = buildComparisonMessage(state.comparisonResult)
+                val travelAdvice = buildTravelAdvice(state.comparisonResult)
+                val contextMessage = buildContextMessage(
+                    state.krContextResult,
+                    state.krWeather.main.temp
+                )
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -167,6 +180,24 @@ fun DashboardScreen(
                                 text = travelAdvice,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer
+                            )
+                        }
+                    }
+
+                    // 체감온도 컨텍스트 카드
+                    if (state.krContextResult.hasSignificantFeelsLikeDiff(state.krWeather.main.temp)) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            ),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Text(
+                                text = contextMessage,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(16.dp)
                             )
                         }
                     }
@@ -261,7 +292,24 @@ private fun buildTravelAdvice(result: TempComparisonResult): String =
     }
 
 // 체감온도 컨텍스트 메시지
-
+@Composable
+private fun buildContextMessage(result: ContextAwareResult, actualTemp: Double): String {
+    val tempDiff = actualTemp - result.feelsLikeTemp
+    return when {
+        result.windLevel == WindLevel.VERY_WINDY && tempDiff >= 5 ->
+            stringResource(R.string.context_very_windy_cold)
+        result.windLevel == WindLevel.WINDY && tempDiff >= 3 ->
+            stringResource(R.string.context_windy_cold)
+        result.humidityLevel == HumidityLevel.VERY_HUMID && result.feelsLikeTemp > actualTemp ->
+            stringResource(R.string.context_very_humid_hot)
+        result.humidityLevel == HumidityLevel.HUMID ->
+            stringResource(R.string.context_humid)
+        result.humidityLevel == HumidityLevel.DRY ->
+            stringResource(R.string.context_dry)
+        else ->
+            stringResource(R.string.context_comfortable)
+    }
+}
 
 // Outfit stage → stringResource
 @Composable
@@ -330,7 +378,7 @@ private fun WeatherCard(
 
             // 코디 추천
             Text(
-                text = outfit.mainOutfit,
+                outfit.localizedMainOutfit(),
                 style = MaterialTheme.typography.bodySmall,
                 color = onCardColor
             )
@@ -375,7 +423,7 @@ private fun OutfitTransitionCard(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("🇰🇷", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = krOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(text = krOutfit.mainOutfit, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(krOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
             Text("→", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
