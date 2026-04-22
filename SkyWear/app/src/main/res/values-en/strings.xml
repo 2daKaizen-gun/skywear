@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App Basics -->
     <string name="app_name">SkyWear</string>
     <string name="app_subtitle">KR-JP Smart Travel Outfit Guide</string>
 
-    <!-- Dashboard -->
     <string name="dashboard_title">🌤️ SkyWear</string>
     <string name="dashboard_loading">Loading weather data…</string>
     <string name="dashboard_refresh">Refresh</string>
@@ -14,17 +12,6 @@
     <string name="dashboard_feels_like">Feels %1$d°</string>
     <string name="dashboard_humidity">Humidity %1$d%%</string>
 
-    <!-- Weather -->
-    <string name="weather_clear">Clear</string>
-    <string name="weather_clouds">Cloudy</string>
-    <string name="weather_rain">Rain</string>
-    <string name="weather_snow">Snow</string>
-    <string name="weather_thunderstorm">Thunderstorm</string>
-    <string name="weather_drizzle">Drizzle</string>
-    <string name="weather_fog">Fog</string>
-    <string name="weather_unknown">Unknown</string>
-
-    <!-- Outfit Algorithm -->
     <string name="outfit_stage1">T-shirt + Shorts</string>
     <string name="outfit_stage2">T-shirt + Light Top</string>
     <string name="outfit_stage3">Cardigan or Long Sleeve</string>
@@ -34,7 +21,26 @@
     <string name="outfit_stage7">Long Puffer + Scarf</string>
     <string name="outfit_stage8">Long Puffer + Scarf + Hand Warmers</string>
 
-    <!-- City Search -->
+    <string name="comparison_jp_warmer">%1$s is %2$d°C warmer than Seoul! 🌤️</string>
+    <string name="comparison_jp_colder">%1$s is %2$d°C colder than Seoul! 🥶</string>
+    <string name="comparison_same">Seoul and %1$s have the same temperature! 🌡️</string>
+
+    <string name="advice_similar_freezing">Dress as warmly as Seoul. ❄️</string>
+    <string name="advice_similar_cold">Similar weather to Seoul. Bring a coat. 🧥</string>
+    <string name="advice_similar_mild">Similar weather to Seoul. Light clothing is fine. 🌤️</string>
+    <string name="advice_similar_hot">Dress as lightly as in Seoul. ☀️</string>
+    <string name="advice_moderate_warmer">Warmer than Seoul — dress one layer lighter. 🌤️</string>
+    <string name="advice_moderate_colder">Colder than Seoul — add one extra layer. 🧣</string>
+    <string name="advice_significant_warmer">Much warmer than Seoul! Seoul outfit may be too heavy. 🌞</string>
+    <string name="advice_significant_colder">Much colder than Seoul! Dress much warmer. ❄️</string>
+
+    <string name="context_very_windy_cold">Very strong winds lower the feels-like temperature! Bring a windbreaker. 🌬️</string>
+    <string name="context_windy_cold">Strong winds make it feel colder. Add an extra layer. 💨</string>
+    <string name="context_very_humid_hot">Very high humidity raises the feels-like temperature. Wear breathable clothes. 💧</string>
+    <string name="context_humid">High humidity today. Watch out for the moisture. 🌫️</string>
+    <string name="context_dry">Dry weather today. Stay moisturized. 🏜️</string>
+    <string name="context_comfortable">Comfortable weather. Dress for the temperature. 😊</string>
+
     <string name="search_title">🔍 City Search</string>
     <string name="search_tab_kr">🇰🇷 Departure (KR)</string>
     <string name="search_tab_jp">🇯🇵 Destination (JP)</string>
@@ -43,7 +49,6 @@
     <string name="search_selected">Selected: %1$s</string>
     <string name="search_selected_label">✓ Selected</string>
 
-    <!-- Checklist -->
     <string name="checklist_title">🗺️ Japan Travel Checklist</string>
     <string name="checklist_progress">Ready</string>
     <string name="checklist_add">Add Item</string>
@@ -55,7 +60,6 @@
     <string name="checklist_cancel">Cancel</string>
     <string name="checklist_all">All</string>
 
-    <!-- Categories -->
     <string name="category_document">📄 Documents</string>
     <string name="category_money">💴 Money</string>
     <string name="category_electronic">🔌 Electronics</string>
@@ -63,12 +67,10 @@
     <string name="category_health">💊 Health</string>
     <string name="category_misc">📦 Misc</string>
 
-    <!-- Notification -->
     <string name="notification_title">🌤️ SkyWear Daily Briefing</string>
     <string name="notification_channel_name">SkyWear Daily Briefing</string>
     <string name="notification_channel_desc">Daily weather and outfit tips for your trip</string>
 
-    <!-- Common -->
     <string name="back">Back</string>
     <string name="error_unknown">An unknown error occurred.</string>
     <string name="error_no_internet">Please check your internet connection.</string>
