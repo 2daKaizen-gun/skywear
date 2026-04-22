@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 앱 기본 -->
     <string name="app_name">SkyWear</string>
@@ -13,17 +14,7 @@
     <string name="dashboard_feels_like">체감 %1$d°</string>
     <string name="dashboard_humidity">습도 %1$d%%</string>
 
-    <!-- 날씨 상태 -->
-    <string name="weather_clear">맑음</string>
-    <string name="weather_clouds">구름 많음</string>
-    <string name="weather_rain">비</string>
-    <string name="weather_snow">눈</string>
-    <string name="weather_thunderstorm">뇌우</string>
-    <string name="weather_drizzle">이슬비</string>
-    <string name="weather_fog">안개</string>
-    <string name="weather_unknown">알 수 없음</string>
-
-    <!-- 코디 알고리즘 -->
+    <!-- 코디 알고리즘 8단계 -->
     <string name="outfit_stage1">반팔 + 반바지</string>
     <string name="outfit_stage2">반팔 + 얇은 긴팔</string>
     <string name="outfit_stage3">가디건 or 긴팔</string>
@@ -32,6 +23,29 @@
     <string name="outfit_stage6">두꺼운 코트 + 레이어링</string>
     <string name="outfit_stage7">롱패딩 + 목도리</string>
     <string name="outfit_stage8">롱패딩 + 목도리 + 핫팩</string>
+
+    <!-- 온도 비교 메시지 -->
+    <string name="comparison_jp_warmer">%1$s이(가) 서울보다 %2$d°C 더 따뜻해요! 🌤️</string>
+    <string name="comparison_jp_colder">%1$s이(가) 서울보다 %2$d°C 더 추워요! 🥶</string>
+    <string name="comparison_same">서울과 %1$s의 기온이 똑같아요! 🌡️</string>
+
+    <!-- 여행 조언 -->
+    <string name="advice_similar_freezing">서울과 비슷하게 두껍게 입으세요. ❄️</string>
+    <string name="advice_similar_cold">서울과 비슷한 날씨예요. 코트를 챙기세요. 🧥</string>
+    <string name="advice_similar_mild">서울과 비슷한 날씨예요. 가볍게 입어도 돼요. 🌤️</string>
+    <string name="advice_similar_hot">서울과 비슷하게 가볍게 입으세요. ☀️</string>
+    <string name="advice_moderate_warmer">서울보다 따뜻하니 한 겹 정도 가볍게 입으세요. 🌤️</string>
+    <string name="advice_moderate_colder">서울보다 추우니 한 겹 더 챙기세요. 🧣</string>
+    <string name="advice_significant_warmer">서울보다 많이 따뜻해요! 서울 옷차림은 너무 두꺼울 수 있어요. 🌞</string>
+    <string name="advice_significant_colder">서울보다 많이 추워요! 서울보다 훨씬 두껍게 입으세요. ❄️</string>
+
+    <!-- 체감온도/바람/습도 컨텍스트 메시지 -->
+    <string name="context_very_windy_cold">바람이 매우 강해 체감온도가 낮아요! 방풍 재킷을 꼭 챙기세요. 🌬️</string>
+    <string name="context_windy_cold">바람이 강해서 실제보다 춥게 느껴져요. 한 겹 더 챙기세요. 💨</string>
+    <string name="context_very_humid_hot">습도가 매우 높아서 체감온도가 더 높아요. 통풍이 잘 되는 옷을 입으세요. 💧</string>
+    <string name="context_humid">습도가 높은 편이에요. 습한 날씨에 주의하세요. 🌫️</string>
+    <string name="context_dry">건조한 날씨예요. 보습에 신경 쓰세요. 🏜️</string>
+    <string name="context_comfortable">쾌적한 날씨예요. 기온에 맞게 입으면 돼요. 😊</string>
 
     <!-- 도시 검색 -->
     <string name="search_title">🔍 도시 검색</string>
