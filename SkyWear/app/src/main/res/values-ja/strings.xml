@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- アプリ基本 -->
     <string name="app_name">SkyWear</string>
     <string name="app_subtitle">韓日気温比較スマートコーディガイド</string>
 
-    <!-- ダッシュボード -->
     <string name="dashboard_title">🌤️ SkyWear</string>
     <string name="dashboard_loading">天気情報を読み込み中…</string>
     <string name="dashboard_refresh">更新</string>
@@ -14,17 +12,6 @@
     <string name="dashboard_feels_like">体感 %1$d°</string>
     <string name="dashboard_humidity">湿度 %1$d%%</string>
 
-    <!-- 天気 -->
-    <string name="weather_clear">晴れ</string>
-    <string name="weather_clouds">曇り</string>
-    <string name="weather_rain">雨</string>
-    <string name="weather_snow">雪</string>
-    <string name="weather_thunderstorm">雷雨</string>
-    <string name="weather_drizzle">霧雨</string>
-    <string name="weather_fog">霧</string>
-    <string name="weather_unknown">不明</string>
-
-    <!-- コーディアルゴリズム -->
     <string name="outfit_stage1">半袖 + ショートパンツ</string>
     <string name="outfit_stage2">半袖 + 薄い長袖</string>
     <string name="outfit_stage3">カーディガン or 長袖</string>
@@ -34,7 +21,26 @@
     <string name="outfit_stage7">ロングダウン + マフラー</string>
     <string name="outfit_stage8">ロングダウン + マフラー + カイロ</string>
 
-    <!-- 都市検索 -->
+    <string name="comparison_jp_warmer">%1$sはソウルより%2$d°C暖かいです！🌤️</string>
+    <string name="comparison_jp_colder">%1$sはソウルより%2$d°C寒いです！🥶</string>
+    <string name="comparison_same">ソウルと%1$sの気温は同じです！🌡️</string>
+
+    <string name="advice_similar_freezing">ソウルと同様に厚着してください。❄️</string>
+    <string name="advice_similar_cold">ソウルと似た天気です。コートをお忘れなく。🧥</string>
+    <string name="advice_similar_mild">ソウルと似た天気です。薄着でも大丈夫です。🌤️</string>
+    <string name="advice_similar_hot">ソウルと同様に軽めの服装でOKです。☀️</string>
+    <string name="advice_moderate_warmer">ソウルより暖かいので、一枚薄着にしましょう。🌤️</string>
+    <string name="advice_moderate_colder">ソウルより寒いので、一枚多めに着ましょう。🧣</string>
+    <string name="advice_significant_warmer">ソウルよりかなり暖かい！ソウルの服装では暑いかも。🌞</string>
+    <string name="advice_significant_colder">ソウルよりかなり寒い！しっかり厚着してください。❄️</string>
+
+    <string name="context_very_windy_cold">強風で体感温度がかなり低いです！防風ジャケットを持参してください。🌬️</string>
+    <string name="context_windy_cold">風が強く実際より寒く感じます。一枚多めに着ましょう。💨</string>
+    <string name="context_very_humid_hot">湿度がとても高く体感温度も高いです。通気性の良い服を着てください。💧</string>
+    <string name="context_humid">湿度が高めです。湿気にご注意ください。🌫️</string>
+    <string name="context_dry">乾燥した天気です。保湿に気をつけましょう。🏜️</string>
+    <string name="context_comfortable">快適な天気です。気温に合わせた服装でOKです。😊</string>
+
     <string name="search_title">🔍 都市検索</string>
     <string name="search_tab_kr">🇰🇷 出発地 (KR)</string>
     <string name="search_tab_jp">🇯🇵 目的地 (JP)</string>
@@ -43,7 +49,6 @@
     <string name="search_selected">現在の選択: %1$s</string>
     <string name="search_selected_label">✓ 選択済み</string>
 
-    <!-- チェックリスト -->
     <string name="checklist_title">🗺️ 日本旅行チェックリスト</string>
     <string name="checklist_progress">準備完了</string>
     <string name="checklist_add">項目を追加</string>
@@ -55,7 +60,6 @@
     <string name="checklist_cancel">キャンセル</string>
     <string name="checklist_all">すべて</string>
 
-    <!-- カテゴリ -->
     <string name="category_document">📄 書類</string>
     <string name="category_money">💴 お金</string>
     <string name="category_electronic">🔌 電子機器</string>
@@ -63,12 +67,10 @@
     <string name="category_health">💊 健康</string>
     <string name="category_misc">📦 その他</string>
 
-    <!-- 通知 -->
     <string name="notification_title">🌤️ SkyWear 本日の旅行ブリーフィング</string>
     <string name="notification_channel_name">SkyWear デイリーブリーフィング</string>
     <string name="notification_channel_desc">毎日の旅行天気とコーディをお知らせします</string>
 
-    <!-- 共通 -->
     <string name="back">戻る</string>
     <string name="error_unknown">不明なエラーが発生しました。</string>
     <string name="error_no_internet">インターネット接続を確認してください。</string>
