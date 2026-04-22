@@ -18,10 +18,12 @@ import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.domain.OutfitRecommendation
+import com.kaizen.skywear.domain.TempComparisonResult
 import com.kaizen.skywear.domain.isOutfitDifferent
 import com.kaizen.skywear.ui.theme.LocalExtraColors
 import com.kaizen.skywear.ui.viewmodel.WeatherUiState
 import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
+import kotlin.math.abs
 
 // Dual-City 날씨 대시보드 메인 화면
 @OptIn(ExperimentalMaterial3Api::class)
@@ -155,13 +157,13 @@ fun DashboardScreen(
                             }
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = state.comparisonResult.comparisonMessage,
+                                text = comparisonMessage,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = state.comparisonResult.travelAdvice,
+                                text = travelAdvice,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onTertiaryContainer
                             )
@@ -220,6 +222,37 @@ fun DashboardScreen(
         }
     }
 }
+
+// 비교 메시지
+@Composable
+private fun buildComparisonMessage(result: TempComparisonResult): String = when {
+    result.gapDegree > 0 -> stringResource(
+        R.string.comparison_jp_warmer,
+        result.jpCityName,
+        abs(result.gapDegree)
+    )
+    result.gapDegree < 0 -> stringResource(
+        R.string.comparison_jp_colder,
+        result.jpCityName,
+        abs(result.gapDegree)
+    )
+    else -> stringResource(R.string.comparison_same, result.jpCityName)
+}
+
+// Outfit stage → stringResource
+@Composable
+fun OutfitRecommendation.localizedMainOutfit(): String = stringResource(
+    when (stage) {
+        1    -> R.string.outfit_stage1
+        2    -> R.string.outfit_stage2
+        3    -> R.string.outfit_stage3
+        4    -> R.string.outfit_stage4
+        5    -> R.string.outfit_stage5
+        6    -> R.string.outfit_stage6
+        7    -> R.string.outfit_stage7
+        else -> R.string.outfit_stage8
+    }
+)
 
 // 날씨 카드 컴포넌트
 @Composable
