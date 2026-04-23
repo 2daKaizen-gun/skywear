@@ -38,8 +38,8 @@ fun DashboardScreen(
     onNavigateToSearch:() -> Unit,
     viewModel: WeatherViewModel
 ) {
-   val uiState by viewModel.uiState.collectAsState()
-   val colors = LocalExtraColors.current
+    val uiState by viewModel.uiState.collectAsState()
+    val colors = LocalExtraColors.current
 
     Scaffold(
         topBar = {
@@ -51,7 +51,8 @@ fun DashboardScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.refresh() }) {
+                    IconButton(onClick = {
+                        viewModel.refresh() }) {
                         Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.dashboard_refresh))
                     }
                     IconButton(onClick = onNavigateToSearch) {
@@ -65,7 +66,6 @@ fun DashboardScreen(
         }
     ) { padding ->
         when (val state = uiState) {
-
             // 로딩
             is WeatherUiState.Loading -> {
                 Box(
