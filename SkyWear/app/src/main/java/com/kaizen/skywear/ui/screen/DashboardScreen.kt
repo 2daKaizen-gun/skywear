@@ -118,7 +118,7 @@ fun DashboardScreen(
                             cityName = state.krWeather.cityName,
                             temp = state.krWeather.tempRounded(),
                             weatherDesc = state.krContextResult.adjustedOutfit.emoji + " " +
-                            state.krWeather.weather.firstOrNull()?.description,
+                                    (state.krWeather.weather.firstOrNull()?.description ?: ""),
                             outfit = state.krContextResult.adjustedOutfit,
                             feelsLike = state.krContextResult.feelsLikeTemp.toInt(),
                             humidity = state.krWeather.main.humidity,
@@ -133,8 +133,7 @@ fun DashboardScreen(
                             flag = "🇯🇵",
                             cityName = state.jpWeather.cityName,
                             temp = state.jpWeather.tempRounded(),
-                            weatherDesc = state.jpContextResult.adjustedOutfit.emoji + " " +
-                            state.jpWeather.weather.firstOrNull()?.description,
+                            weatherDesc = state.jpContextResult.adjustedOutfit.emoji + " " + (state.jpWeather.weather.firstOrNull()?.description ?: ""),
                             outfit = state.jpContextResult.adjustedOutfit,
                             feelsLike = state.jpContextResult.feelsLikeTemp.toInt(),
                             humidity = state.jpWeather.main.humidity,
@@ -429,7 +428,7 @@ private fun OutfitTransitionCard(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("🇯🇵", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(text = jpOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(text = jpOutfit.mainOutfit, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(text = jpOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
         }
     }
