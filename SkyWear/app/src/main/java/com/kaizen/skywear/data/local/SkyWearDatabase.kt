@@ -86,7 +86,28 @@ private fun getKoreanChecklistItems(): List<ChecklistItem> = listOf(
 )
 
 // 영어 체크리스트
-
+private fun getEnglishChecklistItems(): List<ChecklistItem> = listOf(
+    ChecklistItem(title = "Passport (valid 6+ months)", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "Flight booking confirmation", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "Hotel booking confirmation", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "Travel insurance certificate", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "Exchange Japanese Yen", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "International credit card", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "IC Card (for transit)", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "110V power adapter (Japan)", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "Smartphone charger", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "Portable battery bank", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "Pocket Wi-Fi or SIM card", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "Weather-appropriate clothing", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "Comfortable walking shoes", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "Umbrella or raincoat", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "Basic medicine (painkillers)", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "Face mask", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "Hand sanitizer", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "Install Japanese translation app", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "Save offline Google Maps", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "Note emergency contacts", category = ChecklistCategory.MISC),
+)
 
 // 일본어 체크리스트
 
