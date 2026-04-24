@@ -12,6 +12,12 @@
     <string name="dashboard_feels_like">体感 %1$d°</string>
     <string name="dashboard_humidity">湿度 %1$d%%</string>
 
+    <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  日本旅行</string>
+    <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  韓国旅行</string>
+    <string name="direction_switch_label">旅行方向を切り替え</string>
+    <string name="checklist_title_japan">🗺️ 日本旅行チェックリスト</string>
+    <string name="checklist_title_korea">🗺️ 韓国旅行チェックリスト</string>
+
     <string name="outfit_stage1">半袖 + ショートパンツ</string>
     <string name="outfit_stage2">半袖 + 薄い長袖</string>
     <string name="outfit_stage3">カーディガン or 長袖</string>
@@ -23,7 +29,11 @@
 
     <string name="comparison_jp_warmer">%1$sはソウルより%2$d°C暖かいです！🌤️</string>
     <string name="comparison_jp_colder">%1$sはソウルより%2$d°C寒いです！🥶</string>
-    <string name="comparison_same">ソウルと%1$sの気温は同じです！🌡️</string>
+    <string name="comparison_same_kr_jp">ソウルと%1$sの気温は同じです！🌡️</string>
+
+    <string name="comparison_kr_warmer">%1$sは大阪より%2$d°C暖かいです！🌤️</string>
+    <string name="comparison_kr_colder">%1$sは大阪より%2$d°C寒いです！🥶</string>
+    <string name="comparison_same_jp_kr">大阪と%1$sの気温は同じです！🌡️</string>
 
     <string name="advice_similar_freezing">ソウルと同様に厚着してください。❄️</string>
     <string name="advice_similar_cold">ソウルと似た天気です。コートをお忘れなく。🧥</string>
