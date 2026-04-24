@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
     version = 1,
     exportSchema = false
 )
+@TypeConverters(ChecklistConverters::class)
 abstract class SkyWearDatabase : RoomDatabase() {
     abstract fun checklistDao(): ChecklistDao
 
@@ -50,48 +52,41 @@ abstract class SkyWearDatabase : RoomDatabase() {
                 // DB 작업은 IO thread에서 비동기 실행
                 CoroutineScope(Dispatchers.IO).launch {
                     // 기본 아이템 한번에 삽입
-                    database.checklistDao().insertItems(getDefaultChecklistItems())
+                    database.checklistDao().insertItems()
                 }
             }
         }
     }
 }
 
-// 일본 여행 기본 체크리스트 아이템
-fun getDefaultChecklistItems(): List<ChecklistItem> = listOf(
+// 언어별 기본 체크리스트
 
-    // 서류 구비 및 확인
+// 한국어 체크리스트
+private fun getKoreanChecklistItems(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "여권 (유효기간 6개월 이상)", category = ChecklistCategory.DOCUMENT),
-    ChecklistItem(title = "항공권 예약 확인", category = ChecklistCategory.DOCUMENT),
-    ChecklistItem(title = "숙소 예약 확인", category = ChecklistCategory.DOCUMENT),
-    ChecklistItem(title = "여행자 보험 확인", category = ChecklistCategory.DOCUMENT),
-
-    // 금융
+    ChecklistItem(title = "항공권 예약 확인서", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "숙소 예약 확인서", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "여행자 보험 증서", category = ChecklistCategory.DOCUMENT),
     ChecklistItem(title = "엔화 환전", category = ChecklistCategory.MONEY),
     ChecklistItem(title = "해외 결제 가능 카드", category = ChecklistCategory.MONEY),
-    ChecklistItem(title = "교통 카드", category = ChecklistCategory.MONEY),
-    ChecklistItem(title = "트레블 카드", category = ChecklistCategory.MONEY),
-
-    // 전자
+    ChecklistItem(title = "IC카드 (교통용)", category = ChecklistCategory.MONEY),
     ChecklistItem(title = "110V 어댑터 (일본 전압)", category = ChecklistCategory.ELECTRONIC),
     ChecklistItem(title = "스마트폰 충전기", category = ChecklistCategory.ELECTRONIC),
     ChecklistItem(title = "보조 배터리", category = ChecklistCategory.ELECTRONIC),
-    ChecklistItem(title = "이심 or 유심 or 도시락 와이파이", category = ChecklistCategory.ELECTRONIC),
-
-    // 의류
+    ChecklistItem(title = "포켓 Wi-Fi or 유심", category = ChecklistCategory.ELECTRONIC),
     ChecklistItem(title = "현지 날씨에 맞는 옷", category = ChecklistCategory.CLOTHING),
-    ChecklistItem(title = "편한 신발 (도보 이동)", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "편한 신발 (많이 걸음)", category = ChecklistCategory.CLOTHING),
     ChecklistItem(title = "우산 or 우비", category = ChecklistCategory.CLOTHING),
-    ChecklistItem(title = "선글라스 등 기타 악세서리", category = ChecklistCategory.CLOTHING),
-
-    // 건강
-    ChecklistItem(title = "상비약 (두통약, 소화제 등)", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "상비약 (두통약, 소화제)", category = ChecklistCategory.HEALTH),
     ChecklistItem(title = "마스크", category = ChecklistCategory.HEALTH),
-    ChecklistItem(title = "손 소독제, 향수 등 기타 액체류", category = ChecklistCategory.HEALTH),
-
-    // 기타
-    ChecklistItem(title = "일본어 번역 앱", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "손 소독제", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "일본어 번역 앱 설치", category = ChecklistCategory.MISC),
     ChecklistItem(title = "구글맵 오프라인 저장", category = ChecklistCategory.MISC),
     ChecklistItem(title = "비상 연락처 메모", category = ChecklistCategory.MISC),
-    ChecklistItem(title = "여행 플래너 확인", category = ChecklistCategory.MISC),
-    )
+)
+
+// 영어 체크리스트
+
+
+// 일본어 체크리스트
+
