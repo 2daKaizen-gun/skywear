@@ -9,6 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 // Room DB 싱글톤 인스턴스 + 기본 체크리스트 데이터 초기화
 
@@ -52,7 +53,7 @@ abstract class SkyWearDatabase : RoomDatabase() {
                 // DB 작업은 IO thread에서 비동기 실행
                 CoroutineScope(Dispatchers.IO).launch {
                     // 기본 아이템 한번에 삽입
-                    database.checklistDao().insertItems()
+                    database.checklistDao().insertItems(getDefaultChecklistItems(Locale.getDefault().language))
                 }
             }
         }
@@ -60,7 +61,12 @@ abstract class SkyWearDatabase : RoomDatabase() {
 }
 
 // 언어별 기본 체크리스트
-
+fun getDefaultChecklistItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
+    when (lang) {
+        "ja" -> getJapaneseChecklistItems()
+        "en" -> getEnglishChecklistItems()
+        else -> getKoreanChecklistItems()
+    }
 
 // 한국어 체크리스트
 private fun getKoreanChecklistItems(): List<ChecklistItem> = listOf(
