@@ -12,6 +12,12 @@
     <string name="dashboard_feels_like">Feels %1$d°</string>
     <string name="dashboard_humidity">Humidity %1$d%%</string>
 
+    <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  Trip to Japan</string>
+    <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  Trip to Korea</string>
+    <string name="direction_switch_label">Switch travel direction</string>
+    <string name="checklist_title_japan">🗺️ Japan Travel Checklist</string>
+    <string name="checklist_title_korea">🗺️ Korea Travel Checklist</string>
+
     <string name="outfit_stage1">T-shirt + Shorts</string>
     <string name="outfit_stage2">T-shirt + Light Top</string>
     <string name="outfit_stage3">Cardigan or Long Sleeve</string>
@@ -23,7 +29,11 @@
 
     <string name="comparison_jp_warmer">%1$s is %2$d°C warmer than Seoul! 🌤️</string>
     <string name="comparison_jp_colder">%1$s is %2$d°C colder than Seoul! 🥶</string>
-    <string name="comparison_same">Seoul and %1$s have the same temperature! 🌡️</string>
+    <string name="comparison_same_kr_jp">Seoul and %1$s have the same temperature! 🌡️</string>
+
+    <string name="comparison_kr_warmer">%1$s is %2$d°C warmer than Osaka! 🌤️</string>
+    <string name="comparison_kr_colder">%1$s is %2$d°C colder than Osaka! 🥶</string>
+    <string name="comparison_same_jp_kr">Osaka and %1$s have the same temperature! 🌡️</string>
 
     <string name="advice_similar_freezing">Dress as warmly as Seoul. ❄️</string>
     <string name="advice_similar_cold">Similar weather to Seoul. Bring a coat. 🧥</string>
