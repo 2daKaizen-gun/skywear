@@ -14,6 +14,13 @@
     <string name="dashboard_feels_like">체감 %1$d°</string>
     <string name="dashboard_humidity">습도 %1$d%%</string>
 
+    <!-- 여행 방향 -->
+    <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  일본 여행</string>
+    <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  한국 여행</string>
+    <string name="direction_switch_label">여행 방향 변경</string>
+    <string name="checklist_title_japan">🗺️ 일본 여행 체크리스트</string>
+    <string name="checklist_title_korea">🗺️ 한국 여행 체크리스트</string>
+
     <!-- 코디 알고리즘 8단계 -->
     <string name="outfit_stage1">반팔 + 반바지</string>
     <string name="outfit_stage2">반팔 + 얇은 긴팔</string>
@@ -24,10 +31,15 @@
     <string name="outfit_stage7">롱패딩 + 목도리</string>
     <string name="outfit_stage8">롱패딩 + 목도리 + 핫팩</string>
 
-    <!-- 온도 비교 메시지 -->
+    <!-- 온도 비교 메시지 — KR→JP -->
     <string name="comparison_jp_warmer">%1$s이(가) 서울보다 %2$d°C 더 따뜻해요! 🌤️</string>
     <string name="comparison_jp_colder">%1$s이(가) 서울보다 %2$d°C 더 추워요! 🥶</string>
-    <string name="comparison_same">서울과 %1$s의 기온이 똑같아요! 🌡️</string>
+    <string name="comparison_same_kr_jp">서울과 %1$s의 기온이 똑같아요! 🌡️</string>
+
+    <!-- 온도 비교 메시지 — JP→KR -->
+    <string name="comparison_kr_warmer">%1$s이(가) 오사카보다 %2$d°C 더 따뜻해요! 🌤️</string>
+    <string name="comparison_kr_colder">%1$s이(가) 오사카보다 %2$d°C 더 추워요! 🥶</string>
+    <string name="comparison_same_jp_kr">오사카와 %1$s의 기온이 똑같아요! 🌡️</string>
 
     <!-- 여행 조언 -->
     <string name="advice_similar_freezing">서울과 비슷하게 두껍게 입으세요. ❄️</string>
