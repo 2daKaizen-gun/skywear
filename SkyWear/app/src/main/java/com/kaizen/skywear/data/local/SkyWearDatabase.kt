@@ -61,6 +61,7 @@ abstract class SkyWearDatabase : RoomDatabase() {
 
 // 언어별 기본 체크리스트
 
+
 // 한국어 체크리스트
 private fun getKoreanChecklistItems(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "여권 (유효기간 6개월 이상)", category = ChecklistCategory.DOCUMENT),
@@ -110,4 +111,25 @@ private fun getEnglishChecklistItems(): List<ChecklistItem> = listOf(
 )
 
 // 일본어 체크리스트
-
+private fun getJapaneseChecklistItems(): List<ChecklistItem> = listOf(
+    ChecklistItem(title = "パスポート（有効期限6ヶ月以上）", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "航空券予約確認書", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "宿泊予約確認書", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "海外旅行保険証書", category = ChecklistCategory.DOCUMENT),
+    ChecklistItem(title = "ウォン両替", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "海外決済可能なカード", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "T-money（交通カード）", category = ChecklistCategory.MONEY),
+    ChecklistItem(title = "220V変圧器（韓国の電圧）", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "スマートフォン充電器", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "モバイルバッテリー", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "ポケットWi-Fi または SIM", category = ChecklistCategory.ELECTRONIC),
+    ChecklistItem(title = "現地の天気に合った服", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "歩きやすい靴", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "傘またはレインコート", category = ChecklistCategory.CLOTHING),
+    ChecklistItem(title = "常備薬（頭痛薬、胃薬）", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "マスク", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "手指消毒剤", category = ChecklistCategory.HEALTH),
+    ChecklistItem(title = "韓国語翻訳アプリのインストール", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "Googleマップのオフライン保存", category = ChecklistCategory.MISC),
+    ChecklistItem(title = "緊急連絡先のメモ", category = ChecklistCategory.MISC),
+)
