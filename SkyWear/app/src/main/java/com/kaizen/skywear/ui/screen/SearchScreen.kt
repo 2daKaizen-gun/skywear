@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -191,7 +190,7 @@ private fun CityItem(
                 Text(text = city.emoji, style = MaterialTheme.typography.titleLarge)
                 Column {
                     Text(
-                        text = city.nameKo,
+                        text = city.localizedName(),
                         style = MaterialTheme.typography.bodyLarge,
                         color = if (isSelected)
                             MaterialTheme.colorScheme.onPrimaryContainer
