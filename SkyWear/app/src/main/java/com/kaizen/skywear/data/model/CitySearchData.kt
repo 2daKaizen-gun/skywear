@@ -1,14 +1,24 @@
 package com.kaizen.skywear.data.model
 
+import java.util.Locale
+
 // 사전 정의된 한국/일본 주요 도시 리스트
 // 도시 검색 기능에서 활용됨
 
 data class City(
     val nameEn: String, // API 호출용
-    val nameKo: String, // UI 표시용
+    val nameKo: String, // 한국어 표시
+    val nameJa: String, // 일본어 표시
     val country: String, // 국가 코드
     val emoji: String // 국기 이모지
-)
+) {
+    // 기기 언어에 맞는 이름 반환
+    fun localizedName(): String = when (Locale.getDefault().language) {
+        "ja" -> nameJa
+        "ko" -> nameKo
+        else -> nameEn
+    }
+}
 
 // 한국 주요 도시 리스트
 val KR_CITIES = listOf(
