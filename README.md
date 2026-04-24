@@ -76,9 +76,10 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 
 - **Phase 7**: Product Optimization & Professional Portfolio
   - [x] Phase 7-1: Advanced Localization (Internationalization)
-  - [] Phase 7-2: Performance & Monitoring
-  - [] Phase 7-3: Project Retrospective & Feedback
-  - [] Phase 7-4: Technical Documentation
+  - [] Phase 7-2: Travel Direction Switch
+  - [] Phase 7-3: Performance & Monitoring
+  - [] Phase 7-4: Project Retrospective & Feedback
+  - [] Phase 7-5: Technical Documentation
 
 ---
 
