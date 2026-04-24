@@ -4,6 +4,7 @@ import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.remote.NetworkException
 import com.kaizen.skywear.data.remote.RetrofitClient
 import com.kaizen.skywear.util.Constants
+import java.util.Locale
 
 // KR/JP 날씨 데이터 호출 로직 담당
 // ViewModel 에서 이 Repository만 보면 됨
@@ -12,16 +13,21 @@ class WeatherRepository {
 
     private val api = RetrofitClient.instance
 
+    // 기기 언어 -> OpenWeatherMap lang 코드
+    private fun getApiLang(): String = when (Locale.getDefault().language) {
+        "ja" -> "ja"
+        "en" -> "en"
+        else -> "kr"
+    }
+
     // KR 날씨 조회 (서울 위치 기반)
     suspend fun getKrWeather(
         city: String = Constants.DEFAULT_CITY_KR
     ): Result<WeatherResponse> {
         return try {
-            val response = api.getWeatherByCity(
+            Result.success(api.getWeatherByCity(
                 cityName = city,
-                lang = Constants.LANG_KR
-            )
-            Result.success(response)
+                lang = getApiLang()))
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -32,11 +38,9 @@ class WeatherRepository {
         city: String = Constants.DEFAULT_CITY_JP
     ): Result<WeatherResponse> {
         return try {
-            val response = api.getWeatherByCity(
+            Result.success(api.getWeatherByCity(
                 cityName = city,
-                lang = Constants.LANG_KR // 한국어로 날씨 설명 받기
-            )
-            Result.success(response)
+                lang = getApiLang()))
         } catch (e: NetworkException) {
             Result.failure(e)
         } catch (e: Exception) {
@@ -49,12 +53,9 @@ class WeatherRepository {
         krCity: String = Constants.DEFAULT_CITY_KR,
         jpCity: String = Constants.DEFAULT_CITY_JP
     ): DualCityResult {
-        val krResult = getKrWeather(krCity)
-        val jpResult = getJpWeather(jpCity)
-
         return DualCityResult(
-            krWeather = krResult,
-            jpWeather = jpResult
+            getKrWeather(krCity),
+            getJpWeather(jpCity)
         )
     }
 }
