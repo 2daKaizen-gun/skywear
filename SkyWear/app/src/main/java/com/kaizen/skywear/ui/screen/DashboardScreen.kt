@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.domain.ContextAwareResult
 import com.kaizen.skywear.domain.HumidityLevel
 import com.kaizen.skywear.domain.OutfitGapLevel
@@ -39,7 +40,11 @@ fun DashboardScreen(
     viewModel: WeatherViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val travelDirection by viewModel.travelDirection.collectAsState()
     val colors = LocalExtraColors.current
+
+    // 여헹 방향 따라 출발지, 목적지 결정
+    val isKrToJp = travelDirection == TravelDirection.KR_TO_JP
 
     Scaffold(
         topBar = {
@@ -267,7 +272,7 @@ private fun buildComparisonMessage(result: TempComparisonResult): String = when 
         result.jpCityName,
         abs(result.gapDegree)
     )
-    else -> stringResource(R.string.comparison_same, result.jpCityName)
+    else -> stringResource(R.string.comparison_same_jp_kr, result.jpCityName)
 }
 
 // 여행 조인
