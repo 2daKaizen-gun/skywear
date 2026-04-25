@@ -46,7 +46,12 @@ class UserPreferencesRepository(private val context: Context) {
     }
 
     // 여행 방향 flow - 기본값은 kr->jp
-
+    val travelDirection: Flow<TravelDirection> = context.dataStore.data.map { prefs ->
+        when(prefs[Keys.TRAVEL_DIRECTION]) {
+            "JP_TO_KR" -> TravelDirection.JP_TO_KR
+            else -> TravelDirection.KR_TO_JP
+        }
+    }
 
     // 한국 도시 저장
     suspend fun saveKrCity(cityName: String) {
@@ -70,7 +75,11 @@ class UserPreferencesRepository(private val context: Context) {
     }
 
     // 여행 방향 저장
-
+    suspend fun saveTravelDirection(direction: TravelDirection) {
+        context.dataStore.edit { prefs ->
+            prefs[Keys.TRAVEL_DIRECTION] = direction.name
+        }
+    }
 }
 
 // 여행 방향 enum
