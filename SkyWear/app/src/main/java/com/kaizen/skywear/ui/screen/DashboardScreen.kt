@@ -70,6 +70,15 @@ fun DashboardScreen(
             )
         }
     ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            // 여행 방향 스위치 버튼
+
+        }
+
         when (val state = uiState) {
             // 로딩
             is WeatherUiState.Loading -> {
@@ -259,20 +268,25 @@ fun DashboardScreen(
     }
 }
 
-// 비교 메시지
+// 여행 방향 스위치 바
+
+
+// 비교 메시지 - 방향 반영
 @Composable
-private fun buildComparisonMessage(result: TempComparisonResult): String = when {
-    result.gapDegree > 0 -> stringResource(
-        R.string.comparison_jp_warmer,
-        result.jpCityName,
-        abs(result.gapDegree)
-    )
-    result.gapDegree < 0 -> stringResource(
-        R.string.comparison_jp_colder,
-        result.jpCityName,
-        abs(result.gapDegree)
-    )
-    else -> stringResource(R.string.comparison_same_jp_kr, result.jpCityName)
+private fun buildComparisonMessage(result: TempComparisonResult, isKrToJp: Boolean): String {
+    return if (isKrToJp) {
+        when {
+            result.gapDegree > 0 -> stringResource(R.string.comparison_jp_warmer, result.jpCityName, abs(result.gapDegree))
+            result.gapDegree < 0 -> stringResource(R.string.comparison_jp_colder, result.jpCityName, abs(result.gapDegree))
+            else -> stringResource(R.string.comparison_same_kr_jp, result.jpCityName)
+        }
+    } else {
+        when {
+            result.gapDegree < 0 -> stringResource(R.string.comparison_kr_warmer, result.jpCityName, abs(result.gapDegree))
+            result.gapDegree > 0 -> stringResource(R.string.comparison_kr_colder, result.jpCityName, abs(result.gapDegree))
+            else -> stringResource(R.string.comparison_same_jp_kr, result.jpCityName)
+        }
+    }
 }
 
 // 여행 조인
