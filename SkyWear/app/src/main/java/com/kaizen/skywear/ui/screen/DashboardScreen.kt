@@ -77,7 +77,10 @@ fun DashboardScreen(
                 .padding(padding)
         ) {
             // 여행 방향 스위치 버튼
-
+            TravelDirectionBar(
+                direction = travelDirection,
+                onToggle = { viewModel.toggleTravelDirection() }
+            )
         }
 
         when (val state = uiState) {
@@ -104,13 +107,23 @@ fun DashboardScreen(
             // 성공
             is WeatherUiState.Success -> {
 
-                // UI 에서 문자열 생성 (stringResource 사용)
-                val comparisonMessage = buildComparisonMessage(state.comparisonResult)
-                val travelAdvice = buildTravelAdvice(state.comparisonResult)
-                val contextMessage = buildContextMessage(
-                    state.krContextResult,
-                    state.krWeather.main.temp
-                )
+                // 방향에 따라 출발지/목적지 스왑
+                val departureWeather  = if (isKrToJp) state.krWeather else state.jpWeather
+                val destinationWeather = if (isKrToJp) state.jpWeather else state.krWeather
+                val departureContext  = if (isKrToJp) state.krContextResult else state.jpContextResult
+                val destinationContext = if (isKrToJp) state.jpContextResult else state.krContextResult
+                val departureColor    = if (isKrToJp) colors.koreaRed else colors.japanBlue
+                val destinationColor  = if (isKrToJp) colors.japanBlue else colors.koreaRed
+                val departureFlag     = if (isKrToJp) "🇰🇷" else "🇯🇵"
+                val destinationFlag   = if (isKrToJp) "🇯🇵" else "🇰🇷"
+                val departureCardColor    = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
+                val destinationCardColor  = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
+                val departureOnCardColor  = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+                val destinationOnCardColor = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+
+                val comparisonMessage = buildComparisonMessage(state.comparisonResult, isKrToJp)
+                val travelAdvice      = buildTravelAdvice(state.comparisonResult)
+                val contextMessage    = buildContextMessage(departureContext, departureWeather.main.temp)
 
                 Column(
                     modifier = Modifier
