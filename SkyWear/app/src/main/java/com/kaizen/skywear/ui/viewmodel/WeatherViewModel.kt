@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.iconCode
 import com.kaizen.skywear.data.model.weatherId
+import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.ContextAwareResult
@@ -16,9 +17,11 @@ import com.kaizen.skywear.domain.mapWeatherCodeToVisual
 import com.kaizen.skywear.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,6 +45,14 @@ class WeatherViewModel @Inject constructor(
     // 현재 선택된 JP 도시 (도시 검색 활용)
     private val _selectedJpCity = MutableStateFlow(Constants.DEFAULT_CITY_JP)
     val selectedJpCity: StateFlow<String> = _selectedJpCity.asStateFlow()
+
+    // 여행 방향 StateFlow
+    val travelDirection: StateFlow<TravelDirection> = prefsRepository.travelDirection
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = TravelDirection.KR_TO_JP
+        )
 
     init {
         viewModelScope.launch {
@@ -79,6 +90,9 @@ class WeatherViewModel @Inject constructor(
         }
         fetchDualCityWeather(jpCity = cityName)
     }
+
+    // 여행 방향 토글
+
 
     // KR + JP 날씨 동시 호출 -> 코디/ 비교 분석까지 한번에 처리
     fun fetchDualCityWeather(
