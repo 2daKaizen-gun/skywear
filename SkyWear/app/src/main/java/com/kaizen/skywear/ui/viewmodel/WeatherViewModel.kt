@@ -92,7 +92,16 @@ class WeatherViewModel @Inject constructor(
     }
 
     // 여행 방향 토글
-
+    fun toggleTravelDirection() {
+        viewModelScope.launch {
+            val current = travelDirection.value
+            val next = if (current == TravelDirection.KR_TO_JP)
+                TravelDirection.JP_TO_KR
+            else
+                TravelDirection.KR_TO_JP
+            prefsRepository.saveTravelDirection(next)
+        }
+    }
 
     // KR + JP 날씨 동시 호출 -> 코디/ 비교 분석까지 한번에 처리
     fun fetchDualCityWeather(
