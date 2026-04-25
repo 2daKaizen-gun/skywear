@@ -27,6 +27,7 @@ class UserPreferencesRepository(private val context: Context) {
         val SELECTED_JP_CITY = stringPreferencesKey("selected_jp_city")
         val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
         val TEMP_UNIT = stringPreferencesKey("temp_unit") // celsius or fahrenheit
+        val TRAVEL_DIRECTION = stringPreferencesKey("travel_direction") // 여행 방향
     }
 
     // 선택된 한국 도시 Flow
@@ -44,10 +45,8 @@ class UserPreferencesRepository(private val context: Context) {
         prefs[Keys.IS_DARK_MODE] ?: false
     }
 
-    // 온도 단위 Flow
-    val tempUnit: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs[Keys.TEMP_UNIT] ?: "celsius"
-    }
+    // 여행 방향 flow - 기본값은 kr->jp
+
 
     // 한국 도시 저장
     suspend fun saveKrCity(cityName: String) {
@@ -70,10 +69,12 @@ class UserPreferencesRepository(private val context: Context) {
         }
     }
 
-    // 온도 단위 저장
-    suspend fun saveTempUnit(unit: String) {
-        context.dataStore.edit { prefs ->
-            prefs[Keys.TEMP_UNIT] = unit
-        }
-    }
+    // 여행 방향 저장
+
+}
+
+// 여행 방향 enum
+enum class TravelDirection {
+    KR_TO_JP, // 한국에서 일본
+    JP_TO_KR // 일본에서 한국
 }
