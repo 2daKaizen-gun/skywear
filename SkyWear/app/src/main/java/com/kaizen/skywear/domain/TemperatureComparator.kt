@@ -15,7 +15,6 @@ data class TempComparisonResult(
     val jpTemp: Int, // 오사카 현재 온도
     val krCityName: String,
     val jpCityName: String, // UI에서 메시지 생성 시 사용
-    val gapLabel: String, // 온도 차이 텍스트 (ex: "+12°C")
     val gapDegree: Int, // 온도 차이 수치 (ex: 12)
     val outfitGapLevel: OutfitGapLevel, // 체감 차이 단계
     val krOutfit: OutfitRecommendation, // 서울 코디 추천
@@ -52,7 +51,6 @@ fun analyzeTempComparison(
         jpTemp = jpTemp,
         krCityName = krWeather.cityName,
         jpCityName = jpWeather.cityName,
-        gapLabel = temperatureGapLabel(krWeather, jpWeather),
         gapDegree = gap,
         outfitGapLevel = gapLevel,
         krOutfit = getOutfitRecommendation(krWeather.main.temp),
@@ -60,6 +58,12 @@ fun analyzeTempComparison(
     )
 }
 
-// 코디 차이 요약
+// 방향 따른 라벨
+// 부호 반전
+fun TempComparisonResult.directedGapLabel(isKrToJp: Boolean): String {
+    val directed = if (isKrToJp) gapDegree else -gapDegree
+    return if (directed >= 0) "+${directed}°C" else "${directed}°C"
+}
+
 fun TempComparisonResult.isOutfitDifferent(): Boolean =
     krOutfit.stage != jpOutfit.stage
