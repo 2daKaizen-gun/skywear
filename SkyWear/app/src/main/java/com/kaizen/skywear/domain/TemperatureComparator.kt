@@ -13,6 +13,7 @@ import kotlin.math.abs
 data class TempComparisonResult(
     val krTemp: Int, // 서울 현재 온도
     val jpTemp: Int, // 오사카 현재 온도
+    val krCityName: String,
     val jpCityName: String, // UI에서 메시지 생성 시 사용
     val gapLabel: String, // 온도 차이 텍스트 (ex: "+12°C")
     val gapDegree: Int, // 온도 차이 수치 (ex: 12)
@@ -47,14 +48,15 @@ fun analyzeTempComparison(
     }
 
     return TempComparisonResult(
-        krTemp         = krTemp,
-        jpTemp         = jpTemp,
-        jpCityName     = jpWeather.cityName,
-        gapLabel       = temperatureGapLabel(krWeather, jpWeather),
-        gapDegree      = gap,
+        krTemp = krTemp,
+        jpTemp = jpTemp,
+        krCityName = krWeather.cityName,
+        jpCityName = jpWeather.cityName,
+        gapLabel = temperatureGapLabel(krWeather, jpWeather),
+        gapDegree = gap,
         outfitGapLevel = gapLevel,
-        krOutfit       = getOutfitRecommendation(krWeather.main.temp),
-        jpOutfit       = getOutfitRecommendation(jpWeather.main.temp)
+        krOutfit = getOutfitRecommendation(krWeather.main.temp),
+        jpOutfit = getOutfitRecommendation(jpWeather.main.temp)
     )
 }
 
