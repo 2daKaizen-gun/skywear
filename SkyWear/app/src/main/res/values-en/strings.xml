@@ -8,15 +8,15 @@
     <string name="dashboard_refresh">Refresh</string>
     <string name="dashboard_retry">Try Again</string>
     <string name="dashboard_temp_gap">Temperature Gap</string>
-    <string name="dashboard_checklist_button">View Japan Travel Checklist</string>
+    <string name="dashboard_checklist_button">View Travel Checklist</string>
     <string name="dashboard_feels_like">Feels %1$d°</string>
     <string name="dashboard_humidity">Humidity %1$d%%</string>
 
     <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  Trip to Japan</string>
     <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  Trip to Korea</string>
     <string name="direction_switch_label">Switch travel direction</string>
-    <string name="checklist_title_japan">🗺️ Japan Travel Checklist</string>
-    <string name="checklist_title_korea">🗺️ Korea Travel Checklist</string>
+    <string name="checklist_title_japan">🗺️ View Japan Travel Checklist</string>
+    <string name="checklist_title_korea">🗺️ View Korea Travel Checklist</string>
 
     <string name="outfit_stage1">T-shirt + Shorts</string>
     <string name="outfit_stage2">T-shirt + Light Top</string>
@@ -27,26 +27,26 @@
     <string name="outfit_stage7">Long Puffer + Scarf</string>
     <string name="outfit_stage8">Long Puffer + Scarf + Hand Warmers</string>
 
-    <string name="comparison_jp_warmer">%1$s is %2$d°C warmer than Seoul! 🌤️</string>
-    <string name="comparison_jp_colder">%1$s is %2$d°C colder than Seoul! 🥶</string>
-    <string name="comparison_same_kr_jp">Seoul and %1$s have the same temperature! 🌡️</string>
+    <!-- %1$s=destination, %2$s=departure, %3$d=gap -->
+    <string name="comparison_jp_warmer">%1$s is %3$d°C warmer than %2$s! 🌤️</string>
+    <string name="comparison_jp_colder">%1$s is %3$d°C colder than %2$s! 🥶</string>
+    <string name="comparison_same_kr_jp">%2$s and %1$s have the same temperature! 🌡️</string>
+    <string name="comparison_kr_warmer">%1$s is %3$d°C warmer than %2$s! 🌤️</string>
+    <string name="comparison_kr_colder">%1$s is %3$d°C colder than %2$s! 🥶</string>
+    <string name="comparison_same_jp_kr">%2$s and %1$s have the same temperature! 🌡️</string>
 
-    <string name="comparison_kr_warmer">%1$s is %2$d°C warmer than Osaka! 🌤️</string>
-    <string name="comparison_kr_colder">%1$s is %2$d°C colder than Osaka! 🥶</string>
-    <string name="comparison_same_jp_kr">Osaka and %1$s have the same temperature! 🌡️</string>
+    <string name="advice_similar_freezing">Dress as warmly as your departure city. ❄️</string>
+    <string name="advice_similar_cold">Similar weather. Bring a coat. 🧥</string>
+    <string name="advice_similar_mild">Similar weather. Light clothing is fine. 🌤️</string>
+    <string name="advice_similar_hot">Dress as lightly as your departure city. ☀️</string>
+    <string name="advice_moderate_warmer">Destination is warmer — dress one layer lighter. 🌤️</string>
+    <string name="advice_moderate_colder">Destination is colder — add one extra layer. 🧣</string>
+    <string name="advice_significant_warmer">Much warmer at destination! Your current outfit may be too heavy. 🌞</string>
+    <string name="advice_significant_colder">Much colder at destination! Dress much warmer. ❄️</string>
 
-    <string name="advice_similar_freezing">Dress as warmly as Seoul. ❄️</string>
-    <string name="advice_similar_cold">Similar weather to Seoul. Bring a coat. 🧥</string>
-    <string name="advice_similar_mild">Similar weather to Seoul. Light clothing is fine. 🌤️</string>
-    <string name="advice_similar_hot">Dress as lightly as in Seoul. ☀️</string>
-    <string name="advice_moderate_warmer">Warmer than Seoul — dress one layer lighter. 🌤️</string>
-    <string name="advice_moderate_colder">Colder than Seoul — add one extra layer. 🧣</string>
-    <string name="advice_significant_warmer">Much warmer than Seoul! Seoul outfit may be too heavy. 🌞</string>
-    <string name="advice_significant_colder">Much colder than Seoul! Dress much warmer. ❄️</string>
-
-    <string name="context_very_windy_cold">Very strong winds lower the feels-like temperature! Bring a windbreaker. 🌬️</string>
+    <string name="context_very_windy_cold">Very strong winds! Bring a windbreaker. 🌬️</string>
     <string name="context_windy_cold">Strong winds make it feel colder. Add an extra layer. 💨</string>
-    <string name="context_very_humid_hot">Very high humidity raises the feels-like temperature. Wear breathable clothes. 💧</string>
+    <string name="context_very_humid_hot">Very high humidity raises feels-like temperature. Wear breathable clothes. 💧</string>
     <string name="context_humid">High humidity today. Watch out for the moisture. 🌫️</string>
     <string name="context_dry">Dry weather today. Stay moisturized. 🏜️</string>
     <string name="context_comfortable">Comfortable weather. Dress for the temperature. 😊</string>
@@ -59,7 +59,7 @@
     <string name="search_selected">Selected: %1$s</string>
     <string name="search_selected_label">✓ Selected</string>
 
-    <string name="checklist_title">🗺️ Japan Travel Checklist</string>
+    <string name="checklist_title">🗺️ Travel Checklist</string>
     <string name="checklist_progress">Ready</string>
     <string name="checklist_add">Add Item</string>
     <string name="checklist_delete_checked">Delete Checked Items</string>
