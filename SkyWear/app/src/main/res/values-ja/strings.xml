@@ -8,15 +8,15 @@
     <string name="dashboard_refresh">更新</string>
     <string name="dashboard_retry">もう一度試す</string>
     <string name="dashboard_temp_gap">気温差</string>
-    <string name="dashboard_checklist_button">日本旅行チェックリストを見る</string>
+    <string name="dashboard_checklist_button">旅行チェックリストを見る</string>
     <string name="dashboard_feels_like">体感 %1$d°</string>
     <string name="dashboard_humidity">湿度 %1$d%%</string>
 
     <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  日本旅行</string>
     <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  韓国旅行</string>
     <string name="direction_switch_label">旅行方向を切り替え</string>
-    <string name="checklist_title_japan">🗺️ 日本旅行チェックリスト</string>
-    <string name="checklist_title_korea">🗺️ 韓国旅行チェックリスト</string>
+    <string name="checklist_title_japan">🗺️ 日本旅行チェックリストを見る</string>
+    <string name="checklist_title_korea">🗺️ 韓国旅行チェックリストを見る</string>
 
     <string name="outfit_stage1">半袖 + ショートパンツ</string>
     <string name="outfit_stage2">半袖 + 薄い長袖</string>
@@ -27,22 +27,22 @@
     <string name="outfit_stage7">ロングダウン + マフラー</string>
     <string name="outfit_stage8">ロングダウン + マフラー + カイロ</string>
 
-    <string name="comparison_jp_warmer">%1$sはソウルより%2$d°C暖かいです！🌤️</string>
-    <string name="comparison_jp_colder">%1$sはソウルより%2$d°C寒いです！🥶</string>
-    <string name="comparison_same_kr_jp">ソウルと%1$sの気温は同じです！🌡️</string>
+    <!-- %1$s=目的地, %2$s=出発地, %3$d=気温差 -->
+    <string name="comparison_jp_warmer">%1$sは%2$sより%3$d°C暖かいです！🌤️</string>
+    <string name="comparison_jp_colder">%1$sは%2$sより%3$d°C寒いです！🥶</string>
+    <string name="comparison_same_kr_jp">%2$sと%1$sの気温は同じです！🌡️</string>
+    <string name="comparison_kr_warmer">%1$sは%2$sより%3$d°C暖かいです！🌤️</string>
+    <string name="comparison_kr_colder">%1$sは%2$sより%3$d°C寒いです！🥶</string>
+    <string name="comparison_same_jp_kr">%2$sと%1$sの気温は同じです！🌡️</string>
 
-    <string name="comparison_kr_warmer">%1$sは大阪より%2$d°C暖かいです！🌤️</string>
-    <string name="comparison_kr_colder">%1$sは大阪より%2$d°C寒いです！🥶</string>
-    <string name="comparison_same_jp_kr">大阪と%1$sの気温は同じです！🌡️</string>
-
-    <string name="advice_similar_freezing">ソウルと同様に厚着してください。❄️</string>
-    <string name="advice_similar_cold">ソウルと似た天気です。コートをお忘れなく。🧥</string>
-    <string name="advice_similar_mild">ソウルと似た天気です。薄着でも大丈夫です。🌤️</string>
-    <string name="advice_similar_hot">ソウルと同様に軽めの服装でOKです。☀️</string>
-    <string name="advice_moderate_warmer">ソウルより暖かいので、一枚薄着にしましょう。🌤️</string>
-    <string name="advice_moderate_colder">ソウルより寒いので、一枚多めに着ましょう。🧣</string>
-    <string name="advice_significant_warmer">ソウルよりかなり暖かい！ソウルの服装では暑いかも。🌞</string>
-    <string name="advice_significant_colder">ソウルよりかなり寒い！しっかり厚着してください。❄️</string>
+    <string name="advice_similar_freezing">出発地と同様に厚着してください。❄️</string>
+    <string name="advice_similar_cold">似た天気です。コートをお忘れなく。🧥</string>
+    <string name="advice_similar_mild">似た天気です。薄着でも大丈夫です。🌤️</string>
+    <string name="advice_similar_hot">出発地と同様に軽めの服装でOKです。☀️</string>
+    <string name="advice_moderate_warmer">目的地の方が暖かいので、一枚薄着にしましょう。🌤️</string>
+    <string name="advice_moderate_colder">目的地の方が寒いので、一枚多めに着ましょう。🧣</string>
+    <string name="advice_significant_warmer">目的地はかなり暖かい！今の服装では暑いかも。🌞</string>
+    <string name="advice_significant_colder">目的地はかなり寒い！しっかり厚着してください。❄️</string>
 
     <string name="context_very_windy_cold">強風で体感温度がかなり低いです！防風ジャケットを持参してください。🌬️</string>
     <string name="context_windy_cold">風が強く実際より寒く感じます。一枚多めに着ましょう。💨</string>
@@ -59,7 +59,7 @@
     <string name="search_selected">現在の選択: %1$s</string>
     <string name="search_selected_label">✓ 選択済み</string>
 
-    <string name="checklist_title">🗺️ 日本旅行チェックリスト</string>
+    <string name="checklist_title">🗺️ 旅行チェックリスト</string>
     <string name="checklist_progress">準備完了</string>
     <string name="checklist_add">項目を追加</string>
     <string name="checklist_delete_checked">完了項目を削除</string>
