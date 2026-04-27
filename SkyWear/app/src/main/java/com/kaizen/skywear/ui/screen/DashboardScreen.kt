@@ -244,7 +244,12 @@ fun DashboardScreen(
                         ) {
                             Icon(Icons.AutoMirrored.Filled.List, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(stringResource(R.string.dashboard_checklist_button))
+                            Text(
+                                stringResource(
+                                    if (isKrToJp) R.string.checklist_title_japan
+                                    else R.string.checklist_title_korea
+                                )
+                            )
                         }
                     }
                 }
@@ -320,20 +325,24 @@ private fun TravelDirectionBar(
     }
 }
 
-// 비교 메시지 - 방향 반영
+// 비교 메시지 - 출발지/목적지 도시명 동적 처리
 @Composable
 private fun buildComparisonMessage(result: TempComparisonResult, isKrToJp: Boolean): String {
+    val destination = if (isKrToJp) result.jpCityName else result.krCityName
+    val departure   = if (isKrToJp) result.krCityName else result.jpCityName
+    val gap = abs(result.gapDegree)
+
     return if (isKrToJp) {
         when {
-            result.gapDegree > 0 -> stringResource(R.string.comparison_jp_warmer, result.jpCityName, abs(result.gapDegree))
-            result.gapDegree < 0 -> stringResource(R.string.comparison_jp_colder, result.jpCityName, abs(result.gapDegree))
-            else -> stringResource(R.string.comparison_same_kr_jp, result.jpCityName)
+            result.gapDegree > 0 -> stringResource(R.string.comparison_jp_warmer, destination, departure, gap)
+            result.gapDegree < 0 -> stringResource(R.string.comparison_jp_colder, destination, departure, gap)
+            else -> stringResource(R.string.comparison_same_kr_jp, destination, departure)
         }
     } else {
         when {
-            result.gapDegree < 0 -> stringResource(R.string.comparison_kr_warmer, result.jpCityName, abs(result.gapDegree))
-            result.gapDegree > 0 -> stringResource(R.string.comparison_kr_colder, result.jpCityName, abs(result.gapDegree))
-            else -> stringResource(R.string.comparison_same_jp_kr, result.jpCityName)
+            result.gapDegree < 0 -> stringResource(R.string.comparison_kr_warmer, destination, departure, gap)
+            result.gapDegree > 0 -> stringResource(R.string.comparison_kr_colder, destination, departure, gap)
+            else -> stringResource(R.string.comparison_same_jp_kr, destination, departure)
         }
     }
 }
