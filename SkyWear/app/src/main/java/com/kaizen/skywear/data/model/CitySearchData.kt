@@ -46,12 +46,23 @@ val JP_CITIES = listOf(
     City("Yokohama",  "요코하마", "横浜",   "JP", "🇯🇵"),
 )
 
-// 도시명 검색
+val ALL_CITIES = KR_CITIES + JP_CITIES
+
+// API 영어 응답 → 현지화된 도시명 변환
+// ex) "Seoul" → "서울" (한국어), "ソウル" (일본어)
+fun localizedCityName(nameEn: String): String {
+    val city = ALL_CITIES.find {
+        it.nameEn.equals(nameEn, ignoreCase = true)
+    }
+    return city?.localizedName() ?: nameEn  // 없으면 영어 그대로
+}
+
 fun searchCities(query: String, country: String): List<City> {
     if (query.isBlank()) return if (country == "KR") KR_CITIES else JP_CITIES
-
     val cities = if (country == "KR") KR_CITIES else JP_CITIES
     return cities.filter {
-        it.nameKo.contains(query, ignoreCase = true) || it.nameEn.contains(query, ignoreCase = true) || it.nameJa.contains(query, ignoreCase = true)
+        it.nameKo.contains(query, ignoreCase = true) ||
+                it.nameEn.contains(query, ignoreCase = true) ||
+                it.nameJa.contains(query, ignoreCase = true)
     }
 }
