@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,10 +13,11 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 // Room DB 싱글톤 인스턴스 + 기본 체크리스트 데이터 초기화
+// destination 컬럼 추가, 여행 방향 구분
 
 @Database(
     entities = [ChecklistItem::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(ChecklistConverters::class)
@@ -26,6 +28,15 @@ abstract class SkyWearDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: SkyWearDatabase?=null
 
+        // 마이그레이션 — destination 컬럼 추가 (기존 항목은 "JP" 기본값)
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE checklist_items ADD COLUMN destination TEXT NOT NULL DEFAULT 'JP'"
+                )
+            }
+        }
+
         fun getDatabase(context: Context): SkyWearDatabase {
             // 한 번에 하나의 스레드만 접근 가능
             return INSTANCE?:synchronized(this) {
@@ -34,6 +45,7 @@ abstract class SkyWearDatabase : RoomDatabase() {
                     SkyWearDatabase::class.java,
                     "skywear_database"
                 )
+                    .addMigrations(MIGRATION_1_2) // 마이그레이션 틍록
                     .addCallback(DatabaseCallback())
                     .build()
                 // 만든 인스턴스 저장해 다음 호출부터 재사용
@@ -41,7 +53,6 @@ abstract class SkyWearDatabase : RoomDatabase() {
                 instance
             }
         }
-
     }
 
     // DB 최초 생성 시 기본 체크리스트 아이템 자동 삽입
@@ -52,8 +63,17 @@ abstract class SkyWearDatabase : RoomDatabase() {
             INSTANCE?.let { database ->
                 // DB 작업은 IO thread에서 비동기 실행
                 CoroutineScope(Dispatchers.IO).launch {
-                    // 기본 아이템 한번에 삽입
-                    database.checklistDao().insertItems(getDefaultChecklistItems(Locale.getDefault().language))
+                    val lang = Locale.getDefault().language
+
+                    // JP 여행 아이템 삽입
+                    database.checklistDao().insertItems(
+
+                    )
+
+                    // KR 여행 아이템 삽입
+                    database.checklistDao().insertItems(
+
+                    )
                 }
             }
         }
@@ -61,7 +81,7 @@ abstract class SkyWearDatabase : RoomDatabase() {
 }
 
 // 언어별 기본 체크리스트
-fun getDefaultChecklistItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
+fun getJapanTravelItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
     when (lang) {
         "ja" -> getJapaneseChecklistItems()
         "en" -> getEnglishChecklistItems()
