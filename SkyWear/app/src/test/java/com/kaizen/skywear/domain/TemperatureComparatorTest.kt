@@ -1,6 +1,5 @@
 package com.kaizen.skywear.domain
 
-import androidx.collection.arrayMapOf
 import com.kaizen.skywear.data.model.Coord
 import com.kaizen.skywear.data.model.MainWeather
 import com.kaizen.skywear.data.model.Sys
@@ -111,7 +110,7 @@ class TemperatureComparatorTest {
         val kr = makeWeather("Seoul", 0.0)
         val jp = makeWeather("Osaka", 10.0, "JP")
         val result = analyzeTempComparison(kr, jp)
-        assertTrue(result.gapLabel.startsWith("+"))
+        assertTrue(result.directedGapLabel(isKrToJp = true).startsWith("+"))
     }
 
     @Test
@@ -119,6 +118,6 @@ class TemperatureComparatorTest {
         val kr = makeWeather("Seoul", 10.0)
         val jp = makeWeather("Osaka", 0.0, "JP")
         val result = analyzeTempComparison(kr, jp)
-        assertTrue(result.gapLabel.startsWith("-"))
+        assertTrue(result.directedGapLabel(isKrToJp = true).startsWith("-"))
     }
 }
