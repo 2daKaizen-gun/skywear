@@ -67,12 +67,12 @@ abstract class SkyWearDatabase : RoomDatabase() {
 
                     // JP 여행 아이템 삽입
                     database.checklistDao().insertItems(
-
+                        getJapanTravelItems(lang)
                     )
 
                     // KR 여행 아이템 삽입
                     database.checklistDao().insertItems(
-
+                        getKoreaTravelItems(lang)
                     )
                 }
             }
@@ -83,17 +83,17 @@ abstract class SkyWearDatabase : RoomDatabase() {
 // destination = "JP" 아이템 - 언어별
 fun getJapanTravelItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
     when (lang) {
-        "ja" ->
-        "en" ->
-        else ->
+        "ja" -> getJapanTravelChecklistJa()
+        "en" -> getJapanTravelChecklistEn()
+        else -> getJapanTravelChecklistKo()
     }
 
 // destination = "KR" 아이템 - 언어별
 fun getKoreaTravelItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
     when (lang) {
-        "ja" ->
-        "en" ->
-        else ->
+        "ja" -> getKoreaTravelChecklistJa()
+        "en" -> getKoreaTravelChecklistEn()
+        else -> getKoreaTravelChecklistKo()
     }
 
 // 일본 여행 - 한국어
