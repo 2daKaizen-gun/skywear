@@ -1,49 +1,57 @@
 package com.kaizen.skywear.ui.viewmodel
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.data.local.ChecklistItem
 import com.kaizen.skywear.data.repository.ChecklistRepository
+import com.kaizen.skywear.data.repository.TravelDirection
+import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 // 일본 여행 체크리스트 상태 관리
-
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class ChecklistViewModel @Inject constructor(
-    private val repository: ChecklistRepository
+    private val repository: ChecklistRepository,
+    private val prefsRepository: UserPreferencesRepository
 ) : ViewModel() {
 
-    // 전체 아이템 (Flow에서 StateFlow 변환)
-    val allItems: StateFlow<List<ChecklistItem>> = repository.allItems
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+    // 여행 방향 StateFlow
+    val travelDirection: StateFlow<TravelDirection> = prefsRepository.travelDirection
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),
+            TravelDirection.KR_TO_JP)
+
+    // 방향에 따른 destination 문자열
+    private val currentDestination = travelDirection.map { direction ->
+        if (direction == TravelDirection.KR_TO_JP) "JP" else "KR"
+    }
+
+    // 방향 바뀌면 자동으로 다른 체크리스트 로드
+    val allItems: StateFlow<List<ChecklistItem>> = currentDestination
+        .flatMapLatest { dest -> repository.getItemsByDestination(dest) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // 완료 개수
-    val checkedCount: StateFlow<Int> = repository.checkedCount
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = 0
-        )
+    val checkedCount: StateFlow<Int> = currentDestination
+        .flatMapLatest { dest -> repository.getCheckedCount(dest) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),0)
 
     // 전체 개수
-    val totalCount: StateFlow<Int> = repository.totalCount
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = 0
-        )
+    val totalCount: StateFlow<Int> = currentDestination
+        .flatMapLatest { dest -> repository.getTotalCount(dest) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     // 선택된 카테고리 필터
     private val _selectedCategory = MutableStateFlow<ChecklistCategory?>(null)
@@ -59,12 +67,14 @@ class ChecklistViewModel @Inject constructor(
     // 커스텀 아이템 추가
     fun addItem(title: String, category: ChecklistCategory, memo: String = "") {
         viewModelScope.launch {
+            val destination = if (travelDirection.value == TravelDirection.KR_TO_JP) "JP" else "KR"
             repository.addItem(
                 ChecklistItem(
                     title = title,
                     category = category,
                     isDefault = false,
-                    memo = memo
+                    memo = memo,
+                    destination = destination
                 )
             )
         }
@@ -80,14 +90,8 @@ class ChecklistViewModel @Inject constructor(
     // 체크된 아이템 전체 삭제
     fun deleteCheckedItems() {
         viewModelScope.launch {
-            repository.deleteCheckedItems()
-        }
-    }
-
-    // 기본 아이템으로 초기화
-    fun resetToDefault() {
-        viewModelScope.launch {
-            repository.resetToDefault()
+            val destination = if (travelDirection.value == TravelDirection.KR_TO_JP) "JP" else "KR"
+            repository.deleteCheckedItems(destination)
         }
     }
 
