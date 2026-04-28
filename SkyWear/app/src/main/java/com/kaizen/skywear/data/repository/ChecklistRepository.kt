@@ -4,23 +4,25 @@ import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.data.local.ChecklistDao
 import com.kaizen.skywear.data.local.ChecklistItem
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 // ViewModel -> DAO 사이의 데이터 접근 계층
 
-class ChecklistRepository(private val dao: ChecklistDao) {
+class ChecklistRepository @Inject constructor(private val dao: ChecklistDao) {
 
-    // 전체 아이템 Flow (실시간 업데이트)
-    val allItems: Flow<List<ChecklistItem>> = dao.getAllItems()
+    // 여행 방향별 아이템 조회
+    fun getItemsByDestination(destination: String): Flow<List<ChecklistItem>> =
+        dao.getItemsByDestination(destination)
 
-    // 완료된 아이템 수
-    val checkedCount: Flow<Int> = dao.getCheckedCount()
+    fun getCheckedCount(destination: String): Flow<Int> =
+        dao.getCheckedCount(destination)
 
-    // 전체 아이템 수
-    val totalCount: Flow<Int> = dao.getTotalCount()
+    fun getTotalCount(destination: String): Flow<Int> =
+        dao.getTotalCount(destination)
 
     // 카테고리별 조회
-    fun getItemsByCategory(category: ChecklistCategory): Flow<List<ChecklistItem>> =
-        dao.getItemsByCategory(category)
+    fun getItemsByCategory(destination: String, category: ChecklistCategory): Flow<List<ChecklistItem>> =
+        dao.getItemsByDestinationAndCategory(destination, category)
 
     // 아이템 추가
     suspend fun addItem(item: ChecklistItem) = dao.insertItem(item)
@@ -36,7 +38,7 @@ class ChecklistRepository(private val dao: ChecklistDao) {
     suspend fun deleteItem(item: ChecklistItem) = dao.deleteItem(item)
 
     // 체크된 아이템 전체 삭제
-    suspend fun deleteCheckedItems() = dao.deleteCheckedItems()
+    suspend fun deleteCheckedItems(destination: String) = dao.deleteCheckedItems(destination)
 
     // 커스텀 아이템만 삭제 (기본 아이템은 유지)
     suspend fun resetToDefault() = dao.deleteCustomItems()
