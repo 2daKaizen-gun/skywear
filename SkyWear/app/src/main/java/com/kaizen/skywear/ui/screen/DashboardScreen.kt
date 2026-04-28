@@ -6,9 +6,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.CompareArrows
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.R
+import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.domain.ContextAwareResult
@@ -25,6 +26,7 @@ import com.kaizen.skywear.domain.OutfitGapLevel
 import com.kaizen.skywear.domain.OutfitRecommendation
 import com.kaizen.skywear.domain.TempComparisonResult
 import com.kaizen.skywear.domain.WindLevel
+import com.kaizen.skywear.domain.directedGapLabel
 import com.kaizen.skywear.domain.hasSignificantFeelsLikeDiff
 import com.kaizen.skywear.domain.isOutfitDifferent
 import com.kaizen.skywear.ui.theme.LocalExtraColors
@@ -76,19 +78,16 @@ fun DashboardScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // 여행 방향 스위치 버튼
             TravelDirectionBar(
                 direction = travelDirection,
                 onToggle = { viewModel.toggleTravelDirection() }
             )
 
             when (val state = uiState) {
-                // 로딩
+
                 is WeatherUiState.Loading -> {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -103,74 +102,72 @@ fun DashboardScreen(
                     }
                 }
 
-                // 성공
                 is WeatherUiState.Success -> {
-
-                    // 방향에 따라 출발지/목적지 스왑
-                    val departureWeather  = if (isKrToJp) state.krWeather else state.jpWeather
+                    val departureWeather   = if (isKrToJp) state.krWeather else state.jpWeather
                     val destinationWeather = if (isKrToJp) state.jpWeather else state.krWeather
-                    val departureContext  = if (isKrToJp) state.krContextResult else state.jpContextResult
+                    val departureContext   = if (isKrToJp) state.krContextResult else state.jpContextResult
                     val destinationContext = if (isKrToJp) state.jpContextResult else state.krContextResult
-                    val departureColor    = if (isKrToJp) colors.koreaRed else colors.japanBlue
-                    val destinationColor  = if (isKrToJp) colors.japanBlue else colors.koreaRed
-                    val departureFlag     = if (isKrToJp) "🇰🇷" else "🇯🇵"
-                    val destinationFlag   = if (isKrToJp) "🇯🇵" else "🇰🇷"
-                    val departureCardColor    = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
-                    val destinationCardColor  = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
-                    val departureOnCardColor  = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
-                    val destinationOnCardColor = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+                    val departureColor     = if (isKrToJp) colors.koreaRed else colors.japanBlue
+                    val destinationColor   = if (isKrToJp) colors.japanBlue else colors.koreaRed
+                    val departureFlag      = if (isKrToJp) "🇰🇷" else "🇯🇵"
+                    val destinationFlag    = if (isKrToJp) "🇯🇵" else "🇰🇷"
+                    val departureCardColor   = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
+                    val destinationCardColor = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
+                    val departureOnCard    = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+                    val destinationOnCard  = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+
+                    // API 영어 도시명 → 현지화
+                    val departureLocalName   = localizedCityName(departureWeather.cityName)
+                    val destinationLocalName = localizedCityName(destinationWeather.cityName)
 
                     val comparisonMessage = buildComparisonMessage(state.comparisonResult, isKrToJp)
-                    val travelAdvice      = buildTravelAdvice(state.comparisonResult)
+                    val travelAdvice      = buildTravelAdvice(state.comparisonResult, isKrToJp)
                     val contextMessage    = buildContextMessage(departureContext, departureWeather.main.temp)
 
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(padding)
                             .verticalScroll(rememberScrollState())
                             .padding(horizontal = 16.dp, vertical = 12.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-
-                        // Dual-City 날씨 카드
+                        // Dual-City 카드
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            // KR 카드
                             WeatherCard(
                                 modifier = Modifier.weight(1f),
-                                flag = "🇰🇷",
-                                cityName = state.krWeather.cityName,
-                                temp = state.krWeather.tempRounded(),
-                                weatherDesc = state.krContextResult.adjustedOutfit.emoji + " " +
-                                        (state.krWeather.weather.firstOrNull()?.description ?: ""),
-                                outfit = state.krContextResult.adjustedOutfit,
-                                feelsLike = state.krContextResult.feelsLikeTemp.toInt(),
-                                humidity = state.krWeather.main.humidity,
-                                tempColor = colors.koreaRed,
-                                cardColor = MaterialTheme.colorScheme.primaryContainer,
-                                onCardColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                flag = departureFlag,
+                                // 현지화된 도시명 사용
+                                cityName = departureLocalName,
+                                temp = departureWeather.tempRounded(),
+                                weatherDesc = departureContext.adjustedOutfit.emoji + " " +
+                                        (departureWeather.weather.firstOrNull()?.description ?: ""),
+                                outfit = departureContext.adjustedOutfit,
+                                feelsLike = departureContext.feelsLikeTemp.toInt(),
+                                humidity = departureWeather.main.humidity,
+                                tempColor = departureColor,
+                                cardColor = departureCardColor,
+                                onCardColor = departureOnCard
                             )
-
-                            // JP 카드
                             WeatherCard(
                                 modifier = Modifier.weight(1f),
-                                flag = "🇯🇵",
-                                cityName = state.jpWeather.cityName,
-                                temp = state.jpWeather.tempRounded(),
-                                weatherDesc = state.jpContextResult.adjustedOutfit.emoji + " " + (state.jpWeather.weather.firstOrNull()?.description ?: ""),
-                                outfit = state.jpContextResult.adjustedOutfit,
-                                feelsLike = state.jpContextResult.feelsLikeTemp.toInt(),
-                                humidity = state.jpWeather.main.humidity,
-                                tempColor = colors.japanBlue,
-                                cardColor = MaterialTheme.colorScheme.secondaryContainer,
-                                onCardColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                flag = destinationFlag,
+                                cityName = destinationLocalName,
+                                temp = destinationWeather.tempRounded(),
+                                weatherDesc = destinationContext.adjustedOutfit.emoji + " " +
+                                        (destinationWeather.weather.firstOrNull()?.description ?: ""),
+                                outfit = destinationContext.adjustedOutfit,
+                                feelsLike = destinationContext.feelsLikeTemp.toInt(),
+                                humidity = destinationWeather.main.humidity,
+                                tempColor = destinationColor,
+                                cardColor = destinationCardColor,
+                                onCardColor = destinationOnCard
                             )
                         }
 
-                        // 온도 차이 뱃지
+                        // 온도 차이 카드
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
@@ -189,8 +186,9 @@ fun DashboardScreen(
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.onTertiaryContainer
                                     )
+                                    // ✅ 방향에 따른 gapLabel
                                     Text(
-                                        text = state.comparisonResult.gapLabel,
+                                        text = state.comparisonResult.directedGapLabel(isKrToJp),
                                         style = MaterialTheme.typography.displaySmall,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )
@@ -211,7 +209,7 @@ fun DashboardScreen(
                         }
 
                         // 체감온도 컨텍스트 카드
-                        if (state.krContextResult.hasSignificantFeelsLikeDiff(state.krWeather.main.temp)) {
+                        if (departureContext.hasSignificantFeelsLikeDiff(departureWeather.main.temp)) {
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = CardDefaults.cardColors(
@@ -228,15 +226,17 @@ fun DashboardScreen(
                             }
                         }
 
-                        // 코디 전환 요약
+                        // 코디 전환 카드
                         if (state.comparisonResult.isOutfitDifferent()) {
                             OutfitTransitionCard(
-                                krOutfit = state.comparisonResult.krOutfit,
-                                jpOutfit = state.comparisonResult.jpOutfit
+                                departureOutfit = if (isKrToJp) state.comparisonResult.krOutfit else state.comparisonResult.jpOutfit,
+                                destinationOutfit = if (isKrToJp) state.comparisonResult.jpOutfit else state.comparisonResult.krOutfit,
+                                departureFlag = departureFlag,
+                                destinationFlag = destinationFlag
                             )
                         }
 
-                        // 체크리스트 바로가기 버튼
+                        // 체크리스트 버튼
                         Button(
                             onClick = onNavigateToChecklist,
                             modifier = Modifier.fillMaxWidth(),
@@ -254,22 +254,16 @@ fun DashboardScreen(
                     }
                 }
 
-                // 에러
                 is WeatherUiState.Error -> {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            Text(
-                                text = "⚠️",
-                                style = MaterialTheme.typography.displaySmall
-                            )
+                            Text("⚠️", style = MaterialTheme.typography.displaySmall)
                             Text(
                                 text = state.message,
                                 style = MaterialTheme.typography.bodyMedium,
@@ -316,7 +310,7 @@ private fun TravelDirectionBar(
             )
             IconButton(onClick = onToggle) {
                 Icon(
-                    imageVector = Icons.Default.SwapHoriz,
+                    imageVector = Icons.Default.CompareArrows,
                     contentDescription = stringResource(R.string.direction_switch_label),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -328,8 +322,8 @@ private fun TravelDirectionBar(
 // 비교 메시지 - 출발지/목적지 도시명 동적 처리
 @Composable
 private fun buildComparisonMessage(result: TempComparisonResult, isKrToJp: Boolean): String {
-    val destination = if (isKrToJp) result.jpCityName else result.krCityName
-    val departure   = if (isKrToJp) result.krCityName else result.jpCityName
+    val destination = localizedCityName(if (isKrToJp) result.jpCityName else result.krCityName)
+    val departure   = localizedCityName(if (isKrToJp) result.krCityName else result.jpCityName)
     val gap = abs(result.gapDegree)
 
     return if (isKrToJp) {
@@ -339,6 +333,7 @@ private fun buildComparisonMessage(result: TempComparisonResult, isKrToJp: Boole
             else -> stringResource(R.string.comparison_same_kr_jp, destination, departure)
         }
     } else {
+        // JP→KR: gapDegree 부호 반전해서 해석
         when {
             result.gapDegree < 0 -> stringResource(R.string.comparison_kr_warmer, destination, departure, gap)
             result.gapDegree > 0 -> stringResource(R.string.comparison_kr_colder, destination, departure, gap)
@@ -347,25 +342,31 @@ private fun buildComparisonMessage(result: TempComparisonResult, isKrToJp: Boole
     }
 }
 
-// 여행 조인
+// 여행 조언 — isKrToJp 반영
 @Composable
-private fun buildTravelAdvice(result: TempComparisonResult): String =
-    when (result.outfitGapLevel) {
+private fun buildTravelAdvice(result: TempComparisonResult, isKrToJp: Boolean): String {
+    // KR→JP: gapDegree > 0 → 목적지(JP) 더 따뜻
+    // JP→KR: gapDegree > 0 → 출발지(JP) 더 따뜻 → 목적지(KR) 더 추움 → 부호 반전
+    val directedGap = if (isKrToJp) result.gapDegree else -result.gapDegree
+    val destTemp    = if (isKrToJp) result.jpTemp else result.krTemp
+
+    return when (result.outfitGapLevel) {
         OutfitGapLevel.SIMILAR -> when {
-            result.jpTemp <= 0  -> stringResource(R.string.advice_similar_freezing)
-            result.jpTemp <= 10 -> stringResource(R.string.advice_similar_cold)
-            result.jpTemp <= 20 -> stringResource(R.string.advice_similar_mild)
-            else                -> stringResource(R.string.advice_similar_hot)
+            destTemp <= 0  -> stringResource(R.string.advice_similar_freezing)
+            destTemp <= 10 -> stringResource(R.string.advice_similar_cold)
+            destTemp <= 20 -> stringResource(R.string.advice_similar_mild)
+            else           -> stringResource(R.string.advice_similar_hot)
         }
         OutfitGapLevel.MODERATE -> when {
-            result.gapDegree > 0 -> stringResource(R.string.advice_moderate_warmer)
-            else                 -> stringResource(R.string.advice_moderate_colder)
+            directedGap > 0 -> stringResource(R.string.advice_moderate_warmer)
+            else            -> stringResource(R.string.advice_moderate_colder)
         }
         OutfitGapLevel.SIGNIFICANT -> when {
-            result.gapDegree > 0 -> stringResource(R.string.advice_significant_warmer)
-            else                 -> stringResource(R.string.advice_significant_colder)
+            directedGap > 0 -> stringResource(R.string.advice_significant_warmer)
+            else            -> stringResource(R.string.advice_significant_colder)
         }
     }
+}
 
 // 체감온도 컨텍스트 메시지
 @Composable
@@ -479,33 +480,31 @@ private fun WeatherCard(
 // 코디 전환 요약 카드
 @Composable
 private fun OutfitTransitionCard(
-    krOutfit: OutfitRecommendation,
-    jpOutfit: OutfitRecommendation
+    departureOutfit: OutfitRecommendation,
+    destinationOutfit: OutfitRecommendation,
+    departureFlag: String,
+    destinationFlag: String
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("🇰🇷", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(text = krOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(krOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(departureFlag, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(departureOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
+                Text(departureOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
             Text("→", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("🇯🇵", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(text = jpOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(text = jpOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(destinationFlag, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(destinationOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
+                Text(destinationOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
         }
     }
