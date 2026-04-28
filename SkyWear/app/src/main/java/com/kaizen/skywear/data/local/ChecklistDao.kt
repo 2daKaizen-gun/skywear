@@ -13,25 +13,21 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ChecklistDao {
 
-    // 전체 아이템 조회 (카테고리 정리 -> 체크 안 된 것부터)
-    @Query("SELECT * FROM checklist_items ORDER BY category ASC, isChecked ASC")
-    fun getAllItems(): Flow<List<ChecklistItem>>
+    // 여행 방향별 조회
+    @Query("SELECT * FROM checklist_items WHERE destination = :destination ORDER BY category ASC, isChecked ASC")
+    fun getItemsByDestination(destination: String): Flow<List<ChecklistItem>>
 
-    // 카테고리별 조회
-    @Query("SELECT * FROM checklist_items WHERE category = :category")
-    fun getItemsByCategory(category: ChecklistCategory): Flow<List<ChecklistItem>>
+    // 여행 방향 + 카테고리 조회
+    @Query("SELECT * FROM checklist_items WHERE destination = :destination AND category = :category ORDER BY isChecked ASC")
+    fun getItemsByDestinationAndCategory(destination: String, category: ChecklistCategory): Flow<List<ChecklistItem>>
 
-    // 체크 안 된 아이템만 조회
-    @Query("SELECT * FROM checklist_items WHERE isChecked = 0")
-    fun getUncheckedItems(): Flow<List<ChecklistItem>>
+    // 여행 방향별 완료 수
+    @Query("SELECT COUNT(*) FROM checklist_items WHERE destination = :destination AND isChecked = 1")
+    fun getCheckedCount(destination: String): Flow<Int>
 
-    // 완료된 아이템 수 조회
-    @Query("SELECT COUNT(*) FROM checklist_items WHERE isChecked = 1")
-    fun getCheckedCount(): Flow<Int>
-
-    // 전체 아이템 수 조회
-    @Query("SELECT COUNT(*) FROM checklist_items")
-    fun getTotalCount(): Flow<Int>
+    // 여행 방향별 전체 수
+    @Query("SELECT COUNT(*) FROM checklist_items WHERE destination = :destination")
+    fun getTotalCount(destination: String): Flow<Int>
 
     // 아이템 추가
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -54,8 +50,8 @@ interface ChecklistDao {
     suspend fun deleteItem(item: ChecklistItem)
 
     // 체크된 아이템 전체 삭제
-    @Query("DELETE FROM checklist_items WHERE isChecked = 1")
-    suspend fun deleteCheckedItems()
+    @Query("DELETE FROM checklist_items WHERE destination = :destination AND isChecked = 1")
+    suspend fun deleteCheckedItems(destination: String)
 
     // 전체 초기화 (기본 아이템만 남기기)
     @Query("DELETE FROM checklist_items WHERE isDefault = 0")
