@@ -14,7 +14,8 @@ data class ChecklistItem(
     val category: ChecklistCategory, // 카테고리 (ex: DOCUMENT)
     val isChecked: Boolean = false, // 체크 여부
     val isDefault: Boolean = true, // 기본 제공 아이템 여부
-    val memo: String = "" // 메모(선택적)
+    val memo: String = "", // 메모(선택적)
+    val destination: String = "JP" // JP = 일본 여행, KR = 한국 여행
 )
 
 // Checklist Category
