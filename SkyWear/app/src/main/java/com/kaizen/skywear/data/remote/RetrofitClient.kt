@@ -10,31 +10,26 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // Logging Interceptor: 디버그 빌드에서 APi 요청/응답 로그 작성 -> 배포 시에는 제거 권장함
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG)
-            HttpLoggingInterceptor.Level.BODY
-        else
-            HttpLoggingInterceptor.Level.NONE
-    }
-
-    // Network Interceptor (커스텀 에러 처리)
-    private val networkException = NetworkInterceptor()
-
-    // OkHttpClient : 타임아웃 및 로깅 설정
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(15, TimeUnit.SECONDS) // 연결 타임아웃
-        .readTimeout(15, TimeUnit.SECONDS) // 읽기 타임아웃
-        .writeTimeout(15, TimeUnit.SECONDS) // 쓰기 타임아웃
-        .addInterceptor(networkException) // 커스텀 에러 인터럽터
-        .addInterceptor(loggingInterceptor) // 로그 인터셉터
-        .build()
-
-    // Retrofit 인스턴스
     val instance: WeatherApiService by lazy {
+        // 릴리즈 빌드에서 HTTP 로깅 완전 비활성화
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG)
+                HttpLoggingInterceptor.Level.BODY
+            else
+                HttpLoggingInterceptor.Level.NONE
+        }
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(NetworkInterceptor())
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .build()
+
         Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
-            .client(okHttpClient)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WeatherApiService::class.java)
