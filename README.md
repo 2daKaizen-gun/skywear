@@ -1,39 +1,55 @@
-# 📋 SkyWear: 🇰🇷🇯🇵 KR-JP Travel Coordinator
+# 📋 SkyWear: 🇰🇷🇯🇵 KR-JP Smart Travel Outfit Coordinator
+> **"Don't just check the weather. Know what to wear."**
+>
+> **SkyWear** [Sky (Weather) + Wear (Outfit)]: An Android-native solution designed to bridge the temperature gap between Korea and Japan, transforming raw weather data into actionable, culturally-aware travel outfit recommendations.
 
-**"한·일 온도 비교 기반 스마트 트래블 코디 가이드"**
-
-**SkyWear [Sky + Wear]** is a mobile solution designed to bridge the environmental gap between Korea and Japan. By comparing real-time weather data between departure and destination cities, it provides intuitive outfit recommendations to ensure a seamless travel experience.
-
+An AI-assisted Android travel companion that compares real-time weather between Korean and Japanese cities, delivers 8-stage outfit recommendations powered by Wind Chill and Heat Index algorithms, and adapts entirely to the traveler's direction — whether heading from Korea to Japan, or Japan to Korea.
+ 
 ---
 
 ## 🎯 Background & Motivation
 
 ### The Context: "Seamless Travel Experience"
-Although Korea and Japan are neighboring countries, their perceived temperatures vary significantly due to differences in latitude and geography. Travelers often struggle with the uncertainty of whether their current attire is suitable for their destination (e.g., freezing in Seoul vs. mild in Osaka).
+Korea and Japan are the closest neighboring countries in Northeast Asia, yet their climates differ significantly due to latitude, terrain, and seasonal patterns. It is common for Seoul to be below freezing while Osaka remains comfortably above 10°C — a gap that can make or break a traveler's packing decision.
 
 ### The Problem
-* **Tedious Comparison**: Users must manually toggle between different weather apps to compare temperatures.
-* **Abstract Data**: Numerical temperatures (e.g., 8°C) don't intuitively suggest specific outfits like "heavy coat" or "light jacket."
-* **Missing Local Context**: Lack of integrated information on humidity, wind chill, and Japan-specific travel essentials (e.g., 110V adapters).
-
+1. **Cross-reference Fatigue**: Travelers manually switch between Korean and Japanese weather apps, mentally calculating temperature differences without any outfit context.
+2. **Numbers Without Meaning**: "8°C" alone doesn't tell a traveler whether they need a light coat or a heavy parka. Raw data lacks the outfit intelligence layer.
+3. **One-Directional Design**: Most travel apps are built for a single market. There is no solution that seamlessly serves both Korean travelers heading to Japan *and* Japanese travelers heading to Korea.
 ### The Solution
-* **Dual-City Dashboard**: Instant visualization of weather differences between KR and JP on a single screen.
-* **Outfit Recommendation Engine**: An 8-stage algorithm that suggests optimal clothing based on temperature.
-* **Travel-Specific Intelligence**: Integrated checklists for Japan travel and weather-based item reminders.
-
+1. **Dual-City Dashboard**: Displays real-time weather for both the departure and destination city side-by-side, with temperature gap visualization.
+2. **8-Stage Outfit Engine**: Converts temperature into concrete outfit stages — from T-shirt + Shorts (28°C+) to Long Puffer + Scarf + Hand Warmers (below -1°C) — enhanced by Wind Chill and Heat Index corrections.
+3. **Bidirectional Travel Mode**: A single toggle switches the entire app experience between KR→JP and JP→KR, including localized checklists, comparison messages, and outfit advice.
+- **Data Source**: OpenWeatherMap API (Current Weather)
+- **Key Features**:
+  1. **Dual-City Weather Comparison**: Side-by-side KR/JP weather cards with feels-like temperature and humidity
+  2. **8-Stage Outfit Algorithm**: Temperature-to-outfit mapping with Wind Chill / Heat Index corrections
+  3. **Travel Direction Switch**: KR→JP ↔ JP→KR bidirectional toggle with full UX adaptation
+  4. **Localized Checklist**: Direction-aware travel checklist (Japan trip / Korea trip) in 3 languages
+  5. **Full i18n**: Korean / English / Japanese localization across all screens
+  6. **Firebase Crashlytics**: Production crash monitoring with release-only collection
 ---
 
-## 🛠 Tech Stack
+## ⚙️ Key Features
 
-| Category | Tech Stack |
-| :--- | :--- |
-| **Language** | **Kotlin** |
-| **UI Framework** | **Jetpack Compose** |
-| **Architecture** | **MVVM** (Model-View-ViewModel) |
-| **Network** | **Retrofit2**, **OkHttp3** |
-| **AI/Data** | **OpenWeatherMap API** |
-| **Image Loading**| **Coil** |
+- **Outfit Intelligence**: Goes beyond temperature numbers to deliver stage-based outfit recommendations tailored to real feels-like conditions
+- **Bidirectional UX**: Full experience swap — departure/destination cities, comparison messages, travel advice, and checklists — with a single toggle
+- **Multilingual Support**: Complete localization in Korean, English, and Japanese including weather descriptions via dynamic API `lang` parameter
+---
 
+## 🛠️ Tech Stack
+
+- **Language**: ![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
+- **UI Framework**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-UI-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
+- **Architecture**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_+_Clean-green?style=for-the-badge)
+- **DI**: ![Hilt](https://img.shields.io/badge/Hilt-DI-E91E63?style=for-the-badge)
+- **Network**: ![Retrofit2](https://img.shields.io/badge/Retrofit2-Network-48B983?style=for-the-badge) | ![OkHttp3](https://img.shields.io/badge/OkHttp3-Interceptor-48B983?style=for-the-badge)
+- **Local DB**: ![Room](https://img.shields.io/badge/Room-Database-FF6F00?style=for-the-badge)
+- **Preferences**: ![DataStore](https://img.shields.io/badge/DataStore-Preferences-FF6F00?style=for-the-badge)
+- **Background**: ![WorkManager](https://img.shields.io/badge/WorkManager-Notifications-FF6F00?style=for-the-badge)
+- **Animation**: ![Lottie](https://img.shields.io/badge/Lottie-Animation-00C4CC?style=for-the-badge)
+- **Monitoring**: ![Firebase](https://img.shields.io/badge/Firebase-Crashlytics-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+- **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-API-EB6E4B?style=for-the-badge)
 ---
 
 ## ✅ Milestone
