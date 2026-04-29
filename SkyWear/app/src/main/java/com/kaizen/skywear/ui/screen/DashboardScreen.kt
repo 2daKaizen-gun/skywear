@@ -6,7 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.CompareArrows
+import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -310,7 +310,7 @@ private fun TravelDirectionBar(
             )
             IconButton(onClick = onToggle) {
                 Icon(
-                    imageVector = Icons.Default.CompareArrows,
+                    imageVector = Icons.AutoMirrored.Filled.CompareArrows,
                     contentDescription = stringResource(R.string.direction_switch_label),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
