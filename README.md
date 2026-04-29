@@ -4,8 +4,7 @@
 > **SkyWear** [Sky (Weather) + Wear (Outfit)]: An Android-native solution designed to bridge the temperature gap between Korea and Japan, transforming raw weather data into actionable, culturally-aware travel outfit recommendations.
 
 An AI-assisted Android travel companion that compares real-time weather between Korean and Japanese cities, delivers 8-stage outfit recommendations powered by Wind Chill and Heat Index algorithms, and adapts entirely to the traveler's direction — whether heading from Korea to Japan, or Japan to Korea.
- 
----
+
 
 ## 🎯 Background & Motivation
 
@@ -28,14 +27,14 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
   4. **Localized Checklist**: Direction-aware travel checklist (Japan trip / Korea trip) in 3 languages
   5. **Full i18n**: Korean / English / Japanese localization across all screens
   6. **Firebase Crashlytics**: Production crash monitoring with release-only collection
----
+
 
 ## ⚙️ Key Features
 
 - **Outfit Intelligence**: Goes beyond temperature numbers to deliver stage-based outfit recommendations tailored to real feels-like conditions
 - **Bidirectional UX**: Full experience swap — departure/destination cities, comparison messages, travel advice, and checklists — with a single toggle
 - **Multilingual Support**: Complete localization in Korean, English, and Japanese including weather descriptions via dynamic API `lang` parameter
----
+
 
 ## 🛠️ Tech Stack
 
@@ -50,7 +49,8 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 - **Animation**: ![Lottie](https://img.shields.io/badge/Lottie-Animation-00C4CC?style=for-the-badge)
 - **Monitoring**: ![Firebase](https://img.shields.io/badge/Firebase-Crashlytics-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 - **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-API-EB6E4B?style=for-the-badge)
----
+
+
 
 ## 🏗️ Architecture
 
@@ -94,8 +94,6 @@ graph TD
     CR --> ROOM
     UPR --> DS
 ```
- 
----
 
 ## ✅ Milestone
 - **Phase 1**: Project Foundation & Android Environment Setup
@@ -142,7 +140,6 @@ graph TD
   - [] Phase 7-4: Project Retrospective & Feedback
   - [] Phase 7-5: Technical Documentation
 
----
 
 ## 🔥 Troubleshooting & Lessons Learned
 
@@ -175,7 +172,6 @@ graph TD
 - **Challenge**: OpenWeatherMap API always returns city names in English (e.g., "Seoul", "Osaka"), regardless of the `lang` parameter. Display names in comparison messages remained in English even when device language was set to Japanese.
 - **Resolution**: Built `localizedCityName(nameEn: String)` lookup function in `CitySearchData.kt` that maps English API city names to their native equivalents using a predefined city list with `nameKo` and `nameJa` fields.
 
----
 
 ## 📈 Results
 
@@ -185,7 +181,6 @@ graph TD
 - **Error Handling**: 6-type sealed class network error handling covering all failure scenarios
 - **Architecture**: Strict 3-layer separation (Data / Domain / UI) with zero cross-layer string leakage
 
----
 
 ## 🧐 Self-Reflection
 
@@ -199,7 +194,6 @@ graph TD
 - **Root Cause Over Quick Fix**: The gapDegree sign inversion bug could have been patched with a conditional, but understanding *why* the sign was wrong — and fixing the abstraction — produced a cleaner, more maintainable solution.
 - **Layer Discipline**: Every time a string or logic leaked between layers, it created downstream i18n or testability problems. Respecting architectural boundaries is not academic — it has real engineering consequences.
 
----
 
 ## 🧐 Final Project Retrospective
 
@@ -212,7 +206,6 @@ Starting from a simple API call and evolving into a fully layered MVVM + Clean A
 ### 🌏 Bridging Markets Through Technology
 As a developer targeting the Japanese IT market, SkyWear represents my approach to engineering: identify a real cross-cultural friction point, and solve it with clean, maintainable, and user-empathetic code.
  
----
 
 ## ✨ Contact
 
