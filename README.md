@@ -215,5 +215,5 @@ As a developer targeting the Japanese IT market, SkyWear represents my approach 
 ---
 
 <div align="center">
-<sub>Built with ❤️ for KR-JP Travelers · SkyWear © 2025</sub>
+<sub>Built for ❤️ · SkyWear © 2026</sub>
 </div>
