@@ -52,6 +52,51 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 - **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-API-EB6E4B?style=for-the-badge)
 ---
 
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    subgraph UI["🖥️ UI Layer (Jetpack Compose)"]
+        MA[MainActivity]
+        WVM[WeatherViewModel]
+        CVM[ChecklistViewModel]
+        CSVM[CitySearchViewModel]
+    end
+ 
+    subgraph Domain["🧠 Domain Layer"]
+        OA[OutfitAlgorithm]
+        TC[TemperatureComparator]
+        CA[ContextAwareRecommendation]
+        WIM[WeatherIconMapper]
+    end
+ 
+    subgraph Data["🗄️ Data Layer"]
+        WR[WeatherRepository]
+        CR[ChecklistRepository]
+        UPR[UserPreferencesRepository]
+    end
+ 
+    subgraph Remote["🌐 Remote"]
+        API[WeatherApiService\nRetrofit2 + OkHttp3]
+        OWM[(OpenWeatherMap API)]
+    end
+ 
+    subgraph Local["💾 Local"]
+        ROOM[(Room DB\nChecklist)]
+        DS[(DataStore\nPreferences)]
+    end
+ 
+    MA --> WVM & CVM & CSVM
+    WVM --> WR & OA & TC & CA & WIM
+    CVM --> CR & UPR
+    CSVM --> UPR
+    WR --> API --> OWM
+    CR --> ROOM
+    UPR --> DS
+```
+ 
+---
+
 ## ✅ Milestone
 - **Phase 1**: Project Foundation & Android Environment Setup
   - [x] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
