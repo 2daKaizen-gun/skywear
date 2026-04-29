@@ -208,12 +208,10 @@ As a developer targeting the Japanese IT market, SkyWear represents my approach 
  
 
 ## ✨ Contact
+- **GitHub Repository**: https://github.com/2daKaizen-gun/skywear
 
-| | |
-|---|---|
-| 📧 Email | hkys1223@gmail.com |
-| 🐙 GitHub | [@2daKaizen-gun](https://github.com/2daKaizen-gun/SkyWear) |
- 
+- **Email**: hkys1223@gmail.com
+
 ---
 
 <div align="center">
