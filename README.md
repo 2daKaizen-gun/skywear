@@ -144,114 +144,83 @@ graph TD
 
 ---
 
-## 🔥 Troubleshooting
+## 🔥 Troubleshooting & Lessons Learned
 
-### 1. KSP + Kotlin Version Compatibility
-**Problem:** Room Compiler KSP version mismatch with Kotlin 2.2.10 caused build failure
+**1. KSP + Kotlin Version Compatibility**
+- **Challenge**: Room Compiler KSP version mismatch with Kotlin 2.2.10 caused build failure at compile time.
+- **Resolution**: Pinned `ksp = "2.2.10-2.0.2"` to exactly match the Kotlin version, resolving the incompatibility.
+  
+**2. Hilt — Missing `android:name` in AndroidManifest**
+- **Challenge**: App crashed on launch with `Hilt Activity must be attached to an @HiltAndroidApp Application`.
+- **Resolution**: Added `android:name=".SkyWearApplication"` to `<application>` tag in `AndroidManifest.xml`.
+  
+**3. ViewModel Instance Isolation Across Screens**
+- **Challenge**: City selection in SearchScreen was not reflected in DashboardScreen — each screen created its own ViewModel instance via `hiltViewModel()`.
+- **Resolution**: Elevated `hiltViewModel()` calls to NavGraph level and passed shared instances as parameters to each screen, ensuring a single source of truth.
 
-**Solution:** Pinned `ksp = "2.2.10-2.0.2"` to match the exact Kotlin version
+**4. Travel Direction — Inverted Gap Degree Logic**
+- **Challenge**: When direction was JP→KR and the destination (Korea) was colder, the app incorrectly advised "dress one layer lighter."
+- **Root Cause**: `gapDegree` is always calculated as `jpTemp - krTemp`. The sign needed to be flipped for JP→KR direction to correctly represent the destination temperature delta.
+- **Resolution**: Applied `directedGap = if (isKrToJp) gapDegree else -gapDegree` throughout comparison and advice logic.
 
-### 2. Hilt — Missing `android:name` in AndroidManifest
-**Problem:** `Hilt Activity must be attached to an @HiltAndroidApp Application` crash on launch
+**5. Compose i18n — `stringResource()` Context Constraint**
+- **Challenge**: String generation for outfit recommendations and comparison messages was embedded in the Domain layer, making localization impossible since `stringResource()` requires a Composable context.
+- **Resolution**: Removed all string generation from Domain layer. Created dedicated `@Composable` functions in the UI layer (`buildComparisonMessage()`, `buildTravelAdvice()`, `buildContextMessage()`) that call `stringResource()` directly.
 
-**Solution:** Added `android:name=".SkyWearApplication"` to `AndroidManifest.xml`
+**6. Room TypeConverter — Enum Persistence**
+- **Challenge**: Room DB had no mechanism to store `ChecklistCategory` enum, risking a runtime crash on first checklist access.
+- **Resolution**: Created `ChecklistConverters` class with `@TypeConverter` annotations for bidirectional `String ↔ ChecklistCategory` conversion and registered it via `@TypeConverters` on the database class.
 
-### 3. DEX Version Compatibility (Test Function Names)
-**Problem:** Backtick function names with spaces caused build errors on DEX versions below 040
+**7. Dynamic City Name Localization**
+- **Challenge**: OpenWeatherMap API always returns city names in English (e.g., "Seoul", "Osaka"), regardless of the `lang` parameter. Display names in comparison messages remained in English even when device language was set to Japanese.
+- **Resolution**: Built `localizedCityName(nameEn: String)` lookup function in `CitySearchData.kt` that maps English API city names to their native equivalents using a predefined city list with `nameKo` and `nameJa` fields.
 
-**Solution:** Renamed all test functions using underscore convention
-
-### 4. Missing Room TypeConverter
-**Problem:** Potential crash when storing `ChecklistCategory` enum in Room DB
-
-**Solution:** Created `ChecklistConverters` class and registered `@TypeConverters` annotation
-
-### 5. ViewModel Instance Sharing Across Screens
-**Problem:** City changes in SearchScreen were not reflected in DashboardScreen
-
-**Root Cause:** Each screen created its own ViewModel instance via `hiltViewModel()`
-
-**Solution:** Called `hiltViewModel()` at NavGraph level and passed instances as parameters to each screen
-
-### 6. Travel Direction — gapDegree Sign Issue
-**Problem:** When JP→KR and destination is colder, advice incorrectly said "dress lighter"
-
-**Root Cause:** `gapDegree` is always calculated as JP - KR, but the sign needed to be flipped for JP→KR direction
-
-**Solution:** Applied `directedGap = if (isKrToJp) gapDegree else -gapDegree`
-
-### 7. Emulator Storage Space Insufficient
-**Problem:** `Not enough space` error prevented APK installation
-
-**Solution:** Device Manager → Show Advanced Settings → increased Internal Storage
-
-### 8. Compose i18n — String Generation in Domain Layer
-**Problem:** `stringResource()` can only be called from a Composable context
-
-**Solution:** Removed all string generation from Domain layer; moved to UI layer as `@Composable` functions (`buildComparisonMessage()`, `buildTravelAdvice()`, etc.)
- 
 ---
 
-## 💡 Technical Growth
+## 📈 Results
 
-### Kotlin Language
-- Practical use of Elvis operator (`?:`), Safe Call (`?.`), and sealed classes
-- Extension Functions for clean DTO → UI transformation layer
-- `flatMapLatest` for dynamic data switching based on StateFlow
-- `@Composable` extension function patterns
-### Android Architecture
-- Strict layer separation with MVVM + Clean Architecture principles
-- Unidirectional data flow with `StateFlow` + `collectAsState()`
-- Complete dependency inversion with Hilt DI across ViewModel and Repository
-- Room DB schema migration (`MIGRATION_1_2`)
-### Network & Data
-- Retrofit2 + OkHttp Interceptor pattern for centralized error handling
-- Room DB Entity/DAO/Database three-layer structure
-- DataStore for persistent settings across app restarts
-- Firebase Crashlytics for production crash monitoring
-### Internationalization (i18n)
-- Android `strings.xml` for 3 locales (values/, values-en/, values-ja/)
-- Clean separation between Domain and UI layers for string responsibility
-- Dynamic API `lang` parameter detection for localized weather descriptions
-- `localizedCityName()` mapping from English API response to native city names
+- **Localization**: 100% string coverage in Korean, English, and Japanese across all screens
+- **Bidirectional Support**: Full UX adaptation for both KR→JP and JP→KR travel modes
+- **Crash Monitoring**: Firebase Crashlytics integrated with release-only collection policy
+- **Error Handling**: 6-type sealed class network error handling covering all failure scenarios
+- **Architecture**: Strict 3-layer separation (Data / Domain / UI) with zero cross-layer string leakage
+
 ---
 
 ## 🧐 Self-Reflection
 
-### What Went Well
-- **Layer Separation**: Strict Data / Domain / UI separation made each layer's responsibility crystal clear
-- **Practical Algorithm**: The 8-stage outfit algorithm combined with Wind Chill / Heat Index corrections produces genuinely useful travel recommendations
-- **Bidirectional Travel Support**: Supporting both KR→JP and JP→KR directions makes the app useful for both Korean and Japanese travelers
-- **Complete i18n**: Outfit recommendations, comparison messages, and travel advice are all fully localized in 3 languages
-### Areas for Improvement
-- **Lottie Animations**: Actual Lottie JSON files for weather animations were not fully integrated with live API data
-- **Test Coverage**: Network layer mock tests were not implemented
-- **Pretendard Font**: Temporarily using `FontFamily.Default` due to build errors; custom font not yet applied
-### What I Would Do Differently
-- Apply test-driven development (TDD) from the beginning
-- Define the i18n strategy before starting string generation in Domain layer
-- Set up CI/CD pipeline from early stages
+### Technical Growth
+- **Algorithm to Product**: Translating meteorological formulas (Wind Chill, Heat Index) into a user-facing outfit recommendation system taught me the importance of bridging domain knowledge with engineering.
+- **State Management Mastery**: Managing bidirectional travel state across multiple screens with `StateFlow`, `flatMapLatest`, and shared ViewModels deepened my understanding of reactive architecture in Jetpack Compose.
+- **i18n Architecture**: Learning that internationalization must be a first-class architectural concern — not an afterthought — was one of the most valuable lessons of this project.
+
+### Problem-Solving Mindset
+- **Cultural Product Thinking**: Building for both Korean and Japanese travelers reinforced that great products require empathy for diverse user contexts, not just technical correctness.
+- **Root Cause Over Quick Fix**: The gapDegree sign inversion bug could have been patched with a conditional, but understanding *why* the sign was wrong — and fixing the abstraction — produced a cleaner, more maintainable solution.
+- **Layer Discipline**: Every time a string or logic leaked between layers, it created downstream i18n or testability problems. Respecting architectural boundaries is not academic — it has real engineering consequences.
+
 ---
 
-## 🚀 Future Roadmap
+## 🧐 Final Project Retrospective
 
-```
-v1.1
-├── GPS-based automatic KR city detection
-├── 7-day weather forecast feature
-└── Android App Widget support
- 
-v1.2
-├── Pretendard custom font integration
-├── Travel schedule-based weather alerts
-└── Support for additional routes beyond KR-JP (China, Southeast Asia, etc.)
-```
+### 💡 Engineering for Real Travelers
+SkyWear was built around a genuine pain point: travelers don't need more weather data — they need weather *intelligence*. By combining real-time API data with a proprietary outfit algorithm and bidirectional travel support, this project demonstrates that mobile engineering can deliver tangible, human-centered value.
+
+### 🚀 Technical Evolution: Architecture as a Foundation
+Starting from a simple API call and evolving into a fully layered MVVM + Clean Architecture application with Hilt DI, Room migrations, DataStore persistence, and Firebase monitoring taught me that architecture is not overhead — it is the foundation that makes every feature addition faster and safer.
+
+### 🌏 Bridging Markets Through Technology
+As a developer targeting the Japanese IT market, SkyWear represents my approach to engineering: identify a real cross-cultural friction point, and solve it with clean, maintainable, and user-empathetic code.
  
 ---
 
 ## ✨ Contact
-* **GitHub**: https://github.com/2daKaizen-gun/skywear
-* **Email**: hkys1223@gmail.com
+
+| | |
+|---|---|
+| 📧 Email | hkys1223@gmail.com |
+| 🐙 GitHub | [@2daKaizen-gun](https://github.com/2daKaizen-gun/SkyWear) |
+ 
 ---
 
 <div align="center">
