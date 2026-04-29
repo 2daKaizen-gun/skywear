@@ -83,6 +83,116 @@ Although Korea and Japan are neighboring countries, their perceived temperatures
 
 ---
 
+## 🔥 Troubleshooting
+
+### 1. KSP + Kotlin Version Compatibility
+**Problem:** Room Compiler KSP version mismatch with Kotlin 2.2.10 caused build failure
+
+**Solution:** Pinned `ksp = "2.2.10-2.0.2"` to match the exact Kotlin version
+
+### 2. Hilt — Missing `android:name` in AndroidManifest
+**Problem:** `Hilt Activity must be attached to an @HiltAndroidApp Application` crash on launch
+
+**Solution:** Added `android:name=".SkyWearApplication"` to `AndroidManifest.xml`
+
+### 3. DEX Version Compatibility (Test Function Names)
+**Problem:** Backtick function names with spaces caused build errors on DEX versions below 040
+
+**Solution:** Renamed all test functions using underscore convention
+
+### 4. Missing Room TypeConverter
+**Problem:** Potential crash when storing `ChecklistCategory` enum in Room DB
+
+**Solution:** Created `ChecklistConverters` class and registered `@TypeConverters` annotation
+
+### 5. ViewModel Instance Sharing Across Screens
+**Problem:** City changes in SearchScreen were not reflected in DashboardScreen
+
+**Root Cause:** Each screen created its own ViewModel instance via `hiltViewModel()`
+
+**Solution:** Called `hiltViewModel()` at NavGraph level and passed instances as parameters to each screen
+
+### 6. Travel Direction — gapDegree Sign Issue
+**Problem:** When JP→KR and destination is colder, advice incorrectly said "dress lighter"
+
+**Root Cause:** `gapDegree` is always calculated as JP - KR, but the sign needed to be flipped for JP→KR direction
+
+**Solution:** Applied `directedGap = if (isKrToJp) gapDegree else -gapDegree`
+
+### 7. Emulator Storage Space Insufficient
+**Problem:** `Not enough space` error prevented APK installation
+
+**Solution:** Device Manager → Show Advanced Settings → increased Internal Storage
+
+### 8. Compose i18n — String Generation in Domain Layer
+**Problem:** `stringResource()` can only be called from a Composable context
+
+**Solution:** Removed all string generation from Domain layer; moved to UI layer as `@Composable` functions (`buildComparisonMessage()`, `buildTravelAdvice()`, etc.)
+ 
+---
+
+## 💡 Technical Growth
+
+### Kotlin Language
+- Practical use of Elvis operator (`?:`), Safe Call (`?.`), and sealed classes
+- Extension Functions for clean DTO → UI transformation layer
+- `flatMapLatest` for dynamic data switching based on StateFlow
+- `@Composable` extension function patterns
+### Android Architecture
+- Strict layer separation with MVVM + Clean Architecture principles
+- Unidirectional data flow with `StateFlow` + `collectAsState()`
+- Complete dependency inversion with Hilt DI across ViewModel and Repository
+- Room DB schema migration (`MIGRATION_1_2`)
+### Network & Data
+- Retrofit2 + OkHttp Interceptor pattern for centralized error handling
+- Room DB Entity/DAO/Database three-layer structure
+- DataStore for persistent settings across app restarts
+- Firebase Crashlytics for production crash monitoring
+### Internationalization (i18n)
+- Android `strings.xml` for 3 locales (values/, values-en/, values-ja/)
+- Clean separation between Domain and UI layers for string responsibility
+- Dynamic API `lang` parameter detection for localized weather descriptions
+- `localizedCityName()` mapping from English API response to native city names
+---
+
+## 🧐 Self-Reflection
+
+### What Went Well
+- **Layer Separation**: Strict Data / Domain / UI separation made each layer's responsibility crystal clear
+- **Practical Algorithm**: The 8-stage outfit algorithm combined with Wind Chill / Heat Index corrections produces genuinely useful travel recommendations
+- **Bidirectional Travel Support**: Supporting both KR→JP and JP→KR directions makes the app useful for both Korean and Japanese travelers
+- **Complete i18n**: Outfit recommendations, comparison messages, and travel advice are all fully localized in 3 languages
+### Areas for Improvement
+- **Lottie Animations**: Actual Lottie JSON files for weather animations were not fully integrated with live API data
+- **Test Coverage**: Network layer mock tests were not implemented
+- **Pretendard Font**: Temporarily using `FontFamily.Default` due to build errors; custom font not yet applied
+### What I Would Do Differently
+- Apply test-driven development (TDD) from the beginning
+- Define the i18n strategy before starting string generation in Domain layer
+- Set up CI/CD pipeline from early stages
+---
+
+## 🚀 Future Roadmap
+
+```
+v1.1
+├── GPS-based automatic KR city detection
+├── 7-day weather forecast feature
+└── Android App Widget support
+ 
+v1.2
+├── Pretendard custom font integration
+├── Travel schedule-based weather alerts
+└── Support for additional routes beyond KR-JP (China, Southeast Asia, etc.)
+```
+ 
+---
+
 ## ✨ Contact
 * **GitHub**: https://github.com/2daKaizen-gun/skywear
 * **Email**: hkys1223@gmail.com
+---
+
+<div align="center">
+<sub>Built with ❤️ for KR-JP Travelers · SkyWear © 2025</sub>
+</div>
