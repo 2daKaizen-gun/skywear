@@ -55,8 +55,20 @@ fun List<ForecastItem>.dailyRepresentative(): Map<String, ForecastItem> {
 }
 
 // DualForecastResult - KR + JP 예보 쌍
-
+data class DualForecastResult(
+    val krForecast: Result<WeatherForecastResponse>,
+    val jpForecast: Result<WeatherForecastResponse>
+) {
+    val isSuccess: Boolean get() = krForecast.isSuccess && jpForecast.isSuccess
+    val errorMessage: String? get() = krForecast.exceptionOrNull()?.message
+        ?: jpForecast.exceptionOrNull()?.message
+}
 
 // DailyForecastPair - 날짜별 KR/JP 예보 쌍
-
+data class DailyForecastPair(
+    val dateKey: String, // "2026-05-01"
+    val dateLabel: String, // "05/01"
+    val krItem: ForecastItem,
+    val jpItem: ForecastItem
+)
 
