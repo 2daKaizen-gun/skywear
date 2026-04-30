@@ -38,7 +38,7 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 
 ## 🛠️ Tech Stack
 
-- **Language**: ![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
+- **Language**: ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 - **UI Framework**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-UI-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
 - **Architecture**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_+_Clean-green?style=for-the-badge)
 - **DI**: ![Hilt](https://img.shields.io/badge/Hilt-DI-E91E63?style=for-the-badge)
@@ -133,12 +133,16 @@ graph TD
   - [x] Phase 6-4: Japan Travel Checklist Screen
   - [x] Phase 6-5: Bug Fixes & Code Quality Improvements
 
-- **Phase 7**: Product Optimization & Professional Portfolio
+- **Phase 7**: Product Optimization
   - [x] Phase 7-1: Advanced Localization (Internationalization)
   - [x] Phase 7-2: Travel Direction Switch
   - [x] Phase 7-3: Performance & Monitoring
-  - [] Phase 7-4: Project Retrospective & Feedback
-  - [] Phase 7-5: Technical Documentation
+
+- **Phase 8**: 5-Day Forecast Comparison & Professional Portfolio
+  - [] Phase 8-1: Forecast API Integration & DTO
+  - [] Phase 8-2: Forecast Dashboard UI with Date Selector
+  - [] Phase 8-3: Project Retrospective & Feedback
+  - [] Phase 8-4: Technical Documentation
 
 
 ## 🔥 Troubleshooting & Lessons Learned
