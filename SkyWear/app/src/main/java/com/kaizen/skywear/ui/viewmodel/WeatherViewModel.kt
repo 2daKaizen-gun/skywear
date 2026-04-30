@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.DailyForecastPair
 import com.kaizen.skywear.data.model.WeatherResponse
+import com.kaizen.skywear.data.model.dailyRepresentative
+import com.kaizen.skywear.data.model.dateLabel
 import com.kaizen.skywear.data.model.iconCode
 import com.kaizen.skywear.data.model.weatherId
 import com.kaizen.skywear.data.repository.TravelDirection
@@ -70,7 +72,7 @@ class WeatherViewModel @Inject constructor(
             val savedJp = prefsRepository.selectedJpCity.first()
             _selectedKrCity.value = savedKr
             _selectedJpCity.value = savedJp
-            fetchDualCityWeather(savedKr, savedJp)
+            fetchAll(savedKr, savedJp)
         }
     }
 
@@ -87,19 +89,70 @@ class WeatherViewModel @Inject constructor(
     
     // 현재 날씨 호출
     fun fetchDualCityWeather(
-
+        krCity: String = _selectedKrCity.value,
+        jpCity: String = _selectedJpCity.value
     ) {
-
+        viewModelScope.launch {
+            _uiState.value = WeatherUiState.Loading
+            val result = repository.getDualCityWeather(krCity, jpCity)
+            _uiState.value = if (result.isSuccess) {
+                val krWeather = result.krWeather.getOrNull()!!
+                val jpWeather = result.jpWeather.getOrNull()!!
+                WeatherUiState.Success(
+                    krWeather        = krWeather,
+                    jpWeather        = jpWeather,
+                    krContextResult  = buildContextAwareRecommendation(krWeather),
+                    jpContextResult  = buildContextAwareRecommendation(jpWeather),
+                    comparisonResult = analyzeTempComparison(krWeather, jpWeather),
+                    krVisual         = mapWeatherCodeToVisual(krWeather.weatherId(), krWeather.iconCode(), krWeather.main.temp),
+                    jpVisual         = mapWeatherCodeToVisual(jpWeather.weatherId(), jpWeather.iconCode(), jpWeather.main.temp)
+                )
+            } else {
+                WeatherUiState.Error(result.errorMessage ?: "알 수 없는 오류가 발생했습니다.")
+            }
+        }
     }
     
     // 5일 예보 호출
     fun fetchDualCityForecast(
-
+        krCity: String = _selectedKrCity.value,
+        jpCity: String = _selectedJpCity.value
     ) {
+        viewModelScope.launch {
+            _forecastState.value = ForecastUiState.Loading
+            val result = repository.getDualCityForecast(krCity, jpCity)
+            _forecastState.value = if (result.isSuccess) {
+                val krForecast = result.krForecast.getOrNull()!!
+                val jpForecast = result.jpForecast.getOrNull()!!
 
+                // 날짜별 대표 슬롯 추출
+                val krDaily = krForecast.list.dailyRepresentative()
+                val jpDaily = jpForecast.list.dailyRepresentative()
+
+                // KR + JP 공통 날짜만 페어링
+                val commonDates = krDaily.keys.intersect(jpDaily.keys).sorted()
+                val pairs = commonDates.mapNotNull { dateKey ->
+                    val krItem = krDaily[dateKey] ?: return@mapNotNull null
+                    val jpItem = jpDaily[dateKey] ?: return@mapNotNull null
+                    DailyForecastPair(
+                        dateKey   = dateKey,
+                        dateLabel = krItem.dateLabel(),
+                        krItem    = krItem,
+                        jpItem    = jpItem
+                    )
+                }
+                ForecastUiState.Success(pairs = pairs)
+            } else {
+                ForecastUiState.Error(result.errorMessage ?: "예보를 불러올 수 없습니다.")
+            }
+        }
     }
 
     // 날짜 선택
+    // null = 현재 날씨, dateKey = 예보 날짜
+    fun selectDate(dateKey: String?) {
+        _selectedDateKey.value = dateKey
+    }
 
     // KR 도시 변경
     fun changeKrCity(cityName: String) {
