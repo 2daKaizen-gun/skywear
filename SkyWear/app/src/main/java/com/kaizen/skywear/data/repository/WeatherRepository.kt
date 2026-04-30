@@ -1,5 +1,7 @@
 package com.kaizen.skywear.data.repository
 
+import com.kaizen.skywear.data.model.DualForecastResult
+import com.kaizen.skywear.data.model.WeatherForecastResponse
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.remote.NetworkException
 import com.kaizen.skywear.data.remote.RetrofitClient
@@ -56,6 +58,34 @@ class WeatherRepository {
         return DualCityResult(
             getKrWeather(krCity),
             getJpWeather(jpCity)
+        )
+    }
+
+    // 5일 예보
+    suspend fun getKrForecast(city: String = Constants.DEFAULT_CITY_KR): Result<WeatherForecastResponse> {
+        return try {
+            Result.success(api.getForecastByCity(cityName = city, lang = getApiLang()))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getJpForecast(city: String = Constants.DEFAULT_CITY_JP): Result<WeatherForecastResponse> {
+        return try {
+            Result.success(api.getForecastByCity(cityName = city, lang = getApiLang()))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // KR + JP 예보 동시 호출
+    suspend fun getDualCityForecast(
+        krCity: String = Constants.DEFAULT_CITY_KR,
+        jpCity: String = Constants.DEFAULT_CITY_JP
+    ): DualForecastResult {
+        return DualForecastResult(
+            krForecast = getKrForecast(krCity),
+            jpForecast = getJpForecast(jpCity)
         )
     }
 }
