@@ -1,5 +1,6 @@
 package com.kaizen.skywear.data.remote
 
+import com.kaizen.skywear.data.model.WeatherForecastResponse
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.util.Constants
 import retrofit2.http.GET
@@ -26,4 +27,14 @@ interface WeatherApiService {
         @Query("units") units: String = Constants.UNIT,
         @Query("lang") lang: String = Constants.LANG_KR
     ): WeatherResponse
+
+    // 5일 예보 (3시간 간격, 최대 40슬롯)
+    @GET("forecast")
+    suspend fun getForecastByCity(
+        @Query("q")     cityName: String,
+        @Query("appid") apiKey: String = Constants.WEATHER_API_KEY,
+        @Query("units") units: String = Constants.UNIT,
+        @Query("lang")  lang: String = Constants.LANG_KR,
+        @Query("cnt")   count: Int = 40
+    ): WeatherForecastResponse
 }
