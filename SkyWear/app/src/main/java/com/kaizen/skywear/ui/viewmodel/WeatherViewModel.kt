@@ -131,10 +131,13 @@ class WeatherViewModel @Inject constructor(
                 val jpDaily = jpForecast.list.dailyRepresentativeWithTime()
 
                 // KR + JP 공통 날짜만 페어링
-                val commonDates = krDaily.keys.intersect(jpDaily.keys).sorted()
+                val today = java.time.LocalDate.now().toString()
+                val commonDates = krDaily.keys.intersect(jpDaily.keys)
+                    .filter { it >= today }
+                    .sorted()
                 val pairs = commonDates.mapNotNull { dateKey ->
                     val (krItem, krTime) = krDaily[dateKey] ?: return@mapNotNull null
-                    val (jpItem, _)      = jpDaily[dateKey] ?: return@mapNotNull null
+                    val (jpItem, _) = jpDaily[dateKey] ?: return@mapNotNull null
                     DailyForecastPair(
                         dateKey   = dateKey,
                         dateLabel = krItem.dateLabel(),
@@ -162,7 +165,7 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             prefsRepository.saveKrCity(cityName)
         }
-        fetchDualCityWeather(krCity = cityName)
+        fetchAll(krCity = cityName, jpCity = _selectedJpCity.value)
     }
 
     // JP 도시 변경(도시 검색 기능)
@@ -171,7 +174,7 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             prefsRepository.saveJpCity(cityName)
         }
-        fetchDualCityWeather(jpCity = cityName)
+        fetchAll(krCity = _selectedKrCity.value, jpCity = cityName)
     }
 
     // 여행 방향 토글
