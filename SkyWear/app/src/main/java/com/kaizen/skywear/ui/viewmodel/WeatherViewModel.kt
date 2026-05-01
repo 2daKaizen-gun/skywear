@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.DailyForecastPair
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.dailyRepresentative
+import com.kaizen.skywear.data.model.dailyRepresentativeWithTime
 import com.kaizen.skywear.data.model.dateLabel
 import com.kaizen.skywear.data.model.iconCode
 import com.kaizen.skywear.data.model.weatherId
@@ -125,18 +126,19 @@ class WeatherViewModel @Inject constructor(
                 val krForecast = result.krForecast.getOrNull()!!
                 val jpForecast = result.jpForecast.getOrNull()!!
 
-                // 날짜별 대표 슬롯 추출
-                val krDaily = krForecast.list.dailyRepresentative()
-                val jpDaily = jpForecast.list.dailyRepresentative()
+                // 날짜별 대표 슬롯 + 시간 추출
+                val krDaily = krForecast.list.dailyRepresentativeWithTime()
+                val jpDaily = jpForecast.list.dailyRepresentativeWithTime()
 
                 // KR + JP 공통 날짜만 페어링
                 val commonDates = krDaily.keys.intersect(jpDaily.keys).sorted()
                 val pairs = commonDates.mapNotNull { dateKey ->
-                    val krItem = krDaily[dateKey] ?: return@mapNotNull null
-                    val jpItem = jpDaily[dateKey] ?: return@mapNotNull null
+                    val (krItem, krTime) = krDaily[dateKey] ?: return@mapNotNull null
+                    val (jpItem, _)      = jpDaily[dateKey] ?: return@mapNotNull null
                     DailyForecastPair(
                         dateKey   = dateKey,
                         dateLabel = krItem.dateLabel(),
+                        representativeTime = krTime,
                         krItem    = krItem,
                         jpItem    = jpItem
                     )

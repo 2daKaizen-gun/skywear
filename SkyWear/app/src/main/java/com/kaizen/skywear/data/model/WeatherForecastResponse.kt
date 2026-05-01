@@ -45,14 +45,22 @@ fun ForecastItem.dateKey(): String = dateText.substring(0, 10)
 fun ForecastItem.timeLabel(): String = dateText.substring(11, 16)
 
 // 날짜별 대표 슬롯 - 낮 12시 기준 (없으면 첫 번째로)
-fun List<ForecastItem>.dailyRepresentative(): Map<String, ForecastItem> {
+// 반환값: dateKey → Pair(대표 ForecastItem, 대표 시간 문자열)
+fun List<ForecastItem>.dailyRepresentativeWithTime(): Map<String, Pair<ForecastItem, String>> {
     return groupBy { it.dateKey() }
         .mapValues { (_, items) ->
-            items.firstOrNull { it.timeLabel() == "12:00" }
-                ?: items.firstOrNull { it.timeLabel() == "15:00" }
-                ?: items.first()
+            val representative =
+                items.firstOrNull { it.timeLabel() == "12:00" }
+                    ?: items.firstOrNull { it.timeLabel() == "15:00" }
+                    ?: items.firstOrNull { it.timeLabel() == "09:00" }
+                    ?: items.first()
+            Pair(representative, representative.timeLabel())
         }
 }
+
+// 기존 호환용
+fun List<ForecastItem>.dailyRepresentative(): Map<String, ForecastItem> =
+    dailyRepresentativeWithTime().mapValues { it.value.first }
 
 // DualForecastResult - KR + JP 예보 쌍
 data class DualForecastResult(
@@ -68,7 +76,7 @@ data class DualForecastResult(
 data class DailyForecastPair(
     val dateKey: String, // "2026-05-01"
     val dateLabel: String, // "05/01"
+    val representativeTime: String, // "12:00" — 대표 슬롯 시간
     val krItem: ForecastItem,
     val jpItem: ForecastItem
 )
-
