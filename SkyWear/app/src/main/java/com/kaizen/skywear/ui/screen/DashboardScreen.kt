@@ -128,21 +128,19 @@ private fun DateSelectorRow(
     selectedDateKey: String?,
     onDateSelected: (String?) -> Unit
 ) {
-    val scrollState = rememberScrollState()
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .horizontalScroll(scrollState)
+            .horizontalScroll(rememberScrollState())
             .padding(horizontal = 12.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // "지금" 탭 — 현재 날씨
+        // "지금/Now/現在" 탭 — 현재 날씨
         FilterChip(
             selected = selectedDateKey == null,
             onClick = { onDateSelected(null) },
-            label = { Text("지금") }
+            label = { Text(stringResource(R.string.forecast_now)) }
         )
 
         // 예보 날짜 탭
@@ -151,7 +149,20 @@ private fun DateSelectorRow(
                 FilterChip(
                     selected = selectedDateKey == pair.dateKey,
                     onClick = { onDateSelected(pair.dateKey) },
-                    label = { Text(pair.dateLabel) }
+                    label = {
+                        // 날짜 + 대표 슬롯 시간 표시
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = pair.dateLabel,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                            Text(
+                                text = pair.representativeTime,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 )
             }
         }
@@ -259,114 +270,67 @@ private fun ForecastDayContent(
     colors: com.kaizen.skywear.ui.theme.SkyWearExtraColors,
     onNavigateToChecklist: () -> Unit
 ) {
-    val depItem  = if (isKrToJp) pair.krItem else pair.jpItem
-    val dstItem  = if (isKrToJp) pair.jpItem else pair.krItem
-    val depColor = if (isKrToJp) colors.koreaRed else colors.japanBlue
-    val dstColor = if (isKrToJp) colors.japanBlue else colors.koreaRed
-    val depFlag  = if (isKrToJp) "🇰🇷" else "🇯🇵"
-    val dstFlag  = if (isKrToJp) "🇯🇵" else "🇰🇷"
-    val depCardColor = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
-    val dstCardColor = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
-    val depOnCard    = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
-    val dstOnCard    = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+    val depItem   = if (isKrToJp) pair.krItem else pair.jpItem
+    val dstItem   = if (isKrToJp) pair.jpItem else pair.krItem
+    val depColor  = if (isKrToJp) colors.koreaRed else colors.japanBlue
+    val dstColor  = if (isKrToJp) colors.japanBlue else colors.koreaRed
+    val depFlag   = if (isKrToJp) "🇰🇷" else "🇯🇵"
+    val dstFlag   = if (isKrToJp) "🇯🇵" else "🇰🇷"
+    val depCard   = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
+    val dstCard   = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
+    val depOnCard = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+    val dstOnCard = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
 
-    // 예보 아이템으로 임시 WeatherResponse-like 데이터 추출
-    val depTemp   = depItem.main.temp.roundToInt()
-    val dstTemp   = dstItem.main.temp.roundToInt()
-    val gapDegree = dstItem.main.temp.roundToInt() - depItem.main.temp.roundToInt()
+    val depTemp     = depItem.main.temp.roundToInt()
+    val dstTemp     = dstItem.main.temp.roundToInt()
+    val gapDegree   = dstTemp - depTemp
     val directedGap = if (isKrToJp) gapDegree else -gapDegree
-    val gapLabel  = if (directedGap >= 0) "+${directedGap}°C" else "${directedGap}°C"
+    val gapLabel    = if (directedGap >= 0) "+${directedGap}°C" else "${directedGap}°C"
+    val depOutfit   = getOutfitRecommendation(depItem.main.temp)
+    val dstOutfit   = getOutfitRecommendation(dstItem.main.temp)
 
-    val depOutfit = getOutfitRecommendation(depItem.main.temp)
-    val dstOutfit = getOutfitRecommendation(dstItem.main.temp)
+    val depCityName = localizedCityName(if (isKrToJp) "Seoul" else "Osaka")
+    val dstCityName = localizedCityName(if (isKrToJp) "Osaka" else "Seoul")
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 날짜 헤더
+        // 날짜 헤더 — 날짜 + 대표 슬롯 시간 현지화
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "📅 ${pair.dateLabel} 예보",
+                text = stringResource(R.string.forecast_day_header, pair.dateLabel, pair.representativeTime),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
             )
         }
 
-        // 출발지 / 목적지 카드
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            ForecastWeatherCard(
-                modifier = Modifier.weight(1f),
-                flag = depFlag,
-                cityName = localizedCityName(depItem.main.let { pair.krItem.main }.let {
-                    if (isKrToJp) pair.krItem else pair.jpItem
-                }.let { pair.krItem.main.toString() }.let {
-                    if (isKrToJp) "Seoul" else "Osaka"
-                }),
-                temp = depTemp,
-                weatherDesc = depItem.weather.firstOrNull()?.description ?: "",
-                outfit = depOutfit,
-                humidity = depItem.main.humidity,
-                tempColor = depColor,
-                cardColor = depCardColor,
-                onCardColor = depOnCard
-            )
-            ForecastWeatherCard(
-                modifier = Modifier.weight(1f),
-                flag = dstFlag,
-                cityName = localizedCityName(if (isKrToJp) "Osaka" else "Seoul"),
-                temp = dstTemp,
-                weatherDesc = dstItem.weather.firstOrNull()?.description ?: "",
-                outfit = dstOutfit,
-                humidity = dstItem.main.humidity,
-                tempColor = dstColor,
-                cardColor = dstCardColor,
-                onCardColor = dstOnCard
-            )
+            ForecastWeatherCard(Modifier.weight(1f), depFlag, depCityName, depTemp,
+                depItem.weather.firstOrNull()?.description ?: "", depOutfit, depItem.main.humidity, depColor, depCard, depOnCard)
+            ForecastWeatherCard(Modifier.weight(1f), dstFlag, dstCityName, dstTemp,
+                dstItem.weather.firstOrNull()?.description ?: "", dstOutfit, dstItem.main.humidity, dstColor, dstCard, dstOnCard)
         }
 
-        // 온도 차이 카드
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
             shape = RoundedCornerShape(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.dashboard_temp_gap),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onTertiaryContainer
-                )
-                Text(
-                    text = gapLabel,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.tertiary
-                )
+            Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.dashboard_temp_gap), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                Text(gapLabel, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.tertiary)
             }
         }
 
-        // 코디 전환 카드
         if (depOutfit.stage != dstOutfit.stage) {
-            OutfitTransitionCard(
-                departureOutfit = depOutfit,
-                destinationOutfit = dstOutfit,
-                departureFlag = depFlag,
-                destinationFlag = dstFlag
-            )
+            OutfitTransitionCard(depOutfit, dstOutfit, depFlag, dstFlag)
         }
-
         ChecklistButton(isKrToJp, onNavigateToChecklist)
     }
 }
@@ -553,10 +517,10 @@ private fun buildTravelAdvice(result: TempComparisonResult, isKrToJp: Boolean): 
     val destTemp    = if (isKrToJp) result.jpTemp else result.krTemp
     return when (result.outfitGapLevel) {
         OutfitGapLevel.SIMILAR -> when {
-            destTemp <= 0  -> stringResource(R.string.advice_similar_freezing)
+            destTemp <= 0 -> stringResource(R.string.advice_similar_freezing)
             destTemp <= 10 -> stringResource(R.string.advice_similar_cold)
             destTemp <= 20 -> stringResource(R.string.advice_similar_mild)
-            else           -> stringResource(R.string.advice_similar_hot)
+            else -> stringResource(R.string.advice_similar_hot)
         }
         OutfitGapLevel.MODERATE -> if (directedGap > 0) stringResource(R.string.advice_moderate_warmer) else stringResource(R.string.advice_moderate_colder)
         OutfitGapLevel.SIGNIFICANT -> if (directedGap > 0) stringResource(R.string.advice_significant_warmer) else stringResource(R.string.advice_significant_colder)
@@ -568,24 +532,24 @@ private fun buildContextMessage(result: ContextAwareResult, actualTemp: Double):
     val tempDiff = actualTemp - result.feelsLikeTemp
     return when {
         result.windLevel == WindLevel.VERY_WINDY && tempDiff >= 5 -> stringResource(R.string.context_very_windy_cold)
-        result.windLevel == WindLevel.WINDY && tempDiff >= 3      -> stringResource(R.string.context_windy_cold)
+        result.windLevel == WindLevel.WINDY && tempDiff >= 3 -> stringResource(R.string.context_windy_cold)
         result.humidityLevel == HumidityLevel.VERY_HUMID && result.feelsLikeTemp > actualTemp -> stringResource(R.string.context_very_humid_hot)
-        result.humidityLevel == HumidityLevel.HUMID               -> stringResource(R.string.context_humid)
-        result.humidityLevel == HumidityLevel.DRY                 -> stringResource(R.string.context_dry)
-        else                                                       -> stringResource(R.string.context_comfortable)
+        result.humidityLevel == HumidityLevel.HUMID -> stringResource(R.string.context_humid)
+        result.humidityLevel == HumidityLevel.DRY -> stringResource(R.string.context_dry)
+        else -> stringResource(R.string.context_comfortable)
     }
 }
 
 @Composable
 fun OutfitRecommendation.localizedMainOutfit(): String = stringResource(
     when (stage) {
-        1    -> R.string.outfit_stage1
-        2    -> R.string.outfit_stage2
-        3    -> R.string.outfit_stage3
-        4    -> R.string.outfit_stage4
-        5    -> R.string.outfit_stage5
-        6    -> R.string.outfit_stage6
-        7    -> R.string.outfit_stage7
+        1 -> R.string.outfit_stage1
+        2 -> R.string.outfit_stage2
+        3 -> R.string.outfit_stage3
+        4 -> R.string.outfit_stage4
+        5 -> R.string.outfit_stage5
+        6 -> R.string.outfit_stage6
+        7 -> R.string.outfit_stage7
         else -> R.string.outfit_stage8
     }
 )
