@@ -284,8 +284,7 @@ private fun ForecastDayContent(
     val depTemp     = depItem.main.temp.roundToInt()
     val dstTemp     = dstItem.main.temp.roundToInt()
     val gapDegree   = dstTemp - depTemp
-    val directedGap = if (isKrToJp) gapDegree else -gapDegree
-    val gapLabel    = if (directedGap >= 0) "+${directedGap}°C" else "${directedGap}°C"
+    val gapLabel    = if (gapDegree >= 0) "+${gapDegree}°C" else "${gapDegree}°C"
     val depOutfit   = getOutfitRecommendation(depItem.main.temp)
     val dstOutfit   = getOutfitRecommendation(dstItem.main.temp)
 
@@ -311,10 +310,17 @@ private fun ForecastDayContent(
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            ForecastWeatherCard(Modifier.weight(1f), depFlag, depCityName, depTemp,
-                depItem.weather.firstOrNull()?.description ?: "", depOutfit, depItem.main.humidity, depColor, depCard, depOnCard)
-            ForecastWeatherCard(Modifier.weight(1f), dstFlag, dstCityName, dstTemp,
-                dstItem.weather.firstOrNull()?.description ?: "", dstOutfit, dstItem.main.humidity, dstColor, dstCard, dstOnCard)
+            ForecastWeatherCard(
+                modifier = Modifier.weight(1f), flag = depFlag, cityName = depCityName, temp = depTemp,
+                weatherDesc = depOutfit.emoji + " " + (depItem.weather.firstOrNull()?.description ?: ""),
+                outfit = depOutfit,
+                feelsLike = depItem.main.feelsLike.roundToInt(),
+                humidity = depItem.main.humidity, tempColor = depColor, cardColor = depCard, onCardColor = depOnCard)
+            ForecastWeatherCard( modifier = Modifier.weight(1f), flag = dstFlag, cityName = dstCityName, temp = dstTemp,
+                weatherDesc = dstOutfit.emoji + " " + (dstItem.weather.firstOrNull()?.description ?: ""),
+                outfit = dstOutfit,
+                feelsLike = dstItem.main.feelsLike.roundToInt(),
+                humidity = dstItem.main.humidity, tempColor = dstColor, cardColor = dstCard, onCardColor = dstOnCard)
         }
 
         Card(
@@ -450,8 +456,9 @@ private fun WeatherCard(
 @Composable
 private fun ForecastWeatherCard(
     modifier: Modifier = Modifier,
-    flag: String, cityName: String, temp: Int, weatherDesc: String,
-    outfit: OutfitRecommendation, humidity: Int,
+    flag: String, cityName: String, temp: Int,
+    weatherDesc: String,
+    outfit: OutfitRecommendation, feelsLike: Int, humidity: Int,
     tempColor: androidx.compose.ui.graphics.Color,
     cardColor: androidx.compose.ui.graphics.Color,
     onCardColor: androidx.compose.ui.graphics.Color
