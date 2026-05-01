@@ -12,6 +12,12 @@
     <string name="dashboard_feels_like">체감 %1$d°</string>
     <string name="dashboard_humidity">습도 %1$d%%</string>
 
+    <!-- 예보 관련 -->
+    <string name="forecast_now">지금</string>
+    <string name="forecast_day_header">📅 %1$s 예보 (%2$s 기준)</string>
+    <string name="forecast_loading">예보를 불러오는 중…</string>
+    <string name="forecast_error">예보를 불러올 수 없습니다.</string>
+
     <!-- 여행 방향 -->
     <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  일본 여행</string>
     <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  한국 여행</string>
@@ -29,7 +35,7 @@
     <string name="outfit_stage7">롱패딩 + 목도리</string>
     <string name="outfit_stage8">롱패딩 + 목도리 + 핫팩</string>
 
-    <!-- ✅ 비교 메시지 — %1$s=목적지, %2$s=출발지, %3$d=온도차 -->
+    <!-- 비교 메시지 — %1$s=목적지, %2$s=출발지, %3$d=온도차 -->
     <string name="comparison_jp_warmer">%1$s이(가) %2$s보다 %3$d°C 더 따뜻해요! 🌤️</string>
     <string name="comparison_jp_colder">%1$s이(가) %2$s보다 %3$d°C 더 추워요! 🥶</string>
     <string name="comparison_same_kr_jp">%2$s와 %1$s의 기온이 똑같아요! 🌡️</string>

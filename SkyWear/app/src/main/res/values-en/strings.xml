@@ -12,6 +12,12 @@
     <string name="dashboard_feels_like">Feels %1$d°</string>
     <string name="dashboard_humidity">Humidity %1$d%%</string>
 
+    <!-- Forecast -->
+    <string name="forecast_now">Now</string>
+    <string name="forecast_day_header">📅 %1$s Forecast (as of %2$s)</string>
+    <string name="forecast_loading">Loading forecast…</string>
+    <string name="forecast_error">Unable to load forecast.</string>
+
     <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  Trip to Japan</string>
     <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  Trip to Korea</string>
     <string name="direction_switch_label">Switch travel direction</string>
