@@ -139,8 +139,8 @@ graph TD
   - [x] Phase 7-3: Performance & Monitoring
 
 - **Phase 8**: 5-Day Forecast Comparison & Professional Portfolio
-  - [] Phase 8-1: Forecast API Integration & DTO
-  - [] Phase 8-2: Forecast Dashboard UI with Date Selector
+  - [x] Phase 8-1: Forecast API Integration & DTO
+  - [x] Phase 8-2: Forecast Dashboard UI with Date Selector
   - [] Phase 8-3: Project Retrospective & Feedback
   - [] Phase 8-4: Technical Documentation
 
