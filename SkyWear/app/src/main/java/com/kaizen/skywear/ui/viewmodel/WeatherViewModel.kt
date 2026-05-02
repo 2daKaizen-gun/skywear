@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.DailyForecastPair
 import com.kaizen.skywear.data.model.WeatherResponse
-import com.kaizen.skywear.data.model.dailyRepresentative
 import com.kaizen.skywear.data.model.dailyRepresentativeWithTime
+import com.kaizen.skywear.data.model.dateKey
 import com.kaizen.skywear.data.model.dateLabel
 import com.kaizen.skywear.data.model.iconCode
 import com.kaizen.skywear.data.model.weatherId
@@ -134,6 +134,12 @@ class WeatherViewModel @Inject constructor(
                 val today = java.time.LocalDate.now().toString()
                 val commonDates = krDaily.keys.intersect(jpDaily.keys)
                     .filter { it >= today }
+                    .filter { Key ->
+                        // KR, JP 모두 슬롯 3개 이상인 날짜만
+                        val krSlots = krForecast.list.filter { it.dateKey() == Key }
+                        val jpSlots = jpForecast.list.filter { it.dateKey() == Key }
+                        krSlots.size >= 3 && jpSlots.size >= 3
+                    }
                     .sorted()
                 val pairs = commonDates.mapNotNull { dateKey ->
                     val (krItem, krTime, krMinMax) = krDaily[dateKey] ?: return@mapNotNull null
