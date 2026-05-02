@@ -126,7 +126,7 @@ class WeatherViewModel @Inject constructor(
                 val krForecast = result.krForecast.getOrNull()!!
                 val jpForecast = result.jpForecast.getOrNull()!!
 
-                // 날짜별 대표 슬롯 + 시간 추출
+                // 대표 슬롯, 시간, pair(최저, 최고)
                 val krDaily = krForecast.list.dailyRepresentativeWithTime()
                 val jpDaily = jpForecast.list.dailyRepresentativeWithTime()
 
@@ -136,14 +136,18 @@ class WeatherViewModel @Inject constructor(
                     .filter { it >= today }
                     .sorted()
                 val pairs = commonDates.mapNotNull { dateKey ->
-                    val (krItem, krTime) = krDaily[dateKey] ?: return@mapNotNull null
-                    val (jpItem, _) = jpDaily[dateKey] ?: return@mapNotNull null
+                    val (krItem, krTime, krMinMax) = krDaily[dateKey] ?: return@mapNotNull null
+                    val (jpItem, _, jpMinMax)      = jpDaily[dateKey] ?: return@mapNotNull null
                     DailyForecastPair(
                         dateKey   = dateKey,
                         dateLabel = krItem.dateLabel(),
                         representativeTime = krTime,
                         krItem    = krItem,
-                        jpItem    = jpItem
+                        jpItem    = jpItem,
+                        krTempMin = krMinMax.first,
+                        krTempMax = krMinMax.second,
+                        jpTempMin = jpMinMax.first,
+                        jpTempMax = jpMinMax.second
                     )
                 }
                 ForecastUiState.Success(pairs = pairs)
