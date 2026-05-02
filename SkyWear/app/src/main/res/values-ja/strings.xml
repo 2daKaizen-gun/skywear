@@ -14,6 +14,7 @@
 
     <!-- 予報 -->
     <string name="forecast_now">現在</string>
+    <string name="forecast_temp_range">最低 %1$d° / 最高 %2$d°</string>
     <string name="forecast_day_header">📅 %1$s の予報 (%2$s 時点)</string>
     <string name="forecast_loading">予報を読み込み中…</string>
     <string name="forecast_error">予報を読み込めませんでした。</string>

@@ -14,6 +14,7 @@
 
     <!-- Forecast -->
     <string name="forecast_now">Now</string>
+    <string name="forecast_temp_range">Low %1$d° / High %2$d°</string>
     <string name="forecast_day_header">📅 %1$s Forecast (as of %2$s)</string>
     <string name="forecast_loading">Loading forecast…</string>
     <string name="forecast_error">Unable to load forecast.</string>

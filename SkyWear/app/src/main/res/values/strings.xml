@@ -14,6 +14,7 @@
 
     <!-- 예보 관련 -->
     <string name="forecast_now">지금</string>
+    <string name="forecast_temp_range">최저 %1$d° / 최고 %2$d°</string>
     <string name="forecast_day_header">📅 %1$s 예보 (%2$s 기준)</string>
     <string name="forecast_loading">예보를 불러오는 중…</string>
     <string name="forecast_error">예보를 불러올 수 없습니다.</string>
