@@ -281,12 +281,19 @@ private fun ForecastDayContent(
     val depOnCard = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
     val dstOnCard = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
 
+    // 방향에 따른 최저/최고
+    val depTempMin = if (isKrToJp) pair.krTempMin else pair.jpTempMin
+    val depTempMax = if (isKrToJp) pair.krTempMax else pair.jpTempMax
+    val dstTempMin = if (isKrToJp) pair.jpTempMin else pair.krTempMin
+    val dstTempMax = if (isKrToJp) pair.jpTempMax else pair.krTempMax
+
+    val depOutfit  = getOutfitRecommendation(depItem.main.temp)
+    val dstOutfit  = getOutfitRecommendation(dstItem.main.temp)
+
     val depTemp     = depItem.main.temp.roundToInt()
     val dstTemp     = dstItem.main.temp.roundToInt()
     val gapDegree   = dstTemp - depTemp
     val gapLabel    = if (gapDegree >= 0) "+${gapDegree}°C" else "${gapDegree}°C"
-    val depOutfit   = getOutfitRecommendation(depItem.main.temp)
-    val dstOutfit   = getOutfitRecommendation(dstItem.main.temp)
 
     val depCityName = localizedCityName(if (isKrToJp) "Seoul" else "Osaka")
     val dstCityName = localizedCityName(if (isKrToJp) "Osaka" else "Seoul")
@@ -313,14 +320,19 @@ private fun ForecastDayContent(
             ForecastWeatherCard(
                 modifier = Modifier.weight(1f), flag = depFlag, cityName = depCityName, temp = depTemp,
                 weatherDesc = depOutfit.emoji + " " + (depItem.weather.firstOrNull()?.description ?: ""),
-                outfit = depOutfit,
-                feelsLike = depItem.main.feelsLike.roundToInt(),
-                humidity = depItem.main.humidity, tempColor = depColor, cardColor = depCard, onCardColor = depOnCard)
-            ForecastWeatherCard( modifier = Modifier.weight(1f), flag = dstFlag, cityName = dstCityName, temp = dstTemp,
+                outfit = depOutfit, feelsLike = depItem.main.feelsLike.roundToInt(),
+                humidity = depItem.main.humidity,
+                tempMin = depTempMin, tempMax = depTempMax,
+                tempColor = depColor, cardColor = depCard, onCardColor = depOnCard
+            )
+            ForecastWeatherCard(
+                modifier = Modifier.weight(1f), flag = dstFlag, cityName = dstCityName, temp = dstTemp,
                 weatherDesc = dstOutfit.emoji + " " + (dstItem.weather.firstOrNull()?.description ?: ""),
-                outfit = dstOutfit,
-                feelsLike = dstItem.main.feelsLike.roundToInt(),
-                humidity = dstItem.main.humidity, tempColor = dstColor, cardColor = dstCard, onCardColor = dstOnCard)
+                outfit = dstOutfit, feelsLike = dstItem.main.feelsLike.roundToInt(),
+                humidity = dstItem.main.humidity,
+                tempMin = dstTempMin, tempMax = dstTempMax,
+                tempColor = dstColor, cardColor = dstCard, onCardColor = dstOnCard
+            )
         }
 
         Card(
@@ -457,8 +469,9 @@ private fun WeatherCard(
 private fun ForecastWeatherCard(
     modifier: Modifier = Modifier,
     flag: String, cityName: String, temp: Int,
-    weatherDesc: String,
-    outfit: OutfitRecommendation, feelsLike: Int, humidity: Int,
+    weatherDesc: String, outfit: OutfitRecommendation,
+    feelsLike: Int, humidity: Int,
+    tempMin: Int, tempMax: Int,
     tempColor: androidx.compose.ui.graphics.Color,
     cardColor: androidx.compose.ui.graphics.Color,
     onCardColor: androidx.compose.ui.graphics.Color
@@ -467,6 +480,12 @@ private fun ForecastWeatherCard(
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text("$flag $cityName", style = MaterialTheme.typography.labelLarge, color = onCardColor)
             Text("$temp°", style = MaterialTheme.typography.displayMedium, color = tempColor)
+            // 최저/최고 표시
+            Text(
+                text = stringResource(R.string.forecast_temp_range, tempMin, tempMax),
+                style = MaterialTheme.typography.labelSmall,
+                color = onCardColor.copy(alpha = 0.8f)
+            )
             Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = onCardColor.copy(alpha = 0.2f))
             Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.bodySmall, color = onCardColor)
