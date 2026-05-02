@@ -30,7 +30,6 @@ import com.kaizen.skywear.domain.TempComparisonResult
 import com.kaizen.skywear.domain.WindLevel
 import com.kaizen.skywear.domain.directedGapLabel
 import com.kaizen.skywear.domain.getOutfitRecommendation
-import com.kaizen.skywear.domain.hasSignificantFeelsLikeDiff
 import com.kaizen.skywear.domain.isOutfitDifferent
 import com.kaizen.skywear.ui.theme.LocalExtraColors
 import com.kaizen.skywear.ui.viewmodel.ForecastUiState
@@ -214,7 +213,7 @@ private fun CurrentWeatherContent(
                         weatherDesc = departureContext.adjustedOutfit.emoji + " " +
                                 (departureWeather.weather.firstOrNull()?.description ?: ""),
                         outfit = departureContext.adjustedOutfit,
-                        feelsLike = departureContext.feelsLikeTemp.toInt(),
+                        feelsLike = departureWeather.main.feelsLike.roundToInt(),
                         humidity = departureWeather.main.humidity,
                         tempColor = departureColor,
                         cardColor = depCardColor,
@@ -228,7 +227,7 @@ private fun CurrentWeatherContent(
                         weatherDesc = destinationContext.adjustedOutfit.emoji + " " +
                                 (destinationWeather.weather.firstOrNull()?.description ?: ""),
                         outfit = destinationContext.adjustedOutfit,
-                        feelsLike = destinationContext.feelsLikeTemp.toInt(),
+                        feelsLike = departureWeather.main.feelsLike.roundToInt(),
                         humidity = destinationWeather.main.humidity,
                         tempColor = destinationColor,
                         cardColor = dstCardColor,
@@ -242,7 +241,7 @@ private fun CurrentWeatherContent(
                     travelAdvice = travelAdvice
                 )
 
-                if (departureContext.hasSignificantFeelsLikeDiff(departureWeather.main.temp)) {
+                if (abs(departureWeather.main.feelsLike - departureWeather.main.temp) >= 2.0) {
                     ContextCard(contextMessage)
                 }
 
@@ -489,7 +488,6 @@ private fun ForecastWeatherCard(
             Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = onCardColor.copy(alpha = 0.2f))
             Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.bodySmall, color = onCardColor)
-            Text(stringResource(R.string.dashboard_humidity, humidity), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
         }
     }
 }
