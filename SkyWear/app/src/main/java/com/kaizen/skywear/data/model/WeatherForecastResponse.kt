@@ -44,9 +44,8 @@ fun ForecastItem.dateKey(): String = dateText.substring(0, 10)
 // 시간만 추출
 fun ForecastItem.timeLabel(): String = dateText.substring(11, 16)
 
-// 날짜별 대표 슬롯 - 낮 12시 기준 (없으면 첫 번째로)
-// 반환값: dateKey → Pair(대표 ForecastItem, 대표 시간 문자열)
-fun List<ForecastItem>.dailyRepresentativeWithTime(): Map<String, Pair<ForecastItem, String>> {
+// 날짜별 대표 슬롯 + 시간 + 최저/최고 온도
+fun List<ForecastItem>.dailyRepresentativeWithTime(): Map<String, Triple<ForecastItem, String, Pair<Int, Int>>> {
     return groupBy { it.dateKey() }
         .mapValues { (_, items) ->
             val representative =
@@ -54,7 +53,11 @@ fun List<ForecastItem>.dailyRepresentativeWithTime(): Map<String, Pair<ForecastI
                     ?: items.firstOrNull { it.timeLabel() == "15:00" }
                     ?: items.firstOrNull { it.timeLabel() == "09:00" }
                     ?: items.first()
-            Pair(representative, representative.timeLabel())
+            // 하루 전체 슬롯에서 최저/최고 계산
+            val tempmin = items.minOf { it.main.temp }.toInt()
+            val tempMax = items.maxOf { it.main.temp }.toInt()
+
+            Triple(representative, representative.timeLabel(), Pair(tempmin, tempMax))
         }
 }
 
@@ -78,5 +81,9 @@ data class DailyForecastPair(
     val dateLabel: String, // "05/01"
     val representativeTime: String, // "12:00" — 대표 슬롯 시간
     val krItem: ForecastItem,
-    val jpItem: ForecastItem
+    val jpItem: ForecastItem,
+    val krTempMin: Int, // 하루 최저
+    val krTempMax: Int, // 하루 최고
+    val jpTempMin: Int,
+    val jpTempMax: Int
 )
