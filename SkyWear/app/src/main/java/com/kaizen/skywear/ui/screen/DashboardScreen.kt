@@ -488,6 +488,10 @@ private fun ForecastWeatherCard(
             Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = onCardColor.copy(alpha = 0.2f))
             Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.bodySmall, color = onCardColor)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.dashboard_feels_like, feelsLike), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
+                Text(stringResource(R.string.dashboard_humidity, humidity), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
+            }
         }
     }
 }
