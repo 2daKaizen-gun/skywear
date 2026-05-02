@@ -144,6 +144,12 @@ graph TD
   - [x] Phase 8-3: Project Retrospective & Feedback
   - [x] Phase 8-4: Technical Documentation
 
+- **Phase 9**: Lifecycle Features & Long-term Engagement
+  - [] Phase 9-1: Bottom Navigation Bar Integration
+  - [] Phase 9-2: City Subscription & Weather Change Alerts
+  - [] Phase 9-3: Seasonal Travel Recommendation Engine
+  - [] Phase 9-4: Travel Journal & Weather History Log
+  - [] Phase 9-5: Portfolio Finalization & README Update
 
 ## 🔥 Troubleshooting & Lessons Learned
 
