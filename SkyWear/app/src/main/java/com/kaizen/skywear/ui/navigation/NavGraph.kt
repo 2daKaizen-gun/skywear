@@ -27,6 +27,7 @@ import com.kaizen.skywear.R
 import com.kaizen.skywear.ui.screen.ChecklistScreen
 import com.kaizen.skywear.ui.screen.DashboardScreen
 import com.kaizen.skywear.ui.screen.SearchScreen
+import com.kaizen.skywear.ui.screen.SubscribeScreen
 import com.kaizen.skywear.ui.viewmodel.CitySearchViewModel
 import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 
@@ -130,10 +131,10 @@ fun SkyWearNavGraph(
                 SubscribeScreen()
             }
             composable(Screen.Journal.route) {
-                JournalScreen()
+                // JournalScreen()
             }
             composable(Screen.Season.route) {
-                SeasonScreen()
+                // SeasonScreen()
             }
         }
     }
