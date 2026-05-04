@@ -1,0 +1,132 @@
+package com.kaizen.skywear.ui.screen
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.kaizen.skywear.R
+import com.kaizen.skywear.domain.SeasonEvent
+import com.kaizen.skywear.domain.SEASON_EVENTS
+import java.util.Locale
+
+// 계절별 한·일 여행 추천
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SeasonScreen() {
+    val lang   = Locale.getDefault().language
+    val sorted = SEASON_EVENTS.sortedBy { it.dDay() }
+    val now    = sorted.filter { it.isNow() }
+    val upcoming = sorted.filter { !it.isNow() }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(stringResource(R.string.nav_season)) })
+        }
+    ) { padding ->
+        LazyColumn(
+            contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxSize().padding(padding)
+        ) {
+            // 지금 적기
+            if (now.isNotEmpty()) {
+                item {
+                    Text("지금 가기 딱 좋아요 ✨",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(bottom = 4.dp))
+                }
+                items(now) { event ->
+                    SeasonCard(event = event, lang = lang, isNow = true)
+                }
+                item { Spacer(Modifier.height(4.dp)) }
+            }
+
+            // 다가오는 시즌
+            item {
+                Text("다가오는 시즌",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 4.dp))
+            }
+            items(upcoming) { event ->
+                SeasonCard(event = event, lang = lang, isNow = false)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SeasonCard(event: SeasonEvent, lang: String, isNow: Boolean) {
+    val title   = when (lang) { "en" -> event.titleEn; "ja" -> event.titleJa; else -> event.titleKo }
+    val avgTemp = when (lang) { "en" -> event.avgTempEn; "ja" -> event.avgTempJa; else -> event.avgTempKo }
+    val tip     = when (lang) { "en" -> event.tipEn; "ja" -> event.tipJa; else -> event.tipKo }
+    val dDay    = event.dDay()
+    val dDayText = if (dDay == 0L) "D-Day!" else "D-${dDay}"
+
+    val accentColor = when (event.colorTag) {
+        "green" -> Color(0xFF639922)
+        "blue"  -> Color(0xFF378ADD)
+        "amber" -> Color(0xFFEF9F27)
+        else    -> Color(0xFFD85A30)
+    }
+    val bgColor = when (event.colorTag) {
+        "green" -> Color(0xFFEAF3DE)
+        "blue"  -> Color(0xFFE6F1FB)
+        "amber" -> Color(0xFFFAEEDA)
+        else    -> Color(0xFFFAECE7)
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isNow) bgColor else MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(event.emoji, style = MaterialTheme.typography.titleLarge)
+                    Column {
+                        Text(title, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                        Text(event.city, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                Surface(
+                    color = if (isNow) accentColor else MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text(
+                        text = if (isNow) "지금 적기" else dDayText,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (isNow) Color.White else MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(avgTemp, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(6.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(tip, style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(8.dp))
+            }
+        }
+    }
+}
