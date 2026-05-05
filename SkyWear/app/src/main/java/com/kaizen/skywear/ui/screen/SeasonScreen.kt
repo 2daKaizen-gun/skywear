@@ -11,23 +11,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaizen.skywear.R
+import com.kaizen.skywear.data.repository.TravelDirection
+import com.kaizen.skywear.domain.JP_SEASON_EVENTS
+import com.kaizen.skywear.domain.KR_SEASON_EVENTS
 import com.kaizen.skywear.domain.SeasonEvent
-import com.kaizen.skywear.domain.SEASON_EVENTS
+import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 import java.util.Locale
 
-// 계절별 한·일 여행 추천
+// 여행 방향에 따라 JP/KR 시즌 이벤트 분기
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SeasonScreen() {
-    val lang   = Locale.getDefault().language
-    val sorted = SEASON_EVENTS.sortedBy { it.dDay() }
-    val now    = sorted.filter { it.isNow() }
+fun SeasonScreen(
+    viewModel: WeatherViewModel = hiltViewModel()
+) {
+    val travelDirection by viewModel.travelDirection.collectAsState()
+    val isKrToJp = travelDirection == TravelDirection.KR_TO_JP
+
+    // 방향에 따라 이벤트 목록 분기
+    val events = if (isKrToJp) JP_SEASON_EVENTS else KR_SEASON_EVENTS
+    val sorted   = events.sortedBy { it.dDay() }
+    val now      = sorted.filter { it.isNow() }
     val upcoming = sorted.filter { !it.isNow() }
+
+    val lang = Locale.getDefault().language
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.nav_season)) })
+            TopAppBar(
+                title = {
+                    Text(
+                        // 방향에 따라 타이틀 분기 + i18n
+                        text = stringResource(
+                            if (isKrToJp) R.string.season_title_jp else R.string.season_title_kr
+                        )
+                    )
+                }
+            )
         }
     ) { padding ->
         LazyColumn(
@@ -38,10 +59,12 @@ fun SeasonScreen() {
             // 지금 적기
             if (now.isNotEmpty()) {
                 item {
-                    Text("지금 가기 딱 좋아요 ✨",
+                    Text(
+                        stringResource(R.string.season_now_label),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(bottom = 4.dp))
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
                 }
                 items(now) { event ->
                     SeasonCard(event = event, lang = lang, isNow = true)
@@ -51,10 +74,12 @@ fun SeasonScreen() {
 
             // 다가오는 시즌
             item {
-                Text("다가오는 시즌",
+                Text(
+                    stringResource(R.string.season_upcoming_label),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = 4.dp))
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
             }
             items(upcoming) { event ->
                 SeasonCard(event = event, lang = lang, isNow = false)
@@ -68,8 +93,13 @@ private fun SeasonCard(event: SeasonEvent, lang: String, isNow: Boolean) {
     val title   = when (lang) { "en" -> event.titleEn; "ja" -> event.titleJa; else -> event.titleKo }
     val avgTemp = when (lang) { "en" -> event.avgTempEn; "ja" -> event.avgTempJa; else -> event.avgTempKo }
     val tip     = when (lang) { "en" -> event.tipEn; "ja" -> event.tipJa; else -> event.tipKo }
+
     val dDay    = event.dDay()
-    val dDayText = if (dDay == 0L) "D-Day!" else "D-${dDay}"
+    // D-day 텍스트 i18n
+    val dDayText = if (dDay == 0L)
+        stringResource(R.string.season_dday_today)
+    else
+        stringResource(R.string.season_dday, dDay)
 
     val accentColor = when (event.colorTag) {
         "green" -> Color(0xFF639922)
@@ -109,7 +139,8 @@ private fun SeasonCard(event: SeasonEvent, lang: String, isNow: Boolean) {
                     shape = RoundedCornerShape(20.dp)
                 ) {
                     Text(
-                        text = if (isNow) "지금 적기" else dDayText,
+                        // "지금 적기" / D-day i18n
+                        text = if (isNow) stringResource(R.string.season_best_now) else dDayText,
                         style = MaterialTheme.typography.labelSmall,
                         color = if (isNow) Color.White else MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
