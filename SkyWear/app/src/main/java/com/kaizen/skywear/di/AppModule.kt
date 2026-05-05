@@ -3,9 +3,13 @@ package com.kaizen.skywear.di
 import android.content.Context
 import com.kaizen.skywear.data.local.ChecklistDao
 import com.kaizen.skywear.data.local.SkyWearDatabase
+import com.kaizen.skywear.data.local.SubscribedCityDao
+import com.kaizen.skywear.data.local.TravelJournalDao
 import com.kaizen.skywear.data.remote.RetrofitClient
 import com.kaizen.skywear.data.remote.WeatherApiService
 import com.kaizen.skywear.data.repository.ChecklistRepository
+import com.kaizen.skywear.data.repository.JournalRepository
+import com.kaizen.skywear.data.repository.SubscribeRepository
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import dagger.Module
@@ -21,56 +25,36 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides @Singleton
+    fun provideWeatherApiService(): WeatherApiService = RetrofitClient.instance
 
-    // WeatherApiService - Retrofit 싱글톤
-    @Provides
-    @Singleton
-    fun provideWeatherApiService(): WeatherApiService {
-        return RetrofitClient.instance
-    }
+    @Provides @Singleton
+    fun provideWeatherRepository(): WeatherRepository = WeatherRepository()
 
-    // WeatherRepository
-    @Provides
-    @Singleton
-    fun provideWeatherRepository(
-        apiService: WeatherApiService
-    ): WeatherRepository {
-        return WeatherRepository()
-    }
+    @Provides @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): SkyWearDatabase =
+        SkyWearDatabase.getDatabase(context)
 
-    // Room Database
-    @Provides
-    @Singleton
-    fun provideDatabase(
-        @ApplicationContext context: Context
-    ): SkyWearDatabase {
-        return SkyWearDatabase.getDatabase(context)
-    }
+    @Provides @Singleton
+    fun provideChecklistDao(db: SkyWearDatabase): ChecklistDao = db.checklistDao()
 
-    // ChecklistDao
-    @Provides
-    @Singleton
-    fun provideChecklistDao(
-        database: SkyWearDatabase
-    ): ChecklistDao {
-        return database.checklistDao()
-    }
+    @Provides @Singleton
+    fun provideSubscribedCityDao(db: SkyWearDatabase): SubscribedCityDao = db.subscribedCityDao()
 
-    // ChecklistRepository
-    @Provides
-    @Singleton
-    fun provideChecklistRepository(
-        dao: ChecklistDao
-    ): ChecklistRepository {
-        return ChecklistRepository(dao)
-    }
+    @Provides @Singleton
+    fun provideTravelJournalDao(db: SkyWearDatabase): TravelJournalDao = db.travelJournalDao()
 
-    // UserPreferencesRepository
-    @Provides
-    @Singleton
-    fun provideUserPreferencesRepository(
-        @ApplicationContext context: Context
-    ): UserPreferencesRepository {
-        return UserPreferencesRepository(context)
-    }
+    @Provides @Singleton
+    fun provideChecklistRepository(dao: ChecklistDao): ChecklistRepository = ChecklistRepository(dao)
+
+    @Provides @Singleton
+    fun provideSubscribeRepository(dao: SubscribedCityDao): SubscribeRepository =
+        SubscribeRepository(dao)
+
+    @Provides @Singleton
+    fun provideJournalRepository(dao: TravelJournalDao): JournalRepository = JournalRepository(dao)
+
+    @Provides @Singleton
+    fun provideUserPreferencesRepository(@ApplicationContext context: Context): UserPreferencesRepository =
+        UserPreferencesRepository(context)
 }
