@@ -57,8 +57,8 @@ fun SubscribeScreen(
                     value = query,
                     onValueChange = { viewModel.searchCity(it) },
                     modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    placeholder = { Text("도시 검색 (한국어/영어/일본어)") },
-                    leadingIcon = { Icon(Icons.Default.Search, null) },
+                    placeholder = { Text(stringResource(R.string.subscribe_add_hint)) },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -84,10 +84,12 @@ fun SubscribeScreen(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    Text("최대 5개 도시까지 구독할 수 있어요.",
+                    Text(
+                        stringResource(R.string.subscribe_max_reached),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.padding(10.dp))
+                        modifier = Modifier.padding(10.dp)
+                    )
                 }
             }
 
@@ -95,8 +97,8 @@ fun SubscribeScreen(
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("🔔", style = MaterialTheme.typography.displayMedium)
-                        Text("관심 도시를 추가해보세요", style = MaterialTheme.typography.titleMedium)
-                        Text("+ 버튼으로 도시를 검색해 추가할 수 있어요",
+                        Text(stringResource(R.string.subscribe_empty_title), style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.subscribe_empty_desc),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -130,6 +132,11 @@ private fun SubscribedCityCard(
     onToggleAlert: () -> Unit,
     onDelete: () -> Unit
 ) {
+    // 알림 상태
+    val alertLabel = stringResource(
+        if (city.isAlertOn) R.string.subscribe_alert_on else R.string.subscribe_alert_off
+    )
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -187,7 +194,7 @@ private fun SearchResultItem(city: City, onAdd: () -> Unit) {
                     Text(city.nameEn, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            TextButton(onClick = onAdd) { Text("추가") }
+            TextButton(onClick = onAdd) { Text(stringResource(R.string.subscribe_add_button)) }
         }
     }
 }

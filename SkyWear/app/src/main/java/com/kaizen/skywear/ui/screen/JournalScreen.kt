@@ -41,8 +41,8 @@ fun JournalScreen(
             Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("📖", style = MaterialTheme.typography.displayMedium)
-                    Text("첫 여행 일지를 기록해보세요", style = MaterialTheme.typography.titleMedium)
-                    Text("여행의 날씨와 코디를 기억할 수 있어요",
+                    Text(stringResource(R.string.journal_empty_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.journal_empty_desc),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
@@ -108,7 +108,7 @@ private fun JournalCard(journal: TravelJournal, onDelete: () -> Unit) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 WeatherChip(
                     modifier = Modifier.weight(1f),
-                    label = "출발",
+                    label = stringResource(R.string.journal_depart_label),
                     temp = journal.departTemp,
                     desc = journal.departWeatherDesc,
                     outfit = journal.departOutfit,
@@ -119,7 +119,7 @@ private fun JournalCard(journal: TravelJournal, onDelete: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                 WeatherChip(
                     modifier = Modifier.weight(1f),
-                    label = "귀국",
+                    label = stringResource(R.string.journal_return_label),
                     temp = journal.returnTemp,
                     desc = journal.returnWeatherDesc,
                     outfit = journal.returnOutfit,
@@ -177,37 +177,47 @@ private fun AddJournalDialog(onDismiss: () -> Unit, onConfirm: (TravelJournal) -
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("여행 일지 추가") },
+        title = { Text(stringResource(R.string.journal_add_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(selected = isJapan, onClick = { isJapan = true }, label = { Text("🇯🇵 일본") })
-                    FilterChip(selected = !isJapan, onClick = { isJapan = false }, label = { Text("🇰🇷 한국") })
+                    FilterChip(selected = isJapan, onClick = { isJapan = true },
+                        label = { Text(stringResource(R.string.journal_tab_japan)) })
+                    FilterChip(selected = !isJapan, onClick = { isJapan = false },
+                        label = { Text(stringResource(R.string.journal_tab_korea)) })
                 }
                 OutlinedTextField(value = destination, onValueChange = { destination = it },
-                    label = { Text("목적지 도시") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                    label = { Text(stringResource(R.string.journal_destination)) },
+                    singleLine = true, modifier = Modifier.fillMaxWidth())
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(value = startDate, onValueChange = { startDate = it },
-                        label = { Text("출발일 (MM-DD)") }, singleLine = true, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(R.string.journal_start_date)) },
+                        singleLine = true, modifier = Modifier.weight(1f))
                     OutlinedTextField(value = endDate, onValueChange = { endDate = it },
-                        label = { Text("귀국일") }, singleLine = true, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(R.string.journal_end_date)) },
+                        singleLine = true, modifier = Modifier.weight(1f))
                 }
-                Text("출발일 날씨", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.journal_depart_weather), style = MaterialTheme.typography.labelMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(value = departTemp, onValueChange = { departTemp = it },
-                        label = { Text("기온 (°C)") }, singleLine = true, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(R.string.journal_temp)) },
+                        singleLine = true, modifier = Modifier.weight(1f))
                     OutlinedTextField(value = departOutfit, onValueChange = { departOutfit = it },
-                        label = { Text("코디") }, singleLine = true, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(R.string.journal_outfit)) },
+                        singleLine = true, modifier = Modifier.weight(1f))
                 }
-                Text("귀국일 날씨", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.journal_return_weather), style = MaterialTheme.typography.labelMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(value = returnTemp, onValueChange = { returnTemp = it },
-                        label = { Text("기온 (°C)") }, singleLine = true, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(R.string.journal_temp)) },
+                        singleLine = true, modifier = Modifier.weight(1f))
                     OutlinedTextField(value = returnOutfit, onValueChange = { returnOutfit = it },
-                        label = { Text("코디") }, singleLine = true, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(R.string.journal_outfit)) },
+                        singleLine = true, modifier = Modifier.weight(1f))
                 }
                 OutlinedTextField(value = memo, onValueChange = { memo = it },
-                    label = { Text("메모") }, modifier = Modifier.fillMaxWidth(), maxLines = 3)
+                    label = { Text(stringResource(R.string.journal_memo)) },
+                    modifier = Modifier.fillMaxWidth(), maxLines = 3)
             }
         },
         confirmButton = {
@@ -225,8 +235,10 @@ private fun AddJournalDialog(onDismiss: () -> Unit, onConfirm: (TravelJournal) -
                         memo = memo
                     ))
                 }
-            ) { Text("저장") }
+            ) { Text(stringResource(R.string.journal_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("취소") } }
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.journal_cancel)) }
+        }
     )
 }
