@@ -1,6 +1,7 @@
 package com.kaizen.skywear.ui.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Notifications
@@ -13,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kaizen.skywear.R
 import com.kaizen.skywear.ui.screen.ChecklistScreen
 import com.kaizen.skywear.ui.screen.DashboardScreen
+import com.kaizen.skywear.ui.screen.JournalScreen
 import com.kaizen.skywear.ui.screen.SearchScreen
 import com.kaizen.skywear.ui.screen.SeasonScreen
 import com.kaizen.skywear.ui.screen.SubscribeScreen
@@ -104,11 +107,11 @@ fun SkyWearNavGraph(
                 }
             }
         }
-    ) { _ ->
-
+    ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Dashboard.route
+            startDestination = Screen.Dashboard.route,
+            modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Dashboard.route) {
                 DashboardScreen(
