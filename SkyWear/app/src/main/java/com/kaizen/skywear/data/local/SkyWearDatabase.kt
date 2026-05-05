@@ -12,75 +12,101 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-// Room DB 싱글톤 인스턴스 + 기본 체크리스트 데이터 초기화
-// destination 컬럼 추가, 여행 방향 구분
-
+// v1 → v2: destination 컬럼 추가 (ChecklistItem)
+// v2 → v3: subscribed_cities, travel_journals 테이블 추가
 @Database(
-    entities = [ChecklistItem::class],
-    version = 2,
+    entities = [
+        ChecklistItem::class,
+        SubscribedCity::class,
+        TravelJournal::class
+    ],
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(ChecklistConverters::class)
 abstract class SkyWearDatabase : RoomDatabase() {
+
     abstract fun checklistDao(): ChecklistDao
+    abstract fun subscribedCityDao(): SubscribedCityDao
+    abstract fun travelJournalDao(): TravelJournalDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: SkyWearDatabase?=null
+        @Volatile private var INSTANCE: SkyWearDatabase? = null
 
-        // 마이그레이션 — destination 컬럼 추가 (기존 항목은 "JP" 기본값)
+        // v1 → v2: destination 컬럼 추가
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL(
-                    "ALTER TABLE checklist_items ADD COLUMN destination TEXT NOT NULL DEFAULT 'JP'"
-                )
+                db.execSQL("ALTER TABLE checklist_items ADD COLUMN destination TEXT NOT NULL DEFAULT 'JP'")
+            }
+        }
+
+        // v2 → v3: subscribed_cities, travel_journals 테이블 추가
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS subscribed_cities (
+                        nameEn TEXT NOT NULL PRIMARY KEY,
+                        nameKo TEXT NOT NULL,
+                        nameJa TEXT NOT NULL,
+                        country TEXT NOT NULL,
+                        emoji TEXT NOT NULL,
+                        isAlertOn INTEGER NOT NULL DEFAULT 1,
+                        lastTemp REAL NOT NULL DEFAULT 0.0,
+                        lastWeatherDesc TEXT NOT NULL DEFAULT '',
+                        addedAt INTEGER NOT NULL
+                    )
+                """.trimIndent())
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS travel_journals (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        destination TEXT NOT NULL,
+                        destinationEmoji TEXT NOT NULL,
+                        startDate TEXT NOT NULL,
+                        endDate TEXT NOT NULL,
+                        departTemp INTEGER NOT NULL,
+                        departWeatherDesc TEXT NOT NULL,
+                        departOutfit TEXT NOT NULL,
+                        returnTemp INTEGER NOT NULL,
+                        returnWeatherDesc TEXT NOT NULL,
+                        returnOutfit TEXT NOT NULL,
+                        memo TEXT NOT NULL DEFAULT '',
+                        createdAt INTEGER NOT NULL
+                    )
+                """.trimIndent())
             }
         }
 
         fun getDatabase(context: Context): SkyWearDatabase {
-            // 한 번에 하나의 스레드만 접근 가능
-            return INSTANCE?:synchronized(this) {
+            return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     SkyWearDatabase::class.java,
                     "skywear_database"
                 )
-                    .addMigrations(MIGRATION_1_2) // 마이그레이션 틍록
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .addCallback(DatabaseCallback())
                     .build()
-                // 만든 인스턴스 저장해 다음 호출부터 재사용
                 INSTANCE = instance
                 instance
             }
         }
     }
 
-    // DB 최초 생성 시 기본 체크리스트 아이템 자동 삽입
-    private class DatabaseCallback: Callback() {
+    private class DatabaseCallback : Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            // 싱글톤 DB 인스턴스가 null 아닐 때 실행
             INSTANCE?.let { database ->
-                // DB 작업은 IO thread에서 비동기 실행
                 CoroutineScope(Dispatchers.IO).launch {
                     val lang = Locale.getDefault().language
-
-                    // JP 여행 아이템 삽입
-                    database.checklistDao().insertItems(
-                        getJapanTravelItems(lang)
-                    )
-
-                    // KR 여행 아이템 삽입
-                    database.checklistDao().insertItems(
-                        getKoreaTravelItems(lang)
-                    )
+                    database.checklistDao().insertItems(getJapanTravelItems(lang))
+                    database.checklistDao().insertItems(getKoreaTravelItems(lang))
                 }
             }
         }
     }
 }
 
-// destination = "JP" 아이템 - 언어별
+// 여행 방향별 아이템 — 언어별 분기
 fun getJapanTravelItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
     when (lang) {
         "ja" -> getJapanTravelChecklistJa()
@@ -88,7 +114,6 @@ fun getJapanTravelItems(lang: String = Locale.getDefault().language): List<Check
         else -> getJapanTravelChecklistKo()
     }
 
-// destination = "KR" 아이템 - 언어별
 fun getKoreaTravelItems(lang: String = Locale.getDefault().language): List<ChecklistItem> =
     when (lang) {
         "ja" -> getKoreaTravelChecklistJa()
@@ -150,10 +175,10 @@ fun getJapanTravelChecklistJa(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "航空券予約確認書",              category = ChecklistCategory.DOCUMENT, destination = "JP"),
     ChecklistItem(title = "宿泊予約確認書",               category = ChecklistCategory.DOCUMENT, destination = "JP"),
     ChecklistItem(title = "海外旅行保険証書",              category = ChecklistCategory.DOCUMENT, destination = "JP"),
-    ChecklistItem(title = "ウォン両替",                   category = ChecklistCategory.MONEY,    destination = "JP"),
+    ChecklistItem(title = "円両替",                      category = ChecklistCategory.MONEY,    destination = "JP"),
     ChecklistItem(title = "海外決済可能なカード",           category = ChecklistCategory.MONEY,    destination = "JP"),
-    ChecklistItem(title = "T-money（交通カード）",         category = ChecklistCategory.MONEY,    destination = "JP"),
-    ChecklistItem(title = "220V変圧器（韓国の電圧）",      category = ChecklistCategory.ELECTRONIC, destination = "JP"),
+    ChecklistItem(title = "ICカード（交通用）",            category = ChecklistCategory.MONEY,    destination = "JP"),
+    ChecklistItem(title = "110V変圧器（日本の電圧）",      category = ChecklistCategory.ELECTRONIC, destination = "JP"),
     ChecklistItem(title = "スマートフォン充電器",           category = ChecklistCategory.ELECTRONIC, destination = "JP"),
     ChecklistItem(title = "モバイルバッテリー",            category = ChecklistCategory.ELECTRONIC, destination = "JP"),
     ChecklistItem(title = "ポケットWi-Fi または SIM",     category = ChecklistCategory.ELECTRONIC, destination = "JP"),
@@ -163,7 +188,7 @@ fun getJapanTravelChecklistJa(): List<ChecklistItem> = listOf(
     ChecklistItem(title = "常備薬（頭痛薬、胃薬）",        category = ChecklistCategory.HEALTH,   destination = "JP"),
     ChecklistItem(title = "マスク",                      category = ChecklistCategory.HEALTH,   destination = "JP"),
     ChecklistItem(title = "手指消毒剤",                  category = ChecklistCategory.HEALTH,   destination = "JP"),
-    ChecklistItem(title = "韓国語翻訳アプリのインストール", category = ChecklistCategory.MISC,     destination = "JP"),
+    ChecklistItem(title = "日本語翻訳アプリのインストール", category = ChecklistCategory.MISC,     destination = "JP"),
     ChecklistItem(title = "Googleマップのオフライン保存",  category = ChecklistCategory.MISC,     destination = "JP"),
     ChecklistItem(title = "緊急連絡先のメモ",             category = ChecklistCategory.MISC,     destination = "JP"),
 )
