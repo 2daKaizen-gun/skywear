@@ -98,4 +98,41 @@
     <string name="error_no_internet">インターネット接続を確認してください。</string>
     <string name="error_timeout">リクエストがタイムアウトしました。もう一度試してください。</string>
     <string name="error_city_not_found">都市が見つかりません。</string>
+
+    <!-- 購読画面 -->
+    <string name="subscribe_add_hint">都市検索（韓国語/英語/日本語）</string>
+    <string name="subscribe_add_button">追加</string>
+    <string name="subscribe_max_reached">最大5都市まで購読できます。</string>
+    <string name="subscribe_empty_title">気になる都市を追加しましょう</string>
+    <string name="subscribe_empty_desc">+ボタンで都市を検索して追加できます</string>
+    <string name="subscribe_alert_on">通知 ON</string>
+    <string name="subscribe_alert_off">通知 OFF</string>
+
+    <!-- 日記画面 -->
+    <string name="journal_empty_title">最初の旅行日記を記録しましょう</string>
+    <string name="journal_empty_desc">旅行中の天気とコーディを記録できます</string>
+    <string name="journal_add_title">旅行日記を追加</string>
+    <string name="journal_destination">目的地の都市</string>
+    <string name="journal_start_date">出発日 (MM-DD)</string>
+    <string name="journal_end_date">帰国日</string>
+    <string name="journal_depart_weather">出発日の天気</string>
+    <string name="journal_return_weather">帰国日の天気</string>
+    <string name="journal_temp">気温 (°C)</string>
+    <string name="journal_outfit">コーディ</string>
+    <string name="journal_memo">メモ</string>
+    <string name="journal_save">保存</string>
+    <string name="journal_cancel">キャンセル</string>
+    <string name="journal_depart_label">出発</string>
+    <string name="journal_return_label">帰国</string>
+    <string name="journal_tab_japan">🇯🇵 日本</string>
+    <string name="journal_tab_korea">🇰🇷 韓国</string>
+
+    <!-- おすすめ画面 -->
+    <string name="season_now_label">今がおすすめ ✨</string>
+    <string name="season_upcoming_label">これからのシーズン</string>
+    <string name="season_best_now">今が旬</string>
+    <string name="season_dday">D-%1$d</string>
+    <string name="season_dday_today">D-Day!</string>
+    <string name="season_title_jp">🇯🇵 日本旅行シーズン</string>
+    <string name="season_title_kr">🇰🇷 韓国旅行シーズン</string>
 </resources>

@@ -107,4 +107,41 @@
     <string name="error_no_internet">인터넷 연결을 확인해주세요.</string>
     <string name="error_timeout">요청 시간이 초과되었습니다. 다시 시도해주세요.</string>
     <string name="error_city_not_found">도시를 찾을 수 없습니다.</string>
+
+    <!-- 구독 화면 -->
+    <string name="subscribe_add_hint">도시 검색 (한국어/영어/일본어)</string>
+    <string name="subscribe_add_button">추가</string>
+    <string name="subscribe_max_reached">최대 5개 도시까지 구독할 수 있어요.</string>
+    <string name="subscribe_empty_title">관심 도시를 추가해보세요</string>
+    <string name="subscribe_empty_desc">+ 버튼으로 도시를 검색해 추가할 수 있어요</string>
+    <string name="subscribe_alert_on">알림 ON</string>
+    <string name="subscribe_alert_off">알림 OFF</string>
+
+    <!-- 일지 화면 -->
+    <string name="journal_empty_title">첫 여행 일지를 기록해보세요</string>
+    <string name="journal_empty_desc">여행의 날씨와 코디를 기억할 수 있어요</string>
+    <string name="journal_add_title">여행 일지 추가</string>
+    <string name="journal_destination">목적지 도시</string>
+    <string name="journal_start_date">출발일 (MM-DD)</string>
+    <string name="journal_end_date">귀국일</string>
+    <string name="journal_depart_weather">출발일 날씨</string>
+    <string name="journal_return_weather">귀국일 날씨</string>
+    <string name="journal_temp">기온 (°C)</string>
+    <string name="journal_outfit">코디</string>
+    <string name="journal_memo">메모</string>
+    <string name="journal_save">저장</string>
+    <string name="journal_cancel">취소</string>
+    <string name="journal_depart_label">출발</string>
+    <string name="journal_return_label">귀국</string>
+    <string name="journal_tab_japan">🇯🇵 일본</string>
+    <string name="journal_tab_korea">🇰🇷 한국</string>
+
+    <!-- 추천 화면 -->
+    <string name="season_now_label">지금 가기 딱 좋아요 ✨</string>
+    <string name="season_upcoming_label">다가오는 시즌</string>
+    <string name="season_best_now">지금 적기</string>
+    <string name="season_dday">D-%1$d</string>
+    <string name="season_dday_today">D-Day!</string>
+    <string name="season_title_jp">🇯🇵 일본 여행 시즌</string>
+    <string name="season_title_kr">🇰🇷 한국 여행 시즌</string>
 </resources>

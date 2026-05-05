@@ -98,4 +98,41 @@
     <string name="error_no_internet">Please check your internet connection.</string>
     <string name="error_timeout">Request timed out. Please try again.</string>
     <string name="error_city_not_found">City not found.</string>
+
+    <!-- Subscribe Screen -->
+    <string name="subscribe_add_hint">Search city (Korean/English/Japanese)</string>
+    <string name="subscribe_add_button">Add</string>
+    <string name="subscribe_max_reached">You can subscribe to up to 5 cities.</string>
+    <string name="subscribe_empty_title">Add cities you\'re interested in</string>
+    <string name="subscribe_empty_desc">Tap + to search and add a city</string>
+    <string name="subscribe_alert_on">Alert ON</string>
+    <string name="subscribe_alert_off">Alert OFF</string>
+
+    <!-- Journal Screen -->
+    <string name="journal_empty_title">Record your first travel journal</string>
+    <string name="journal_empty_desc">Remember the weather and outfits from your trip</string>
+    <string name="journal_add_title">Add Travel Journal</string>
+    <string name="journal_destination">Destination city</string>
+    <string name="journal_start_date">Departure (MM-DD)</string>
+    <string name="journal_end_date">Return date</string>
+    <string name="journal_depart_weather">Departure day weather</string>
+    <string name="journal_return_weather">Return day weather</string>
+    <string name="journal_temp">Temp (°C)</string>
+    <string name="journal_outfit">Outfit</string>
+    <string name="journal_memo">Memo</string>
+    <string name="journal_save">Save</string>
+    <string name="journal_cancel">Cancel</string>
+    <string name="journal_depart_label">Departure</string>
+    <string name="journal_return_label">Return</string>
+    <string name="journal_tab_japan">🇯🇵 Japan</string>
+    <string name="journal_tab_korea">🇰🇷 Korea</string>
+
+    <!-- Season Screen -->
+    <string name="season_now_label">Perfect time to go now ✨</string>
+    <string name="season_upcoming_label">Upcoming seasons</string>
+    <string name="season_best_now">Now</string>
+    <string name="season_dday">D-%1$d</string>
+    <string name="season_dday_today">D-Day!</string>
+    <string name="season_title_jp">🇯🇵 Japan Travel Seasons</string>
+    <string name="season_title_kr">🇰🇷 Korea Travel Seasons</string>
 </resources>
