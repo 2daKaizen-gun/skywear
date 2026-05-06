@@ -107,11 +107,17 @@ fun DashboardScreen(
                 // 예보 날짜
                 val selectedPair = (forecastState as? ForecastUiState.Success)
                     ?.pairs?.firstOrNull { it.dateKey == selectedDateKey }
+
+                val selectedKrCity by viewModel.selectedKrCity.collectAsState()
+                val selectedJpCity by viewModel.selectedJpCity.collectAsState()
+
                 if (selectedPair != null) {
                     ForecastDayContent(
                         pair = selectedPair,
                         isKrToJp = isKrToJp,
                         colors = colors,
+                        krCityName = selectedKrCity,
+                        jpCityName = selectedJpCity,
                         onNavigateToChecklist = onNavigateToChecklist
                     )
                 }
@@ -267,6 +273,8 @@ private fun ForecastDayContent(
     pair: DailyForecastPair,
     isKrToJp: Boolean,
     colors: com.kaizen.skywear.ui.theme.SkyWearExtraColors,
+    krCityName: String,
+    jpCityName: String,
     onNavigateToChecklist: () -> Unit
 ) {
     val depItem   = if (isKrToJp) pair.krItem else pair.jpItem
@@ -294,9 +302,6 @@ private fun ForecastDayContent(
     val gapDegree   = dstTemp - depTemp
     val gapLabel    = if (gapDegree >= 0) "+${gapDegree}°C" else "${gapDegree}°C"
 
-    val depCityName = localizedCityName(if (isKrToJp) "Seoul" else "Osaka")
-    val dstCityName = localizedCityName(if (isKrToJp) "Osaka" else "Seoul")
-
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -317,7 +322,7 @@ private fun ForecastDayContent(
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             ForecastWeatherCard(
-                modifier = Modifier.weight(1f), flag = depFlag, cityName = depCityName, temp = depTemp,
+                modifier = Modifier.weight(1f), flag = depFlag, cityName = localizedCityName(if (isKrToJp) krCityName else jpCityName), temp = depTemp,
                 weatherDesc = depOutfit.emoji + " " + (depItem.weather.firstOrNull()?.description ?: ""),
                 outfit = depOutfit, feelsLike = depItem.main.feelsLike.roundToInt(),
                 humidity = depItem.main.humidity,
@@ -325,7 +330,7 @@ private fun ForecastDayContent(
                 tempColor = depColor, cardColor = depCard, onCardColor = depOnCard
             )
             ForecastWeatherCard(
-                modifier = Modifier.weight(1f), flag = dstFlag, cityName = dstCityName, temp = dstTemp,
+                modifier = Modifier.weight(1f), flag = dstFlag, cityName = localizedCityName(if (isKrToJp) jpCityName else krCityName), temp = dstTemp,
                 weatherDesc = dstOutfit.emoji + " " + (dstItem.weather.firstOrNull()?.description ?: ""),
                 outfit = dstOutfit, feelsLike = dstItem.main.feelsLike.roundToInt(),
                 humidity = dstItem.main.humidity,
