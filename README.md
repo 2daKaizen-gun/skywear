@@ -35,7 +35,8 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
   7. **Seasonal Recommendations**: D-day countdown for 8 JP + 8 KR major travel events, direction-aware
   8. **Travel Journal**: Record trip weather, outfit history, and personal memos
   9. **Full i18n**: Korean / English / Japanese localization across all screens
-  10. **Firebase Crashlytics**: Production crash monitoring with release-only collection
+  10. **Responsive Layout**: Adaptive padding and typography for all screen sizes
+  11. **Firebase Crashlytics**: Production crash monitoring with release-only collection
 
 ---
 
@@ -45,6 +46,7 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 - **Bidirectional UX**: Full experience swap — departure/destination cities, comparison messages, travel advice, checklists, and seasonal recommendations — with a single toggle
 - **Long-term Engagement**: City subscription, travel journal, and seasonal events keep users returning between trips
 - **Multilingual Support**: Complete localization in Korean, English, and Japanese including weather descriptions via dynamic API `lang` parameter
+- **Responsive Design**: Adaptive layout with proportional spacing and typography across all Android devices
 
 ---
 
@@ -173,6 +175,7 @@ graph TD
   - [x] Phase 9-3: Seasonal Travel Recommendation Engine (8 JP + 8 KR events, direction-aware)
   - [x] Phase 9-4: Travel Journal & Weather History Log
   - [x] Phase 9-5: Portfolio Finalization & README Update
+  - [x] Phase 9-6: Responsive Layout Optimization for all screen sizes
 
 ---
 
@@ -219,6 +222,10 @@ graph TD
 - **Challenge**: Adding `SubscribedCity` and `TravelJournal` entities required a safe migration path without data loss.
 - **Resolution**: Implemented `MIGRATION_2_3` with explicit `CREATE TABLE IF NOT EXISTS` SQL statements, maintaining clean incremental migration from v1 → v2 → v3.
 
+**11. Responsive Layout — White Space on Larger Screens**
+- **Challenge**: Fixed padding (16dp) and `displayMedium` font caused excessive white space on larger phones.
+- **Resolution**: Reduced vertical padding to 8dp, switched temperature display to `displaySmall`, and tightened card spacing from 16dp to 10dp across all screens.
+
 ---
 
 ## 📈 Results
@@ -227,6 +234,7 @@ graph TD
 - **Bidirectional Support**: Full UX adaptation for both KR→JP and JP→KR travel modes including direction-aware seasonal recommendations
 - **Forecast Accuracy**: Daily min/max temperature extracted from all available 3-hour slots — not just a single time slot
 - **Long-term Engagement**: 4-tab lifecycle loop (Weather → Subscribe → Journal → Season)
+- **Responsive Design**: Consistent layout across small (360dp) to large (420dp+) Android screens
 - **Crash Monitoring**: Firebase Crashlytics integrated with release-only collection policy
 - **Error Handling**: 6-type sealed class network error handling covering all failure scenarios
 - **Architecture**: Strict 3-layer separation (Data / Domain / UI) with Room DB v3 and clean migration path
