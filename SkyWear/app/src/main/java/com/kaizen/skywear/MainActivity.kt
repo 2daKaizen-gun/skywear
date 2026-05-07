@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import com.kaizen.skywear.ui.navigation.SkyWearNavGraph
 import com.kaizen.skywear.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             SkyWearTheme {
                 SkyWearNavGraph()

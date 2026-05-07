@@ -1,7 +1,9 @@
 package com.kaizen.skywear.ui.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Notifications
@@ -81,6 +83,7 @@ fun SkyWearNavGraph(
     )
 
     Scaffold(
+        contentWindowInsets = WindowInsets.systemBars,
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar {
