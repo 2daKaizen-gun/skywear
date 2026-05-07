@@ -55,6 +55,7 @@ fun DashboardScreen(
     val isKrToJp = travelDirection == TravelDirection.KR_TO_JP
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.dashboard_title), style = MaterialTheme.typography.titleLarge) },
@@ -136,7 +137,7 @@ private fun CurrentWeatherContent(uiState: WeatherUiState, isKrToJp: Boolean, co
             val contextMessage    = buildContextMessage(depContext, depWeather.main.temp)
 
             Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
+                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -189,7 +190,7 @@ private fun ForecastDayContent(pair: DailyForecastPair, isKrToJp: Boolean, color
     val gapLabel   = if (gapDegree >= 0) "+${gapDegree}°C" else "${gapDegree}°C"
 
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(12.dp)) {

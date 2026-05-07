@@ -32,6 +32,7 @@ fun SeasonScreen(viewModel: WeatherViewModel = hiltViewModel()) {
     val lang     = Locale.getDefault().language
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(title = { Text(stringResource(if (isKrToJp) R.string.season_title_jp else R.string.season_title_kr)) })
         }
@@ -39,7 +40,7 @@ fun SeasonScreen(viewModel: WeatherViewModel = hiltViewModel()) {
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxSize().padding(padding)
+            modifier = Modifier.fillMaxWidth().padding(padding)
         ) {
             if (now.isNotEmpty()) {
                 item {
