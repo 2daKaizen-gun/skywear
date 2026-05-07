@@ -83,7 +83,7 @@ fun SkyWearNavGraph(
     )
 
     Scaffold(
-        contentWindowInsets = WindowInsets.systemBars,
+        contentWindowInsets = WindowInsets(0),
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar {
