@@ -49,18 +49,15 @@ fun DashboardScreen(
     val forecastState   by viewModel.forecastState.collectAsState()
     val travelDirection by viewModel.travelDirection.collectAsState()
     val selectedDateKey by viewModel.selectedDateKey.collectAsState()
+    val selectedKrCity  by viewModel.selectedKrCity.collectAsState()
+    val selectedJpCity  by viewModel.selectedJpCity.collectAsState()
     val colors = LocalExtraColors.current
     val isKrToJp = travelDirection == TravelDirection.KR_TO_JP
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.dashboard_title),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
+                title = { Text(stringResource(R.string.dashboard_title), style = MaterialTheme.typography.titleLarge) },
                 actions = {
                     IconButton(onClick = { viewModel.refresh() }) {
                         Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.dashboard_refresh))
@@ -75,97 +72,39 @@ fun DashboardScreen(
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            // 여행 방향 스위치 바
-            TravelDirectionBar(
-                direction = travelDirection,
-                onToggle = { viewModel.toggleTravelDirection() }
-            )
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+            TravelDirectionBar(direction = travelDirection, onToggle = { viewModel.toggleTravelDirection() })
+            DateSelectorRow(forecastState = forecastState, selectedDateKey = selectedDateKey, onDateSelected = { viewModel.selectDate(it) })
 
-            // 날짜 선택 탭 (스위치 바 바로 아래)
-            DateSelectorRow(
-                forecastState = forecastState,
-                selectedDateKey = selectedDateKey,
-                onDateSelected = { viewModel.selectDate(it) }
-            )
-
-            // 선택된 날짜에 따라 현재 날씨 or 예보 표시
             if (selectedDateKey == null) {
-                // 현재 날씨
-                CurrentWeatherContent(
-                    uiState = uiState,
-                    isKrToJp = isKrToJp,
-                    colors = colors,
-                    onNavigateToChecklist = onNavigateToChecklist,
-                    onRefresh = { viewModel.refresh() }
-                )
+                CurrentWeatherContent(uiState = uiState, isKrToJp = isKrToJp, colors = colors, onNavigateToChecklist = onNavigateToChecklist, onRefresh = { viewModel.refresh() })
             } else {
-                // 예보 날짜
-                val selectedPair = (forecastState as? ForecastUiState.Success)
-                    ?.pairs?.firstOrNull { it.dateKey == selectedDateKey }
-
-                val selectedKrCity by viewModel.selectedKrCity.collectAsState()
-                val selectedJpCity by viewModel.selectedJpCity.collectAsState()
-
+                val selectedPair = (forecastState as? ForecastUiState.Success)?.pairs?.firstOrNull { it.dateKey == selectedDateKey }
                 if (selectedPair != null) {
-                    ForecastDayContent(
-                        pair = selectedPair,
-                        isKrToJp = isKrToJp,
-                        colors = colors,
-                        krCityName = selectedKrCity,
-                        jpCityName = selectedJpCity,
-                        onNavigateToChecklist = onNavigateToChecklist
-                    )
+                    ForecastDayContent(pair = selectedPair, isKrToJp = isKrToJp, colors = colors, krCityName = selectedKrCity, jpCityName = selectedJpCity, onNavigateToChecklist = onNavigateToChecklist)
                 }
             }
         }
     }
 }
 
-// 날짜 선택 탭 (가로 스크롤)
 @Composable
-private fun DateSelectorRow(
-    forecastState: ForecastUiState,
-    selectedDateKey: String?,
-    onDateSelected: (String?) -> Unit
-) {
+private fun DateSelectorRow(forecastState: ForecastUiState, selectedDateKey: String?, onDateSelected: (String?) -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 10.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // "지금/Now/現在" 탭 — 현재 날씨
-        FilterChip(
-            selected = selectedDateKey == null,
-            onClick = { onDateSelected(null) },
-            label = { Text(stringResource(R.string.forecast_now)) }
-        )
-
-        // 예보 날짜 탭
+        FilterChip(selected = selectedDateKey == null, onClick = { onDateSelected(null) }, label = { Text(stringResource(R.string.forecast_now), style = MaterialTheme.typography.labelSmall) })
         if (forecastState is ForecastUiState.Success) {
             forecastState.pairs.forEach { pair ->
                 FilterChip(
                     selected = selectedDateKey == pair.dateKey,
                     onClick = { onDateSelected(pair.dateKey) },
                     label = {
-                        // 날짜 + 대표 슬롯 시간 표시
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = pair.dateLabel,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                            Text(
-                                text = pair.representativeTime,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            Text(pair.dateLabel, style = MaterialTheme.typography.labelSmall)
+                            Text(pair.representativeTime, style = MaterialTheme.typography.labelSmall.copy(fontSize = MaterialTheme.typography.labelSmall.fontSize * 0.85f), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 )
@@ -174,92 +113,49 @@ private fun DateSelectorRow(
     }
 }
 
-// 현재 날씨 콘텐츠
 @Composable
-private fun CurrentWeatherContent(
-    uiState: WeatherUiState,
-    isKrToJp: Boolean,
-    colors: com.kaizen.skywear.ui.theme.SkyWearExtraColors,
-    onNavigateToChecklist: () -> Unit,
-    onRefresh: () -> Unit
-) {
+private fun CurrentWeatherContent(uiState: WeatherUiState, isKrToJp: Boolean, colors: com.kaizen.skywear.ui.theme.SkyWearExtraColors, onNavigateToChecklist: () -> Unit, onRefresh: () -> Unit) {
     when (uiState) {
         is WeatherUiState.Loading -> LoadingContent()
         is WeatherUiState.Success -> {
-            val departureWeather   = if (isKrToJp) uiState.krWeather else uiState.jpWeather
-            val destinationWeather = if (isKrToJp) uiState.jpWeather else uiState.krWeather
-            val departureContext   = if (isKrToJp) uiState.krContextResult else uiState.jpContextResult
-            val destinationContext = if (isKrToJp) uiState.jpContextResult else uiState.krContextResult
-            val departureColor     = if (isKrToJp) colors.koreaRed else colors.japanBlue
-            val destinationColor   = if (isKrToJp) colors.japanBlue else colors.koreaRed
-            val departureFlag      = if (isKrToJp) "🇰🇷" else "🇯🇵"
-            val destinationFlag    = if (isKrToJp) "🇯🇵" else "🇰🇷"
-            val depCardColor       = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
-            val dstCardColor       = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
-            val depOnCard          = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
-            val dstOnCard          = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+            val depWeather  = if (isKrToJp) uiState.krWeather else uiState.jpWeather
+            val dstWeather  = if (isKrToJp) uiState.jpWeather else uiState.krWeather
+            val depContext  = if (isKrToJp) uiState.krContextResult else uiState.jpContextResult
+            val dstContext  = if (isKrToJp) uiState.jpContextResult else uiState.krContextResult
+            val depColor    = if (isKrToJp) colors.koreaRed else colors.japanBlue
+            val dstColor    = if (isKrToJp) colors.japanBlue else colors.koreaRed
+            val depFlag     = if (isKrToJp) "🇰🇷" else "🇯🇵"
+            val dstFlag     = if (isKrToJp) "🇯🇵" else "🇰🇷"
+            val depCard     = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
+            val dstCard     = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
+            val depOnCard   = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+            val dstOnCard   = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
 
             val comparisonMessage = buildComparisonMessage(uiState.comparisonResult, isKrToJp)
             val travelAdvice      = buildTravelAdvice(uiState.comparisonResult, isKrToJp)
-            val contextMessage    = buildContextMessage(departureContext, departureWeather.main.temp)
+            val contextMessage    = buildContextMessage(depContext, depWeather.main.temp)
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    WeatherCard(
-                        modifier = Modifier.weight(1f),
-                        flag = departureFlag,
-                        cityName = localizedCityName(departureWeather.cityName),
-                        temp = departureWeather.tempRounded(),
-                        weatherDesc = departureContext.adjustedOutfit.emoji + " " +
-                                (departureWeather.weather.firstOrNull()?.description ?: ""),
-                        outfit = departureContext.adjustedOutfit,
-                        feelsLike = departureWeather.main.feelsLike.roundToInt(),
-                        humidity = departureWeather.main.humidity,
-                        tempColor = departureColor,
-                        cardColor = depCardColor,
-                        onCardColor = depOnCard
-                    )
-                    WeatherCard(
-                        modifier = Modifier.weight(1f),
-                        flag = destinationFlag,
-                        cityName = localizedCityName(destinationWeather.cityName),
-                        temp = destinationWeather.tempRounded(),
-                        weatherDesc = destinationContext.adjustedOutfit.emoji + " " +
-                                (destinationWeather.weather.firstOrNull()?.description ?: ""),
-                        outfit = destinationContext.adjustedOutfit,
-                        feelsLike = departureWeather.main.feelsLike.roundToInt(),
-                        humidity = destinationWeather.main.humidity,
-                        tempColor = destinationColor,
-                        cardColor = dstCardColor,
-                        onCardColor = dstOnCard
-                    )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    WeatherCard(Modifier.weight(1f), depFlag, localizedCityName(depWeather.cityName), depWeather.tempRounded(),
+                        depContext.adjustedOutfit.emoji + " " + (depWeather.weather.firstOrNull()?.description ?: ""),
+                        depContext.adjustedOutfit, depWeather.main.feelsLike.roundToInt(), depWeather.main.humidity, depColor, depCard, depOnCard)
+                    WeatherCard(Modifier.weight(1f), dstFlag, localizedCityName(dstWeather.cityName), dstWeather.tempRounded(),
+                        dstContext.adjustedOutfit.emoji + " " + (dstWeather.weather.firstOrNull()?.description ?: ""),
+                        dstContext.adjustedOutfit, dstWeather.main.feelsLike.roundToInt(), dstWeather.main.humidity, dstColor, dstCard, dstOnCard)
                 }
-
-                TempGapCard(
-                    gapLabel = uiState.comparisonResult.directedGapLabel(isKrToJp),
-                    comparisonMessage = comparisonMessage,
-                    travelAdvice = travelAdvice
-                )
-
-                if (abs(departureWeather.main.feelsLike - departureWeather.main.temp) >= 2.0) {
-                    ContextCard(contextMessage)
-                }
-
+                TempGapCard(uiState.comparisonResult.directedGapLabel(isKrToJp), comparisonMessage, travelAdvice)
+                if (kotlin.math.abs(depWeather.main.feelsLike - depWeather.main.temp) >= 2.0) ContextCard(contextMessage)
                 if (uiState.comparisonResult.isOutfitDifferent()) {
                     OutfitTransitionCard(
-                        departureOutfit   = if (isKrToJp) uiState.comparisonResult.krOutfit else uiState.comparisonResult.jpOutfit,
-                        destinationOutfit = if (isKrToJp) uiState.comparisonResult.jpOutfit else uiState.comparisonResult.krOutfit,
-                        departureFlag = departureFlag,
-                        destinationFlag = destinationFlag
+                        if (isKrToJp) uiState.comparisonResult.krOutfit else uiState.comparisonResult.jpOutfit,
+                        if (isKrToJp) uiState.comparisonResult.jpOutfit else uiState.comparisonResult.krOutfit,
+                        depFlag, dstFlag
                     )
                 }
-
                 ChecklistButton(isKrToJp, onNavigateToChecklist)
             }
         }
@@ -267,28 +163,19 @@ private fun CurrentWeatherContent(
     }
 }
 
-// 예보 날짜 콘텐츠
 @Composable
-private fun ForecastDayContent(
-    pair: DailyForecastPair,
-    isKrToJp: Boolean,
-    colors: com.kaizen.skywear.ui.theme.SkyWearExtraColors,
-    krCityName: String,
-    jpCityName: String,
-    onNavigateToChecklist: () -> Unit
-) {
-    val depItem   = if (isKrToJp) pair.krItem else pair.jpItem
-    val dstItem   = if (isKrToJp) pair.jpItem else pair.krItem
-    val depColor  = if (isKrToJp) colors.koreaRed else colors.japanBlue
-    val dstColor  = if (isKrToJp) colors.japanBlue else colors.koreaRed
-    val depFlag   = if (isKrToJp) "🇰🇷" else "🇯🇵"
-    val dstFlag   = if (isKrToJp) "🇯🇵" else "🇰🇷"
-    val depCard   = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
-    val dstCard   = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
-    val depOnCard = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
-    val dstOnCard = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
+private fun ForecastDayContent(pair: DailyForecastPair, isKrToJp: Boolean, colors: com.kaizen.skywear.ui.theme.SkyWearExtraColors, krCityName: String, jpCityName: String, onNavigateToChecklist: () -> Unit) {
+    val depItem    = if (isKrToJp) pair.krItem else pair.jpItem
+    val dstItem    = if (isKrToJp) pair.jpItem else pair.krItem
+    val depColor   = if (isKrToJp) colors.koreaRed else colors.japanBlue
+    val dstColor   = if (isKrToJp) colors.japanBlue else colors.koreaRed
+    val depFlag    = if (isKrToJp) "🇰🇷" else "🇯🇵"
+    val dstFlag    = if (isKrToJp) "🇯🇵" else "🇰🇷"
+    val depCard    = if (isKrToJp) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer
+    val dstCard    = if (isKrToJp) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.primaryContainer
+    val depOnCard  = if (isKrToJp) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+    val dstOnCard  = if (isKrToJp) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onPrimaryContainer
 
-    // 방향에 따른 최저/최고
     val depTempMin = if (isKrToJp) pair.krTempMin else pair.jpTempMin
     val depTempMax = if (isKrToJp) pair.krTempMax else pair.jpTempMax
     val dstTempMin = if (isKrToJp) pair.jpTempMin else pair.krTempMin
@@ -296,88 +183,52 @@ private fun ForecastDayContent(
 
     val depOutfit  = getOutfitRecommendation(depItem.main.temp)
     val dstOutfit  = getOutfitRecommendation(dstItem.main.temp)
-
-    val depTemp     = depItem.main.temp.roundToInt()
-    val dstTemp     = dstItem.main.temp.roundToInt()
-    val gapDegree   = dstTemp - depTemp
-    val gapLabel    = if (gapDegree >= 0) "+${gapDegree}°C" else "${gapDegree}°C"
+    val depTemp    = depItem.main.temp.roundToInt()
+    val dstTemp    = dstItem.main.temp.roundToInt()
+    val gapDegree  = dstTemp - depTemp
+    val gapLabel   = if (gapDegree >= 0) "+${gapDegree}°C" else "${gapDegree}°C"
 
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // 날짜 헤더 — 날짜 + 대표 슬롯 시간 현지화
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.forecast_day_header, pair.dateLabel, pair.representativeTime),
-                style = MaterialTheme.typography.titleMedium,
+        Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(12.dp)) {
+            Text(stringResource(R.string.forecast_day_header, pair.dateLabel, pair.representativeTime),
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
-            )
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp))
         }
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            ForecastWeatherCard(
-                modifier = Modifier.weight(1f), flag = depFlag, cityName = localizedCityName(if (isKrToJp) krCityName else jpCityName), temp = depTemp,
-                weatherDesc = depOutfit.emoji + " " + (depItem.weather.firstOrNull()?.description ?: ""),
-                outfit = depOutfit, feelsLike = depItem.main.feelsLike.roundToInt(),
-                humidity = depItem.main.humidity,
-                tempMin = depTempMin, tempMax = depTempMax,
-                tempColor = depColor, cardColor = depCard, onCardColor = depOnCard
-            )
-            ForecastWeatherCard(
-                modifier = Modifier.weight(1f), flag = dstFlag, cityName = localizedCityName(if (isKrToJp) jpCityName else krCityName), temp = dstTemp,
-                weatherDesc = dstOutfit.emoji + " " + (dstItem.weather.firstOrNull()?.description ?: ""),
-                outfit = dstOutfit, feelsLike = dstItem.main.feelsLike.roundToInt(),
-                humidity = dstItem.main.humidity,
-                tempMin = dstTempMin, tempMax = dstTempMax,
-                tempColor = dstColor, cardColor = dstCard, onCardColor = dstOnCard
-            )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ForecastWeatherCard(Modifier.weight(1f), depFlag,
+                localizedCityName(if (isKrToJp) krCityName else jpCityName), depTemp,
+                depOutfit.emoji + " " + (depItem.weather.firstOrNull()?.description ?: ""),
+                depOutfit, depItem.main.feelsLike.roundToInt(), depItem.main.humidity, depTempMin, depTempMax, depColor, depCard, depOnCard)
+            ForecastWeatherCard(Modifier.weight(1f), dstFlag,
+                localizedCityName(if (isKrToJp) jpCityName else krCityName), dstTemp,
+                dstOutfit.emoji + " " + (dstItem.weather.firstOrNull()?.description ?: ""),
+                dstOutfit, dstItem.main.feelsLike.roundToInt(), dstItem.main.humidity, dstTempMin, dstTempMax, dstColor, dstCard, dstOnCard)
         }
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.dashboard_temp_gap), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
+        Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), shape = RoundedCornerShape(14.dp)) {
+            Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.dashboard_temp_gap), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
                 Text(gapLabel, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.tertiary)
             }
         }
-
-        if (depOutfit.stage != dstOutfit.stage) {
-            OutfitTransitionCard(depOutfit, dstOutfit, depFlag, dstFlag)
-        }
+        if (depOutfit.stage != dstOutfit.stage) OutfitTransitionCard(depOutfit, dstOutfit, depFlag, dstFlag)
         ChecklistButton(isKrToJp, onNavigateToChecklist)
     }
 }
 
 // 공통 컴포넌트
+
 @Composable
 private fun TravelDirectionBar(direction: TravelDirection, onToggle: () -> Unit) {
-    val label = if (direction == TravelDirection.KR_TO_JP)
-        stringResource(R.string.direction_kr_to_jp)
-    else
-        stringResource(R.string.direction_jp_to_kr)
-
+    val label = stringResource(if (direction == TravelDirection.KR_TO_JP) R.string.direction_kr_to_jp else R.string.direction_jp_to_kr)
     Surface(color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
-            IconButton(onClick = onToggle) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.CompareArrows,
-                    contentDescription = stringResource(R.string.direction_switch_label),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Text(label, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            IconButton(onClick = onToggle, modifier = Modifier.size(36.dp)) {
+                Icon(Icons.AutoMirrored.Filled.CompareArrows, contentDescription = stringResource(R.string.direction_switch_label), tint = MaterialTheme.colorScheme.onPrimaryContainer)
             }
         }
     }
@@ -385,41 +236,33 @@ private fun TravelDirectionBar(direction: TravelDirection, onToggle: () -> Unit)
 
 @Composable
 private fun TempGapCard(gapLabel: String, comparisonMessage: String, travelAdvice: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), shape = RoundedCornerShape(14.dp)) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(R.string.dashboard_temp_gap), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
-                Text(text = gapLabel, style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.tertiary)
+                Text(stringResource(R.string.dashboard_temp_gap), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                Text(gapLabel, style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.tertiary)
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = comparisonMessage, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = travelAdvice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            Spacer(Modifier.height(6.dp))
+            Text(comparisonMessage, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
+            Spacer(Modifier.height(2.dp))
+            Text(travelAdvice, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
         }
     }
 }
 
 @Composable
 private fun ContextCard(message: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Text(text = message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
+    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(14.dp)) {
+        Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(12.dp))
     }
 }
 
 @Composable
 private fun ChecklistButton(isKrToJp: Boolean, onClick: () -> Unit) {
     Button(onClick = onClick, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
-        Icon(Icons.AutoMirrored.Filled.List, contentDescription = null)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(stringResource(if (isKrToJp) R.string.checklist_title_japan else R.string.checklist_title_korea))
+        Icon(Icons.AutoMirrored.Filled.List, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(stringResource(if (isKrToJp) R.string.checklist_title_japan else R.string.checklist_title_korea), style = MaterialTheme.typography.labelLarge)
     }
 }
 
@@ -428,8 +271,8 @@ private fun LoadingContent() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = stringResource(R.string.dashboard_loading), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(12.dp))
+            Text(stringResource(R.string.dashboard_loading), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -437,31 +280,24 @@ private fun LoadingContent() {
 @Composable
 private fun ErrorContent(message: String, onRefresh: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("⚠️", style = MaterialTheme.typography.displaySmall)
-            Text(text = message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error, textAlign = TextAlign.Center)
+            Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error, textAlign = TextAlign.Center)
             Button(onClick = onRefresh) { Text(stringResource(R.string.dashboard_retry)) }
         }
     }
 }
 
 @Composable
-private fun WeatherCard(
-    modifier: Modifier = Modifier,
-    flag: String, cityName: String, temp: Int, weatherDesc: String,
-    outfit: OutfitRecommendation, feelsLike: Int, humidity: Int,
-    tempColor: androidx.compose.ui.graphics.Color,
-    cardColor: androidx.compose.ui.graphics.Color,
-    onCardColor: androidx.compose.ui.graphics.Color
-) {
-    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = cardColor), shape = RoundedCornerShape(20.dp)) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("$flag $cityName", style = MaterialTheme.typography.labelLarge, color = onCardColor)
-            Text("$temp°", style = MaterialTheme.typography.displayMedium, color = tempColor)
+private fun WeatherCard(modifier: Modifier = Modifier, flag: String, cityName: String, temp: Int, weatherDesc: String, outfit: OutfitRecommendation, feelsLike: Int, humidity: Int, tempColor: androidx.compose.ui.graphics.Color, cardColor: androidx.compose.ui.graphics.Color, onCardColor: androidx.compose.ui.graphics.Color) {
+    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = cardColor), shape = RoundedCornerShape(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text("$flag $cityName", style = MaterialTheme.typography.labelMedium, color = onCardColor)
+            Text("$temp°", style = MaterialTheme.typography.displaySmall, color = tempColor)
             Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
-            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = onCardColor.copy(alpha = 0.2f))
-            Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.bodySmall, color = onCardColor)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            HorizontalDivider(modifier = Modifier.padding(vertical = 3.dp), color = onCardColor.copy(alpha = 0.2f))
+            Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = onCardColor)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(R.string.dashboard_feels_like, feelsLike), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
                 Text(stringResource(R.string.dashboard_humidity, humidity), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
             }
@@ -470,30 +306,16 @@ private fun WeatherCard(
 }
 
 @Composable
-private fun ForecastWeatherCard(
-    modifier: Modifier = Modifier,
-    flag: String, cityName: String, temp: Int,
-    weatherDesc: String, outfit: OutfitRecommendation,
-    feelsLike: Int, humidity: Int,
-    tempMin: Int, tempMax: Int,
-    tempColor: androidx.compose.ui.graphics.Color,
-    cardColor: androidx.compose.ui.graphics.Color,
-    onCardColor: androidx.compose.ui.graphics.Color
-) {
-    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = cardColor), shape = RoundedCornerShape(20.dp)) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("$flag $cityName", style = MaterialTheme.typography.labelLarge, color = onCardColor)
-            Text("$temp°", style = MaterialTheme.typography.displayMedium, color = tempColor)
-            // 최저/최고 표시
-            Text(
-                text = stringResource(R.string.forecast_temp_range, tempMin, tempMax),
-                style = MaterialTheme.typography.labelSmall,
-                color = onCardColor.copy(alpha = 0.8f)
-            )
+private fun ForecastWeatherCard(modifier: Modifier = Modifier, flag: String, cityName: String, temp: Int, weatherDesc: String, outfit: OutfitRecommendation, feelsLike: Int, humidity: Int, tempMin: Int, tempMax: Int, tempColor: androidx.compose.ui.graphics.Color, cardColor: androidx.compose.ui.graphics.Color, onCardColor: androidx.compose.ui.graphics.Color) {
+    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = cardColor), shape = RoundedCornerShape(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text("$flag $cityName", style = MaterialTheme.typography.labelMedium, color = onCardColor)
+            Text("$temp°", style = MaterialTheme.typography.displaySmall, color = tempColor)
+            Text(stringResource(R.string.forecast_temp_range, tempMin, tempMax), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.8f))
             Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
-            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = onCardColor.copy(alpha = 0.2f))
-            Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.bodySmall, color = onCardColor)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            HorizontalDivider(modifier = Modifier.padding(vertical = 3.dp), color = onCardColor.copy(alpha = 0.2f))
+            Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = onCardColor)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(R.string.dashboard_feels_like, feelsLike), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
                 Text(stringResource(R.string.dashboard_humidity, humidity), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
             }
@@ -502,44 +324,42 @@ private fun ForecastWeatherCard(
 }
 
 @Composable
-private fun OutfitTransitionCard(
-    departureOutfit: OutfitRecommendation, destinationOutfit: OutfitRecommendation,
-    departureFlag: String, destinationFlag: String
-) {
-    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(16.dp)) {
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+private fun OutfitTransitionCard(depOutfit: OutfitRecommendation, dstOutfit: OutfitRecommendation, depFlag: String, dstFlag: String) {
+    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(14.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(departureFlag, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(departureOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(departureOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(depFlag, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(depOutfit.emoji, style = MaterialTheme.typography.titleLarge)
+                Text(depOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
-            Text("→", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("→", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(destinationFlag, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(destinationOutfit.emoji, style = MaterialTheme.typography.headlineSmall)
-                Text(destinationOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                Text(dstFlag, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(dstOutfit.emoji, style = MaterialTheme.typography.titleLarge)
+                Text(dstOutfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
             }
         }
     }
 }
 
 // 문자열 빌더
+
 @Composable
 private fun buildComparisonMessage(result: TempComparisonResult, isKrToJp: Boolean): String {
-    val destination = localizedCityName(if (isKrToJp) result.jpCityName else result.krCityName)
-    val departure   = localizedCityName(if (isKrToJp) result.krCityName else result.jpCityName)
+    val dst = localizedCityName(if (isKrToJp) result.jpCityName else result.krCityName)
+    val dep = localizedCityName(if (isKrToJp) result.krCityName else result.jpCityName)
     val gap = abs(result.gapDegree)
     return if (isKrToJp) {
         when {
-            result.gapDegree > 0 -> stringResource(R.string.comparison_jp_warmer, destination, departure, gap)
-            result.gapDegree < 0 -> stringResource(R.string.comparison_jp_colder, destination, departure, gap)
-            else -> stringResource(R.string.comparison_same_kr_jp, destination, departure)
+            result.gapDegree > 0 -> stringResource(R.string.comparison_jp_warmer, dst, dep, gap)
+            result.gapDegree < 0 -> stringResource(R.string.comparison_jp_colder, dst, dep, gap)
+            else -> stringResource(R.string.comparison_same_kr_jp, dst, dep)
         }
     } else {
         when {
-            result.gapDegree < 0 -> stringResource(R.string.comparison_kr_warmer, destination, departure, gap)
-            result.gapDegree > 0 -> stringResource(R.string.comparison_kr_colder, destination, departure, gap)
-            else -> stringResource(R.string.comparison_same_jp_kr, destination, departure)
+            result.gapDegree < 0 -> stringResource(R.string.comparison_kr_warmer, dst, dep, gap)
+            result.gapDegree > 0 -> stringResource(R.string.comparison_kr_colder, dst, dep, gap)
+            else -> stringResource(R.string.comparison_same_jp_kr, dst, dep)
         }
     }
 }
@@ -550,39 +370,39 @@ private fun buildTravelAdvice(result: TempComparisonResult, isKrToJp: Boolean): 
     val destTemp    = if (isKrToJp) result.jpTemp else result.krTemp
     return when (result.outfitGapLevel) {
         OutfitGapLevel.SIMILAR -> when {
-            destTemp <= 0 -> stringResource(R.string.advice_similar_freezing)
+            destTemp <= 0  -> stringResource(R.string.advice_similar_freezing)
             destTemp <= 10 -> stringResource(R.string.advice_similar_cold)
             destTemp <= 20 -> stringResource(R.string.advice_similar_mild)
-            else -> stringResource(R.string.advice_similar_hot)
+            else           -> stringResource(R.string.advice_similar_hot)
         }
-        OutfitGapLevel.MODERATE -> if (directedGap > 0) stringResource(R.string.advice_moderate_warmer) else stringResource(R.string.advice_moderate_colder)
+        OutfitGapLevel.MODERATE    -> if (directedGap > 0) stringResource(R.string.advice_moderate_warmer) else stringResource(R.string.advice_moderate_colder)
         OutfitGapLevel.SIGNIFICANT -> if (directedGap > 0) stringResource(R.string.advice_significant_warmer) else stringResource(R.string.advice_significant_colder)
     }
 }
 
 @Composable
 private fun buildContextMessage(result: ContextAwareResult, actualTemp: Double): String {
-    val tempDiff = actualTemp - result.feelsLikeTemp
+    val diff = actualTemp - result.feelsLikeTemp
     return when {
-        result.windLevel == WindLevel.VERY_WINDY && tempDiff >= 5 -> stringResource(R.string.context_very_windy_cold)
-        result.windLevel == WindLevel.WINDY && tempDiff >= 3 -> stringResource(R.string.context_windy_cold)
+        result.windLevel == WindLevel.VERY_WINDY && diff >= 5 -> stringResource(R.string.context_very_windy_cold)
+        result.windLevel == WindLevel.WINDY && diff >= 3      -> stringResource(R.string.context_windy_cold)
         result.humidityLevel == HumidityLevel.VERY_HUMID && result.feelsLikeTemp > actualTemp -> stringResource(R.string.context_very_humid_hot)
-        result.humidityLevel == HumidityLevel.HUMID -> stringResource(R.string.context_humid)
-        result.humidityLevel == HumidityLevel.DRY -> stringResource(R.string.context_dry)
-        else -> stringResource(R.string.context_comfortable)
+        result.humidityLevel == HumidityLevel.HUMID           -> stringResource(R.string.context_humid)
+        result.humidityLevel == HumidityLevel.DRY             -> stringResource(R.string.context_dry)
+        else                                                   -> stringResource(R.string.context_comfortable)
     }
 }
 
 @Composable
 fun OutfitRecommendation.localizedMainOutfit(): String = stringResource(
     when (stage) {
-        1 -> R.string.outfit_stage1
-        2 -> R.string.outfit_stage2
-        3 -> R.string.outfit_stage3
-        4 -> R.string.outfit_stage4
-        5 -> R.string.outfit_stage5
-        6 -> R.string.outfit_stage6
-        7 -> R.string.outfit_stage7
+        1    -> R.string.outfit_stage1
+        2    -> R.string.outfit_stage2
+        3    -> R.string.outfit_stage3
+        4    -> R.string.outfit_stage4
+        5    -> R.string.outfit_stage5
+        6    -> R.string.outfit_stage6
+        7    -> R.string.outfit_stage7
         else -> R.string.outfit_stage8
     }
 )
