@@ -38,6 +38,7 @@ fun SearchScreen(
     var activeTab by remember { mutableIntStateOf(1) } // 0 = KR, 1 = JP
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.search_title)) },

@@ -44,6 +44,7 @@ fun ChecklistScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.checklist_title)) },

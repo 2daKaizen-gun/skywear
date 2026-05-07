@@ -25,6 +25,7 @@ fun JournalScreen(viewModel: JournalViewModel = hiltViewModel()) {
     var showAddDialog by remember { mutableStateOf(false) }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = { TopAppBar(title = { Text(stringResource(R.string.nav_journal)) }) },
         floatingActionButton = { FloatingActionButton(onClick = { showAddDialog = true }) { Icon(Icons.Default.Add, null) } }
     ) { padding ->
