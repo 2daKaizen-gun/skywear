@@ -5,8 +5,8 @@ import com.kaizen.skywear.data.local.ChecklistDao
 import com.kaizen.skywear.data.local.SkyWearDatabase
 import com.kaizen.skywear.data.local.SubscribedCityDao
 import com.kaizen.skywear.data.local.TravelJournalDao
-import com.kaizen.skywear.data.remote.RetrofitClient
 import com.kaizen.skywear.data.remote.WeatherApiService
+import com.kaizen.skywear.data.remote.RetrofitClient
 import com.kaizen.skywear.data.repository.ChecklistRepository
 import com.kaizen.skywear.data.repository.JournalRepository
 import com.kaizen.skywear.data.repository.SubscribeRepository
@@ -19,12 +19,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-// Hilt DI 모듈 - 앱 전역에 의존성 주입 설정
-// SingletonComponent: 앱 생명주기와 동일함
-
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Provides @Singleton
     fun provideWeatherApiService(): WeatherApiService = RetrofitClient.instance
 
@@ -48,8 +46,7 @@ object AppModule {
     fun provideChecklistRepository(dao: ChecklistDao): ChecklistRepository = ChecklistRepository(dao)
 
     @Provides @Singleton
-    fun provideSubscribeRepository(dao: SubscribedCityDao): SubscribeRepository =
-        SubscribeRepository(dao)
+    fun provideSubscribeRepository(dao: SubscribedCityDao): SubscribeRepository = SubscribeRepository(dao)
 
     @Provides @Singleton
     fun provideJournalRepository(dao: TravelJournalDao): JournalRepository = JournalRepository(dao)
