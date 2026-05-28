@@ -6,8 +6,9 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
 import androidx.work.*
-import com.kaizen.skywear.R
 import com.kaizen.skywear.data.repository.SubscribeRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import dagger.assisted.Assisted
@@ -116,7 +117,7 @@ class SubscribeWeatherWorker @AssistedInject constructor(
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
