@@ -8,99 +8,73 @@ import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.getOutfitRecommendation
 import kotlinx.coroutines.flow.first
 
-// WorkManager 기반 백그라운드 날씨 알림 서비스
-// 매일 지정 시간에 한국/일본 날씨와 코디 브리핑 알림 발송
-
-class WeatherNotificationWorker (
+class WeatherNotificationWorker(
     private val context: Context,
     workerParams: WorkerParameters
-): CoroutineWorker(context, workerParams) {
+) : CoroutineWorker(context, workerParams) {
 
     companion object {
-        const val CHANNEL_ID = "skywear_daily_briefing"
-        const val CHANNEL_NAME = "SkyWear 데일리 브리핑"
+        const val CHANNEL_ID      = "skywear_daily_briefing"
+        const val CHANNEL_NAME    = "SkyWear 데일리 브리핑"
         const val NOTIFICATION_ID = 1001
     }
 
     override suspend fun doWork(): Result {
         return try {
-            // DataStore에서 저장된 도시 불러오기
-            val prefsRepo = UserPreferencesRepository(context)
-            val krCity = prefsRepo.selectedKrCity.first()
-            val jpCity = prefsRepo.selectedJpCity.first()
+            val prefsRepo  = UserPreferencesRepository(context)
+            val krCity     = prefsRepo.selectedKrCity.first()
+            val jpCity     = prefsRepo.selectedJpCity.first()
 
-            // 날씨 데이터 호출
             val weatherRepo = WeatherRepository()
-            val dualResult = weatherRepo.getDualCityWeather(krCity, jpCity)
+            val dualResult  = weatherRepo.getDualCityWeather(krCity, jpCity)
 
             if (!dualResult.isSuccess) return Result.retry()
 
             val krWeather = dualResult.krWeather.getOrNull()!!
             val jpWeather = dualResult.jpWeather.getOrNull()!!
 
-            // 코디 추천
+            val krTemp   = krWeather.tempRounded()
+            val jpTemp   = jpWeather.tempRounded()
             val krOutfit = getOutfitRecommendation(krWeather.main.temp)
             val jpOutfit = getOutfitRecommendation(jpWeather.main.temp)
 
-            // 알림 메시지 구성하기
-            val title = "\uD83C\uDF24\uFE0F SkyWear 오늘의 여행 브리핑"
-            val message = buildNotificationMessage(
-                krCity = krCity,
-                jpCity = jpCity,
-                krTemp = krWeather.tempRounded(),
-                jpTemp = jpWeather.tempRounded(),
-                krOutfit = krOutfit.mainOutfit,
-                jpOutfit = jpOutfit.mainOutfit
-            )
+            // ✅ 현지화된 도시명 사용
+            val krCityName = localizedCityName(krCity)
+            val jpCityName = localizedCityName(jpCity)
 
-            // 알림 발송
+            val gap     = jpTemp - krTemp
+            val gapText = if (gap >= 0) "+${gap}°C" else "${gap}°C"
+
+            val title   = "🌤️ SkyWear 오늘의 여행 브리핑"
+            // ✅ 이스케이프 없이 직접 변수 삽입
+            val message = "🇰🇷 $krCityName ${krTemp}°C → ${krOutfit.mainOutfit}\n" +
+                    "🇯🇵 $jpCityName ${jpTemp}°C → ${jpOutfit.mainOutfit}\n" +
+                    "온도 차이: $gapText"
+
             sendNotification(title, message)
-
             Result.success()
+
         } catch (e: Exception) {
             Result.retry()
         }
     }
 
-    // 알림 메시지 빌드
-    private fun buildNotificationMessage(
-        krCity: String,
-        jpCity: String,
-        krTemp: Int,
-        jpTemp: Int,
-        krOutfit: String,
-        jpOutfit: String
-    ): String {
-        val gap = jpTemp - krTemp
-        val gapText = if (gap >= 0) "+${gap}°C" else "${gap}°C"
-
-        return """
-            🇰🇷 ${'$'}krCity ${'$'}{krTemp}°C → ${'$'}krOutfit
-            🇯🇵 ${'$'}jpCity ${'$'}{jpTemp}°C → ${'$'}jpOutfit
-            온도 차이: ${'$'}gapText
-        """.trimIndent()
-    }
-
-    // 알림 채널 생성 및 발송
     private fun sendNotification(title: String, message: String) {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // 알림 채널 필수
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = "매일 여행 날씨와 코디를 알려드립니다"
-            }
-            notificationManager.createNotificationChannel(channel)
+            ).apply { description = "매일 여행 날씨와 코디를 알려드려요" }
+            manager.createNotificationChannel(channel)
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -112,6 +86,6 @@ class WeatherNotificationWorker (
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        manager.notify(NOTIFICATION_ID, notification)
     }
 }
