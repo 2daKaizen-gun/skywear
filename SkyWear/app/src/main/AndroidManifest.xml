@@ -33,7 +33,7 @@
             tools:node="merge"
             tools:replace="android:authorities">
             <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
+                android:name="androidx.hilt.work.HiltWorkerInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>
