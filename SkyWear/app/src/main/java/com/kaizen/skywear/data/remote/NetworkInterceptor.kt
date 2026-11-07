@@ -15,14 +15,20 @@ class NetworkInterceptor : Interceptor {
         return try {
             val response = chain.proceed(request)
 
+            // 성공(2xx)은 그대로 반환
+            if (response.isSuccessful) return response
+
+            // 에러 응답은 throw 전에 body를 닫아 커넥션 누수 방지
+            val code = response.code
+            response.close()
+
             // HTTP 상태코드별 에러 처리
-            when (response.code) {
-                200 -> response // 성공(그대로 반환)
-                401 -> throw NetworkException.Unauthorized // API Key 오류
-                404 -> throw NetworkException.CityNotFound // 도시를 찾을 수 없음
-                429 -> throw NetworkException.RateLimitExceeded // API 호출 한도 초과
-                in 500..599 -> throw NetworkException.ServerError // 서버 오류
-                else -> throw NetworkException.Unknown(response.code)
+            throw when (code) {
+                401 -> NetworkException.Unauthorized // API Key 오류
+                404 -> NetworkException.CityNotFound // 도시를 찾을 수 없음
+                429 -> NetworkException.RateLimitExceeded // API 호출 한도 초과
+                in 500..599 -> NetworkException.ServerError // 서버 오류
+                else -> NetworkException.Unknown(code)
             }
 
         } catch (e: SocketTimeoutException) {

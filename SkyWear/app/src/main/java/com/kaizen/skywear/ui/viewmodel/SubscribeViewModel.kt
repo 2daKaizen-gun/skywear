@@ -82,7 +82,7 @@ class SubscribeViewModel @Inject constructor(
 
     private suspend fun fetchWeatherForCity(nameEn: String) {
         try {
-            val result = weatherRepository.getKrWeather(nameEn)
+            val result = weatherRepository.getWeather(nameEn)
             result.getOrNull()?.let { weather ->
                 val temp = weather.main.temp.toInt()
                 val desc = weather.weather.firstOrNull()?.description ?: ""

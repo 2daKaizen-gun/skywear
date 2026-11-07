@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kaizen.skywear.data.model.tempRounded
@@ -12,11 +13,16 @@ import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.getOutfitRecommendation
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
 
-class WeatherNotificationWorker(
-    private val context: Context,
-    workerParams: WorkerParameters
+@HiltWorker
+class WeatherNotificationWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val prefsRepo: UserPreferencesRepository,
+    private val weatherRepo: WeatherRepository
 ) : CoroutineWorker(context, workerParams) {
 
     companion object {
@@ -27,11 +33,9 @@ class WeatherNotificationWorker(
 
     override suspend fun doWork(): Result {
         return try {
-            val prefsRepo  = UserPreferencesRepository(context)
             val krCity     = prefsRepo.selectedKrCity.first()
             val jpCity     = prefsRepo.selectedJpCity.first()
 
-            val weatherRepo = WeatherRepository()
             val dualResult  = weatherRepo.getDualCityWeather(krCity, jpCity)
 
             if (!dualResult.isSuccess) return Result.retry()

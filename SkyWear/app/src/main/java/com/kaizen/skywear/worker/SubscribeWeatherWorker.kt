@@ -64,7 +64,7 @@ class SubscribeWeatherWorker @AssistedInject constructor(
 
         cities.forEach { city ->
             try {
-                val result = weatherRepository.getKrWeather(city.nameEn)
+                val result = weatherRepository.getWeather(city.nameEn)
                 val weather = result.getOrNull() ?: return@forEach
 
                 val newTemp    = weather.main.temp

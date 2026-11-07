@@ -27,7 +27,7 @@ object AppModule {
     fun provideWeatherApiService(): WeatherApiService = RetrofitClient.instance
 
     @Provides @Singleton
-    fun provideWeatherRepository(): WeatherRepository = WeatherRepository()
+    fun provideWeatherRepository(api: WeatherApiService): WeatherRepository = WeatherRepository(api)
 
     @Provides @Singleton
     fun provideDatabase(@ApplicationContext context: Context): SkyWearDatabase =
