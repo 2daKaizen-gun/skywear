@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SkyWear</string>
-    <string name="app_subtitle">KR-JP Smart Travel Outfit Guide</string>
 
     <string name="dashboard_title">🌤️ SkyWear</string>
     <string name="dashboard_loading">Loading weather data…</string>
     <string name="dashboard_refresh">Refresh</string>
     <string name="dashboard_retry">Try Again</string>
     <string name="dashboard_temp_gap">Temperature Gap</string>
-    <string name="dashboard_checklist_button">View Travel Checklist</string>
     <string name="dashboard_feels_like">Feels %1$d°</string>
     <string name="dashboard_humidity">Humidity %1$d%%</string>
 
@@ -21,8 +19,6 @@
     <string name="nav_season">Seasons</string>
     <string name="forecast_temp_range">Low %1$d° / High %2$d°</string>
     <string name="forecast_day_header">📅 %1$s Forecast (as of %2$s)</string>
-    <string name="forecast_loading">Loading forecast…</string>
-    <string name="forecast_error">Unable to load forecast.</string>
 
     <string name="direction_kr_to_jp">🇰🇷 → 🇯🇵  Trip to Japan</string>
     <string name="direction_jp_to_kr">🇯🇵 → 🇰🇷  Trip to Korea</string>
