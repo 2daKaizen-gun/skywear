@@ -92,6 +92,12 @@
     <string name="notification_title">🌤️ SkyWear 本日の旅行ブリーフィング</string>
     <string name="notification_channel_name">SkyWear デイリーブリーフィング</string>
     <string name="notification_channel_desc">毎日の旅行天気とコーディをお知らせします</string>
+    <string name="notification_briefing_gap">気温差: %1$s</string>
+    <string name="notification_subscribe_channel_name">購読都市の天気通知</string>
+    <string name="notification_subscribe_channel_desc">購読した都市の天気の変化をお知らせします</string>
+    <string name="notification_subscribe_title">%1$sの天気が変化</string>
+    <string name="notification_subscribe_temp_up">気温が%1$d°C → %2$d°Cに上がりました 🌡️</string>
+    <string name="notification_subscribe_temp_down">気温が%1$d°C → %2$d°Cに下がりました 🥶</string>
 
     <string name="back">戻る</string>
     <string name="error_unknown">不明なエラーが発生しました。</string>

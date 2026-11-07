@@ -1,5 +1,7 @@
 package com.kaizen.skywear.domain
 
+import androidx.annotation.StringRes
+import com.kaizen.skywear.R
 import com.kaizen.skywear.ui.theme.TempChilly
 import com.kaizen.skywear.ui.theme.TempCold
 import com.kaizen.skywear.ui.theme.TempCool
@@ -115,4 +117,17 @@ fun getOutfitRecommendation(celsius: Double): OutfitRecommendation {
             emoji = "❄\uFE0F"
         )
     }
+}
+
+// 단계별 현지화된 메인 코디 문자열 리소스 (UI/알림 공통)
+@StringRes
+fun OutfitRecommendation.mainOutfitRes(): Int = when (stage) {
+    1    -> R.string.outfit_stage1
+    2    -> R.string.outfit_stage2
+    3    -> R.string.outfit_stage3
+    4    -> R.string.outfit_stage4
+    5    -> R.string.outfit_stage5
+    6    -> R.string.outfit_stage6
+    7    -> R.string.outfit_stage7
+    else -> R.string.outfit_stage8
 }

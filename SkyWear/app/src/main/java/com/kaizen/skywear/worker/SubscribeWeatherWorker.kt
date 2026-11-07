@@ -7,12 +7,15 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.kaizen.skywear.R
+import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.data.repository.SubscribeRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 // -------------------------------------------------------
 // 🔔 SubscribeWeatherWorker
@@ -30,7 +33,6 @@ class SubscribeWeatherWorker @AssistedInject constructor(
     companion object {
         const val WORK_NAME       = "subscribe_weather_check"
         const val CHANNEL_ID      = "subscribe_weather_channel"
-        const val CHANNEL_NAME    = "구독 도시 날씨 알림"
         const val TEMP_DIFF_THRESHOLD = 3.0  // ✅ 3°C 이상 변화 시 알림
 
         fun schedule(context: Context) {
@@ -72,12 +74,15 @@ class SubscribeWeatherWorker @AssistedInject constructor(
                 val newDesc    = weather.weather.firstOrNull()?.description ?: ""
                 val tempChange = abs(newTemp - prevTemp)
 
-                // ✅ 이전 기록이 있고 3°C 이상 변화 시 알림
-                if (prevTemp != 0.0 && tempChange >= TEMP_DIFF_THRESHOLD) {
-                    val cityName   = city.nameKo
-                    val direction  = if (newTemp > prevTemp) "올랐어요 🌡️" else "내려갔어요 🥶"
-                    val title      = "$cityName 날씨 변화"
-                    val message    = "기온이 ${prevTemp.toInt()}°C → ${newTemp.toInt()}°C로 $direction"
+                // 이전 기록이 있고 3°C 이상 변화 시 알림
+                // (lastTemp 기본값 0.0은 실제 0°C와 구분되지 않으므로 lastWeatherDesc로 기록 여부 판단)
+                val hasPrevRecord = city.lastWeatherDesc.isNotEmpty()
+                if (hasPrevRecord && tempChange >= TEMP_DIFF_THRESHOLD) {
+                    val cityName   = localizedCityName(city.nameEn)
+                    val messageRes = if (newTemp > prevTemp) R.string.notification_subscribe_temp_up
+                                     else R.string.notification_subscribe_temp_down
+                    val title      = context.getString(R.string.notification_subscribe_title, cityName)
+                    val message    = context.getString(messageRes, prevTemp.roundToInt(), newTemp.roundToInt())
 
                     sendNotification(
                         id      = city.nameEn.hashCode(),
@@ -101,10 +106,10 @@ class SubscribeWeatherWorker @AssistedInject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                CHANNEL_NAME,
+                context.getString(R.string.notification_subscribe_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "구독한 도시의 날씨 변화를 알려드려요"
+                description = context.getString(R.string.notification_subscribe_channel_desc)
             }
             val manager = context.getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)

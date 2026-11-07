@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -75,7 +76,8 @@ class SubscribeViewModel @Inject constructor(
     // 구독 도시 날씨 일괄 갱신
     fun refreshAllWeather() {
         viewModelScope.launch {
-            val current = subscribedCities.value
+            // subscribedCities(stateIn)는 화면이 구독하기 전엔 빈 리스트라 init 시점에 항상 비어 있음 → DB에서 직접 조회
+            val current = repository.getAllCities().first()
             current.forEach { city -> fetchWeatherForCity(city.nameEn) }
         }
     }

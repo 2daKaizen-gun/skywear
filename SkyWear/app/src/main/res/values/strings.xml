@@ -100,6 +100,12 @@
     <string name="notification_title">🌤️ SkyWear 오늘의 여행 브리핑</string>
     <string name="notification_channel_name">SkyWear 데일리 브리핑</string>
     <string name="notification_channel_desc">매일 여행 날씨와 코디를 알려드려요</string>
+    <string name="notification_briefing_gap">온도 차이: %1$s</string>
+    <string name="notification_subscribe_channel_name">구독 도시 날씨 알림</string>
+    <string name="notification_subscribe_channel_desc">구독한 도시의 날씨 변화를 알려드려요</string>
+    <string name="notification_subscribe_title">%1$s 날씨 변화</string>
+    <string name="notification_subscribe_temp_up">기온이 %1$d°C → %2$d°C로 올랐어요 🌡️</string>
+    <string name="notification_subscribe_temp_down">기온이 %1$d°C → %2$d°C로 내려갔어요 🥶</string>
 
     <!-- 공통 -->
     <string name="back">뒤로</string>

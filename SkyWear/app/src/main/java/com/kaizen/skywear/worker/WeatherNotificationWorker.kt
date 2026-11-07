@@ -8,15 +8,18 @@ import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.localizedCityName
+import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.getOutfitRecommendation
+import com.kaizen.skywear.domain.mainOutfitRes
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
 
+// 매일 오전 8시 KR/JP 날씨 + 코디 브리핑 알림
 @HiltWorker
 class WeatherNotificationWorker @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -27,39 +30,35 @@ class WeatherNotificationWorker @AssistedInject constructor(
 
     companion object {
         const val CHANNEL_ID      = "skywear_daily_briefing"
-        const val CHANNEL_NAME    = "SkyWear 데일리 브리핑"
         const val NOTIFICATION_ID = 1001
     }
 
     override suspend fun doWork(): Result {
         return try {
-            val krCity     = prefsRepo.selectedKrCity.first()
-            val jpCity     = prefsRepo.selectedJpCity.first()
+            val krCity = prefsRepo.selectedKrCity.first()
+            val jpCity = prefsRepo.selectedJpCity.first()
 
-            val dualResult  = weatherRepo.getDualCityWeather(krCity, jpCity)
-
-            if (!dualResult.isSuccess) return Result.retry()
-
-            val krWeather = dualResult.krWeather.getOrNull()!!
-            val jpWeather = dualResult.jpWeather.getOrNull()!!
+            val dualResult = weatherRepo.getDualCityWeather(krCity, jpCity)
+            val krWeather  = dualResult.krWeather.getOrNull()
+            val jpWeather  = dualResult.jpWeather.getOrNull()
+            if (krWeather == null || jpWeather == null) return Result.retry()
 
             val krTemp   = krWeather.tempRounded()
             val jpTemp   = jpWeather.tempRounded()
-            val krOutfit = getOutfitRecommendation(krWeather.main.temp)
-            val jpOutfit = getOutfitRecommendation(jpWeather.main.temp)
+            val krOutfit = context.getString(getOutfitRecommendation(krWeather.main.temp).mainOutfitRes())
+            val jpOutfit = context.getString(getOutfitRecommendation(jpWeather.main.temp).mainOutfitRes())
 
-            // ✅ 현지화된 도시명 사용
+            // 현지화된 도시명 사용
             val krCityName = localizedCityName(krCity)
             val jpCityName = localizedCityName(jpCity)
 
             val gap     = jpTemp - krTemp
             val gapText = if (gap >= 0) "+${gap}°C" else "${gap}°C"
 
-            val title   = "🌤️ SkyWear 오늘의 여행 브리핑"
-            // ✅ 이스케이프 없이 직접 변수 삽입
-            val message = "🇰🇷 $krCityName ${krTemp}°C → ${krOutfit.mainOutfit}\n" +
-                    "🇯🇵 $jpCityName ${jpTemp}°C → ${jpOutfit.mainOutfit}\n" +
-                    "온도 차이: $gapText"
+            val title   = context.getString(R.string.notification_title)
+            val message = "🇰🇷 $krCityName ${krTemp}°C → $krOutfit\n" +
+                    "🇯🇵 $jpCityName ${jpTemp}°C → $jpOutfit\n" +
+                    context.getString(R.string.notification_briefing_gap, gapText)
 
             sendNotification(title, message)
             Result.success()
@@ -75,9 +74,9 @@ class WeatherNotificationWorker @AssistedInject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                CHANNEL_NAME,
+                context.getString(R.string.notification_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
-            ).apply { description = "매일 여행 날씨와 코디를 알려드려요" }
+            ).apply { description = context.getString(R.string.notification_channel_desc) }
             manager.createNotificationChannel(channel)
         }
 

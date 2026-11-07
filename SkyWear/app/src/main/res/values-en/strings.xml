@@ -92,6 +92,12 @@
     <string name="notification_title">🌤️ SkyWear Daily Briefing</string>
     <string name="notification_channel_name">SkyWear Daily Briefing</string>
     <string name="notification_channel_desc">Daily weather and outfit tips for your trip</string>
+    <string name="notification_briefing_gap">Temp gap: %1$s</string>
+    <string name="notification_subscribe_channel_name">Subscribed city weather alerts</string>
+    <string name="notification_subscribe_channel_desc">Notifies you when the weather changes in your subscribed cities</string>
+    <string name="notification_subscribe_title">Weather change in %1$s</string>
+    <string name="notification_subscribe_temp_up">Temperature rose from %1$d°C to %2$d°C 🌡️</string>
+    <string name="notification_subscribe_temp_down">Temperature dropped from %1$d°C to %2$d°C 🥶</string>
 
     <string name="back">Back</string>
     <string name="error_unknown">An unknown error occurred.</string>
