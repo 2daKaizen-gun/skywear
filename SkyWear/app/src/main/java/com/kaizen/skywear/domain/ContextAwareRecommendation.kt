@@ -144,7 +144,3 @@ private fun buildExtraItems(
 
     return items.distinct()
 }
-
-// 기온과 체감 온도 차이가 큰지 여부 (2°C 이상 차이나면 UI에서 강조)
-fun ContextAwareResult.hasSignificantFeelsLikeDiff(actualTemp: Double): Boolean =
-    kotlin.math.abs(feelsLikeTemp - actualTemp) >= 2.0

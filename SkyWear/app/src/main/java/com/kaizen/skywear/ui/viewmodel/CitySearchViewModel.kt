@@ -39,14 +39,6 @@ class CitySearchViewModel @Inject constructor(
             initialValue = "Osaka"
         )
 
-    // 다크 모드 설정
-    val isDarkMode: StateFlow<Boolean> = prefsRepository.isDarkMode
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = false
-        )
-
     // 한국 검색어
     private val _krSearchQuery = MutableStateFlow("")
     val krSearchQuery: StateFlow<String> = _krSearchQuery.asStateFlow()
@@ -88,13 +80,6 @@ class CitySearchViewModel @Inject constructor(
         viewModelScope.launch {
             prefsRepository.saveJpCity(city.nameEn)
             weatherViewModel.changeJpCity(city.nameEn)
-        }
-    }
-
-    // 다크 모드 토글
-    fun toggleDarkMode() {
-        viewModelScope.launch {
-            prefsRepository.saveDarkMode(!isDarkMode.value)
         }
     }
 }

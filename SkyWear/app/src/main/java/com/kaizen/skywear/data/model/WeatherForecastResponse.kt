@@ -61,10 +61,6 @@ fun List<ForecastItem>.dailyRepresentativeWithTime(): Map<String, Triple<Forecas
         }
 }
 
-// 기존 호환용
-fun List<ForecastItem>.dailyRepresentative(): Map<String, ForecastItem> =
-    dailyRepresentativeWithTime().mapValues { it.value.first }
-
 // DualForecastResult - KR + JP 예보 쌍
 data class DualForecastResult(
     val krForecast: Result<WeatherForecastResponse>,

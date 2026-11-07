@@ -2,7 +2,6 @@ package com.kaizen.skywear.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +14,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -163,18 +161,3 @@ data class SkyWearExtraColors(
 )
 
 val LocalExtraColors = staticCompositionLocalOf { SkyWearExtraColors() }
-
-// Temparature Color Helper
-// 사용: getTemperatureColor(temp) → 해당 온도의 색상 반환
-// Phase 3-1 (Outfit Algorithm) 에서 활용
-
-fun getTemperatureColor(celsius: Double): androidx.compose.ui.graphics.Color = when {
-    celsius >= 28 -> TempScorching
-    celsius >= 23 -> TempHot
-    celsius >= 17 -> TempWarm
-    celsius >= 12 -> TempMild
-    celsius >= 9 -> TempCool
-    celsius >= 5 -> TempChilly
-    celsius >= 0 -> TempCold
-    else -> TempFreezing
-}

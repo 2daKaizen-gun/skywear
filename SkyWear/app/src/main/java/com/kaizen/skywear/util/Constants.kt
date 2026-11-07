@@ -18,5 +18,4 @@ object Constants {
 
     // 언어 설정
     const val LANG_KR = "kr"
-    const val LANG_JP = "ja"
 }

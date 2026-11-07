@@ -14,7 +14,4 @@ interface TravelJournalDao {
 
     @Delete
     suspend fun deleteJournal(journal: TravelJournal)
-
-    @Query("SELECT COUNT(*) FROM travel_journals")
-    suspend fun count(): Int
 }

@@ -1,7 +1,6 @@
 package com.kaizen.skywear.data.model
 
 import com.google.gson.annotations.SerializedName
-import java.sql.Timestamp
 
 // OpenWeatherMap API 응답 데이터 클래스
 data class WeatherResponse(

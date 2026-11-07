@@ -6,8 +6,6 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
 import androidx.work.*
 import com.kaizen.skywear.data.repository.SubscribeRepository
 import com.kaizen.skywear.data.repository.WeatherRepository

@@ -1,6 +1,5 @@
 package com.kaizen.skywear.ui.viewmodel
 
-import androidx.compose.runtime.derivedStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.local.ChecklistCategory

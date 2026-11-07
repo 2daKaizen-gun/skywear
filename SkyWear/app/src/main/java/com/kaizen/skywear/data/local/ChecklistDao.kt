@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 // Room DB 접근 인터페이스 - CRUD 쿼리 정의
@@ -16,10 +15,6 @@ interface ChecklistDao {
     // 여행 방향별 조회
     @Query("SELECT * FROM checklist_items WHERE destination = :destination ORDER BY category ASC, isChecked ASC")
     fun getItemsByDestination(destination: String): Flow<List<ChecklistItem>>
-
-    // 여행 방향 + 카테고리 조회
-    @Query("SELECT * FROM checklist_items WHERE destination = :destination AND category = :category ORDER BY isChecked ASC")
-    fun getItemsByDestinationAndCategory(destination: String, category: ChecklistCategory): Flow<List<ChecklistItem>>
 
     // 여행 방향별 완료 수
     @Query("SELECT COUNT(*) FROM checklist_items WHERE destination = :destination AND isChecked = 1")
@@ -37,10 +32,6 @@ interface ChecklistDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertItems(items: List<ChecklistItem>)
 
-    // 아이템 수정
-    @Update
-    suspend fun updateItem(item: ChecklistItem)
-
     // 체크 상태만 토글
     @Query("UPDATE checklist_items SET isChecked = :isChecked WHERE id = :id")
     suspend fun updateChecked(id: Int, isChecked: Boolean)
@@ -52,9 +43,5 @@ interface ChecklistDao {
     // 체크된 아이템 전체 삭제
     @Query("DELETE FROM checklist_items WHERE destination = :destination AND isChecked = 1")
     suspend fun deleteCheckedItems(destination: String)
-
-    // 전체 초기화 (기본 아이템만 남기기)
-    @Query("DELETE FROM checklist_items WHERE isDefault = 0")
-    suspend fun deleteCustomItems()
 
 }

@@ -3,7 +3,6 @@ package com.kaizen.skywear.domain
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.model.temperatureGap
-import com.kaizen.skywear.data.model.temperatureGapLabel
 import kotlin.math.abs
 
 // KR vs JP 온도 비교 분석 로직
