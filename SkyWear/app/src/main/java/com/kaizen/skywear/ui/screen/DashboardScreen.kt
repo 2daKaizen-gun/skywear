@@ -30,7 +30,7 @@ import com.kaizen.skywear.domain.TempComparisonResult
 import com.kaizen.skywear.domain.WindLevel
 import com.kaizen.skywear.domain.directedGapLabel
 import com.kaizen.skywear.domain.getOutfitRecommendation
-import com.kaizen.skywear.domain.isOutfitDifferent
+import com.kaizen.skywear.domain.mainOutfitRes
 import com.kaizen.skywear.ui.theme.LocalExtraColors
 import com.kaizen.skywear.ui.viewmodel.ForecastUiState
 import com.kaizen.skywear.ui.viewmodel.WeatherUiState
@@ -149,13 +149,10 @@ private fun CurrentWeatherContent(uiState: WeatherUiState, isKrToJp: Boolean, co
                         dstContext.adjustedOutfit, dstWeather.main.feelsLike.roundToInt(), dstWeather.main.humidity, dstColor, dstCard, dstOnCard)
                 }
                 TempGapCard(uiState.comparisonResult.directedGapLabel(isKrToJp), comparisonMessage, travelAdvice)
-                if (kotlin.math.abs(depWeather.main.feelsLike - depWeather.main.temp) >= 2.0) ContextCard(contextMessage)
-                if (uiState.comparisonResult.isOutfitDifferent()) {
-                    OutfitTransitionCard(
-                        if (isKrToJp) uiState.comparisonResult.krOutfit else uiState.comparisonResult.jpOutfit,
-                        if (isKrToJp) uiState.comparisonResult.jpOutfit else uiState.comparisonResult.krOutfit,
-                        depFlag, dstFlag
-                    )
+                if (abs(depWeather.main.feelsLike - depWeather.main.temp) >= 2.0) ContextCard(contextMessage)
+                // 상단 카드와 동일하게 체감온도 보정 코디 기준으로 비교/표시
+                if (depContext.adjustedOutfit.stage != dstContext.adjustedOutfit.stage) {
+                    OutfitTransitionCard(depContext.adjustedOutfit, dstContext.adjustedOutfit, depFlag, dstFlag)
                 }
                 ChecklistButton(isKrToJp, onNavigateToChecklist)
             }
@@ -395,15 +392,4 @@ private fun buildContextMessage(result: ContextAwareResult, actualTemp: Double):
 }
 
 @Composable
-fun OutfitRecommendation.localizedMainOutfit(): String = stringResource(
-    when (stage) {
-        1    -> R.string.outfit_stage1
-        2    -> R.string.outfit_stage2
-        3    -> R.string.outfit_stage3
-        4    -> R.string.outfit_stage4
-        5    -> R.string.outfit_stage5
-        6    -> R.string.outfit_stage6
-        7    -> R.string.outfit_stage7
-        else -> R.string.outfit_stage8
-    }
-)
+fun OutfitRecommendation.localizedMainOutfit(): String = stringResource(mainOutfitRes())

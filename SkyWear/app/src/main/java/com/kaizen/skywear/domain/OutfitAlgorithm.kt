@@ -55,7 +55,7 @@ fun getOutfitRecommendation(celsius: Double): OutfitRecommendation {
         celsius >= 17 -> OutfitRecommendation(
             stage = 3,
             tempRange = "17~22°C",
-            mainOutfit = "가디언 or 긴팔",
+            mainOutfit = "가디건 or 긴팔",
             subOutfit = "얇은 레이어링 추천",
             essentialItems = listOf("얇은 자켓"),
             colorHex = TempWarm,
@@ -77,7 +77,7 @@ fun getOutfitRecommendation(celsius: Double): OutfitRecommendation {
         celsius >= 9 -> OutfitRecommendation(
             stage = 5,
             tempRange = "9~11°C",
-            mainOutfit = "가벼운 코드 + 니트",
+            mainOutfit = "가벼운 코트 + 니트",
             subOutfit = "일본 여행 시 히트텍 추천",
             essentialItems = listOf("코트", "히트텍", "스카프"),
             colorHex = TempCool,
@@ -90,7 +90,7 @@ fun getOutfitRecommendation(celsius: Double): OutfitRecommendation {
             tempRange = "5~8°C",
             mainOutfit = "두꺼운 코트 + 레이어링",
             subOutfit = "히트텍 필수",
-            essentialItems = listOf("두꺼운 코드", "히트텍", "장갑", "목도리"),
+            essentialItems = listOf("두꺼운 코트", "히트텍", "장갑", "목도리"),
             colorHex = TempChilly,
             emoji = "\uD83E\uDDE5"
         )
