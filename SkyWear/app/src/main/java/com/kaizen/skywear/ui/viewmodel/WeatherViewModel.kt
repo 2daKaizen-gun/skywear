@@ -8,18 +8,14 @@ import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.dailyRepresentativeWithTime
 import com.kaizen.skywear.data.model.dateKey
 import com.kaizen.skywear.data.model.dateLabel
-import com.kaizen.skywear.data.model.iconCode
-import com.kaizen.skywear.data.model.weatherId
 import com.kaizen.skywear.data.remote.toErrorMessageRes
 import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.ContextAwareResult
 import com.kaizen.skywear.domain.TempComparisonResult
-import com.kaizen.skywear.domain.WeatherVisual
 import com.kaizen.skywear.domain.analyzeTempComparison
 import com.kaizen.skywear.domain.buildContextAwareRecommendation
-import com.kaizen.skywear.domain.mapWeatherCodeToVisual
 import com.kaizen.skywear.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -106,9 +102,7 @@ class WeatherViewModel @Inject constructor(
                     jpWeather        = jpWeather,
                     krContextResult  = buildContextAwareRecommendation(krWeather),
                     jpContextResult  = buildContextAwareRecommendation(jpWeather),
-                    comparisonResult = analyzeTempComparison(krWeather, jpWeather),
-                    krVisual         = mapWeatherCodeToVisual(krWeather.weatherId(), krWeather.iconCode(), krWeather.main.temp),
-                    jpVisual         = mapWeatherCodeToVisual(jpWeather.weatherId(), jpWeather.iconCode(), jpWeather.main.temp)
+                    comparisonResult = analyzeTempComparison(krWeather, jpWeather)
                 )
             } else {
                 WeatherUiState.Error(result.error.toErrorMessageRes())
@@ -215,10 +209,7 @@ sealed class WeatherUiState {
         val jpWeather: WeatherResponse, // jp 날씨 원본 데이터
         val krContextResult: ContextAwareResult, // kr 체감온도/코디 보정 결과
         val jpContextResult: ContextAwareResult, // jp 체감온도/코디 보정 결과
-        val comparisonResult: TempComparisonResult, // KRvsJP 비교 분석 결과
-
-        val krVisual: WeatherVisual,
-        val jpVisual: WeatherVisual
+        val comparisonResult: TempComparisonResult // KRvsJP 비교 분석 결과
     ) : WeatherUiState()
 
     // 실패: 현지화된 에러 메시지 리소스 보유

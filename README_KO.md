@@ -82,7 +82,6 @@ graph TD
         OA[OutfitAlgorithm]
         TC[TemperatureComparator]
         CA[ContextAwareRecommendation]
-        WIM[WeatherIconMapper]
         SE[SeasonEvent]
     end
 
@@ -105,7 +104,7 @@ graph TD
     end
 
     MA --> WVM & CVM & CSVM & SUBVM & JVM
-    WVM --> WR & OA & TC & CA & WIM
+    WVM --> WR & OA & TC & CA
     SUBVM --> SR & WR
     JVM --> JR
     CVM --> CR & UPR
