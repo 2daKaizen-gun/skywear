@@ -1,5 +1,6 @@
 package com.kaizen.skywear.ui.viewmodel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizen.skywear.data.model.DailyForecastPair
@@ -9,6 +10,7 @@ import com.kaizen.skywear.data.model.dateKey
 import com.kaizen.skywear.data.model.dateLabel
 import com.kaizen.skywear.data.model.iconCode
 import com.kaizen.skywear.data.model.weatherId
+import com.kaizen.skywear.data.remote.toErrorMessageRes
 import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
@@ -109,7 +111,7 @@ class WeatherViewModel @Inject constructor(
                     jpVisual         = mapWeatherCodeToVisual(jpWeather.weatherId(), jpWeather.iconCode(), jpWeather.main.temp)
                 )
             } else {
-                WeatherUiState.Error(result.errorMessage ?: "알 수 없는 오류가 발생했습니다.")
+                WeatherUiState.Error(result.error.toErrorMessageRes())
             }
         }
     }
@@ -158,7 +160,7 @@ class WeatherViewModel @Inject constructor(
                 }
                 ForecastUiState.Success(pairs = pairs)
             } else {
-                ForecastUiState.Error(result.errorMessage ?: "예보를 불러올 수 없습니다.")
+                ForecastUiState.Error
             }
         }
     }
@@ -219,14 +221,14 @@ sealed class WeatherUiState {
         val jpVisual: WeatherVisual
     ) : WeatherUiState()
 
-    // 실패: 에러 메시지 보유
+    // 실패: 현지화된 에러 메시지 리소스 보유
     data class Error(
-        val message: String
+        @StringRes val messageRes: Int
     ) : WeatherUiState()
 }
 
 sealed class ForecastUiState {
     data object Loading : ForecastUiState()
     data class Success(val pairs: List<DailyForecastPair>) : ForecastUiState()
-    data class Error(val message: String) : ForecastUiState()
+    data object Error : ForecastUiState()
 }

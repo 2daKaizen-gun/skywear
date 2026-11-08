@@ -3,6 +3,7 @@ package com.kaizen.skywear.data.remote
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -35,6 +36,8 @@ class NetworkInterceptor : Interceptor {
             throw NetworkException.Timeout // 타임아웃
         } catch (e: UnknownHostException) {
             throw NetworkException.NoInternet // 인터넷 연결 없음
+        } catch (e: ConnectException) {
+            throw NetworkException.NoInternet // 연결 실패 (네트워크 없음)
         } catch (e: NetworkException) {
             throw e // 이미 처리된 에러는 그대로 전달
         } catch (e: IOException) {
@@ -44,40 +47,41 @@ class NetworkInterceptor : Interceptor {
 }
 
 // 앱 전체에서 사용하는 커스텀 네트워크 에러
+// message는 로그용 — 화면 표시 문구는 toErrorMessageRes()로 현지화된 리소스를 사용
 sealed class NetworkException(message: String) : IOException(message) {
 
     // 인터넷 연결 없음
     data object NoInternet : NetworkException(
-        "인터넷 연결을 확인해주세요."
+        "No internet connection"
     )
 
     // 요청 타임아웃
     data object Timeout : NetworkException(
-        "요청 시간 초과되었습니다. 다시 시도해주세요."
+        "Request timed out"
     )
 
     // API Key 오류(401)
     data object Unauthorized : NetworkException(
-        "API 인증에 실패했습니다. API Key를 확인해주세요."
+        "Unauthorized - check API key"
     )
 
     // 도시를 찾을 수 없음(404)
     data object CityNotFound : NetworkException(
-        "도시를 찾을 수 없습니다. 도시명을 확인해주세요."
+        "City not found"
     )
 
     // API 호출 한도 초과(429)
     data object RateLimitExceeded : NetworkException(
-        "API 호출 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+        "Rate limit exceeded"
     )
 
     // 서버 오류(5xx)
     data object ServerError : NetworkException(
-        "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        "Server error"
     )
 
     // 알 수 없는 오류
     data class Unknown(val code: Int) : NetworkException(
-        "알 수 없는 오류가 발생했습니다. (code: $code)"
+        "Unknown error (code: $code)"
     )
 }

@@ -62,8 +62,7 @@ data class DualCityResult(
     val isSuccess: Boolean
         get() = krWeather.isSuccess && jpWeather.isSuccess
 
-    // 둘 중 하나라도 실패 시 반환
-    val errorMessage: String?
-        get() = krWeather.exceptionOrNull()?.message
-            ?: jpWeather.exceptionOrNull()?.message
+    // 둘 중 하나라도 실패 시 해당 예외 반환
+    val error: Throwable?
+        get() = krWeather.exceptionOrNull() ?: jpWeather.exceptionOrNull()
 }

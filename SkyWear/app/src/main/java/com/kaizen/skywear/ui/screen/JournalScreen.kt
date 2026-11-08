@@ -27,7 +27,7 @@ fun JournalScreen(viewModel: JournalViewModel = hiltViewModel()) {
     Scaffold(
         contentWindowInsets = WindowInsets(0),
         topBar = { TopAppBar(title = { Text(stringResource(R.string.nav_journal)) }) },
-        floatingActionButton = { FloatingActionButton(onClick = { showAddDialog = true }) { Icon(Icons.Default.Add, null) } }
+        floatingActionButton = { FloatingActionButton(onClick = { showAddDialog = true }) { Icon(Icons.Default.Add, contentDescription = stringResource(R.string.journal_add_title)) } }
     ) { padding ->
         if (journals.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
@@ -67,7 +67,7 @@ private fun JournalCard(journal: TravelJournal, onDelete: () -> Unit) {
                     }
                 }
                 IconButton(onClick = onDelete, modifier = Modifier.size(30.dp)) {
-                    Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete), tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(16.dp))
                 }
             }
             Spacer(Modifier.height(8.dp))

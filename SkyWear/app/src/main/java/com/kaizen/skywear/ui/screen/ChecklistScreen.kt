@@ -200,7 +200,7 @@ private fun ChecklistItemCard(
                 IconButton(onClick = onDelete, modifier = Modifier.size(24.dp)) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "삭제",
+                        contentDescription = stringResource(R.string.delete),
                         tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(16.dp)
                     )

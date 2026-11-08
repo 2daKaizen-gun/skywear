@@ -100,6 +100,10 @@
     <string name="error_no_internet">Please check your internet connection.</string>
     <string name="error_timeout">Request timed out. Please try again.</string>
     <string name="error_city_not_found">City not found.</string>
+    <string name="delete">Delete</string>
+    <string name="error_unauthorized">API authentication failed. Please check your API key.</string>
+    <string name="error_rate_limit">Too many requests. Please try again later.</string>
+    <string name="error_server">A server error occurred. Please try again later.</string>
 
     <!-- Subscribe Screen -->
     <string name="subscribe_add_hint">Search city (Korean/English/Japanese)</string>

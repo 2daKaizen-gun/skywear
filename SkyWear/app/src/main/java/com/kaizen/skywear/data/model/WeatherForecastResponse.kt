@@ -67,8 +67,7 @@ data class DualForecastResult(
     val jpForecast: Result<WeatherForecastResponse>
 ) {
     val isSuccess: Boolean get() = krForecast.isSuccess && jpForecast.isSuccess
-    val errorMessage: String? get() = krForecast.exceptionOrNull()?.message
-        ?: jpForecast.exceptionOrNull()?.message
+    val error: Throwable? get() = krForecast.exceptionOrNull() ?: jpForecast.exceptionOrNull()
 }
 
 // DailyForecastPair - 날짜별 KR/JP 예보 쌍

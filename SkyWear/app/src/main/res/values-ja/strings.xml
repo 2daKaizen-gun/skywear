@@ -100,6 +100,10 @@
     <string name="error_no_internet">インターネット接続を確認してください。</string>
     <string name="error_timeout">リクエストがタイムアウトしました。もう一度試してください。</string>
     <string name="error_city_not_found">都市が見つかりません。</string>
+    <string name="delete">削除</string>
+    <string name="error_unauthorized">API認証に失敗しました。APIキーを確認してください。</string>
+    <string name="error_rate_limit">リクエストが多すぎます。しばらくしてから再試行してください。</string>
+    <string name="error_server">サーバーエラーが発生しました。しばらくしてから再試行してください。</string>
 
     <!-- 購読画面 -->
     <string name="subscribe_add_hint">都市検索（韓国語/英語/日本語）</string>

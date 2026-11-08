@@ -39,8 +39,8 @@ fun SubscribeScreen(viewModel: SubscribeViewModel = hiltViewModel()) {
             TopAppBar(
                 title = { Text(stringResource(R.string.nav_subscribe)) },
                 actions = {
-                    IconButton(onClick = { viewModel.refreshAllWeather() }) { Icon(Icons.Default.Refresh, null) }
-                    IconButton(onClick = { showSearch = !showSearch }) { Icon(Icons.Default.Add, null) }
+                    IconButton(onClick = { viewModel.refreshAllWeather() }) { Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.dashboard_refresh)) }
+                    IconButton(onClick = { showSearch = !showSearch }) { Icon(Icons.Default.Add, contentDescription = stringResource(R.string.subscribe_add_button)) }
                 }
             )
         }
@@ -116,10 +116,10 @@ private fun SubscribedCityCard(city: SubscribedCity, temp: Int?, weatherDesc: St
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                 if (temp != null) Text("$temp°", style = MaterialTheme.typography.titleMedium, color = if (city.country == "KR") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
                 IconButton(onClick = onToggleAlert, modifier = Modifier.size(32.dp)) {
-                    Icon(if (city.isAlertOn) Icons.Default.Notifications else Icons.Default.NotificationsOff, null, tint = if (city.isAlertOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
+                    Icon(if (city.isAlertOn) Icons.Default.Notifications else Icons.Default.NotificationsOff, contentDescription = alertLabel, tint = if (city.isAlertOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
                 }
                 IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete), tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
                 }
             }
         }

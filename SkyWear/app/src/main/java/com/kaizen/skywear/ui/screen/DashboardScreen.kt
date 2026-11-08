@@ -157,7 +157,7 @@ private fun CurrentWeatherContent(uiState: WeatherUiState, isKrToJp: Boolean, co
                 ChecklistButton(isKrToJp, onNavigateToChecklist)
             }
         }
-        is WeatherUiState.Error -> ErrorContent(uiState.message, onRefresh)
+        is WeatherUiState.Error -> ErrorContent(stringResource(uiState.messageRes), onRefresh)
     }
 }
 
