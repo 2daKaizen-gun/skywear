@@ -141,7 +141,8 @@ fun SkyWearNavGraph(
                 JournalScreen()
             }
             composable(Screen.Season.route) {
-                SeasonScreen()
+                // 화면 전용 WeatherViewModel을 새로 만들면 날씨/예보 API를 다시 호출하므로 공유 인스턴스 전달
+                SeasonScreen(viewModel = weatherViewModel)
             }
         }
     }

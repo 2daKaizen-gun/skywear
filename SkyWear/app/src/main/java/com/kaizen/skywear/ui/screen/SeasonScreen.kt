@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.domain.JP_SEASON_EVENTS
@@ -22,7 +21,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SeasonScreen(viewModel: WeatherViewModel = hiltViewModel()) {
+fun SeasonScreen(viewModel: WeatherViewModel) {
     val travelDirection by viewModel.travelDirection.collectAsState()
     val isKrToJp = travelDirection == TravelDirection.KR_TO_JP
     val events   = if (isKrToJp) JP_SEASON_EVENTS else KR_SEASON_EVENTS

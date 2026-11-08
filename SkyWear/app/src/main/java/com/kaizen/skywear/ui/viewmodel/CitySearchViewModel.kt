@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 // 도시 검색 + 사용자 설정 상태 관리
@@ -67,19 +66,13 @@ class CitySearchViewModel @Inject constructor(
         _jpSearchResults.value = searchCities(query, "JP")
     }
 
-    // 한국 도시 선택 -> DataStore 저장 -> WeatherViewModel에 전달
+    // 한국 도시 선택 -> WeatherViewModel에 전달 (DataStore 저장은 changeKrCity에서 처리)
     fun selectKrCity(city: City, weatherViewModel: WeatherViewModel) {
-        viewModelScope.launch {
-            prefsRepository.saveKrCity(city.nameEn)
-            weatherViewModel.changeKrCity(city.nameEn)
-        }
+        weatherViewModel.changeKrCity(city.nameEn)
     }
 
-    // 일본 도시 선택 -> DataStore 저장 -> WeatherViewModel에 전달
+    // 일본 도시 선택 -> WeatherViewModel에 전달 (DataStore 저장은 changeJpCity에서 처리)
     fun selectJpCity(city: City, weatherViewModel: WeatherViewModel) {
-        viewModelScope.launch {
-            prefsRepository.saveJpCity(city.nameEn)
-            weatherViewModel.changeJpCity(city.nameEn)
-        }
+        weatherViewModel.changeJpCity(city.nameEn)
     }
 }
