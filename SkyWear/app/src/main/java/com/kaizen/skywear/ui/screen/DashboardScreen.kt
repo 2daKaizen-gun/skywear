@@ -197,14 +197,16 @@ private fun ForecastDayContent(pair: DailyForecastPair, isKrToJp: Boolean, color
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp))
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ForecastWeatherCard(Modifier.weight(1f), depFlag,
+            WeatherCard(Modifier.weight(1f), depFlag,
                 localizedCityName(if (isKrToJp) krCityName else jpCityName), depTemp,
                 depOutfit.emoji + " " + (depItem.weather.firstOrNull()?.description ?: ""),
-                depOutfit, depItem.main.feelsLike.roundToInt(), depItem.main.humidity, depTempMin, depTempMax, depColor, depCard, depOnCard)
-            ForecastWeatherCard(Modifier.weight(1f), dstFlag,
+                depOutfit, depItem.main.feelsLike.roundToInt(), depItem.main.humidity, depColor, depCard, depOnCard,
+                tempRange = depTempMin to depTempMax)
+            WeatherCard(Modifier.weight(1f), dstFlag,
                 localizedCityName(if (isKrToJp) jpCityName else krCityName), dstTemp,
                 dstOutfit.emoji + " " + (dstItem.weather.firstOrNull()?.description ?: ""),
-                dstOutfit, dstItem.main.feelsLike.roundToInt(), dstItem.main.humidity, dstTempMin, dstTempMax, dstColor, dstCard, dstOnCard)
+                dstOutfit, dstItem.main.feelsLike.roundToInt(), dstItem.main.humidity, dstColor, dstCard, dstOnCard,
+                tempRange = dstTempMin to dstTempMax)
         }
         Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), shape = RoundedCornerShape(14.dp)) {
             Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -286,30 +288,16 @@ private fun ErrorContent(message: String, onRefresh: () -> Unit) {
     }
 }
 
+// 현재 날씨 / 예보 공통 도시 카드 (tempRange가 있으면 예보의 최저/최고 표시)
 @Composable
-private fun WeatherCard(modifier: Modifier = Modifier, flag: String, cityName: String, temp: Int, weatherDesc: String, outfit: OutfitRecommendation, feelsLike: Int, humidity: Int, tempColor: androidx.compose.ui.graphics.Color, cardColor: androidx.compose.ui.graphics.Color, onCardColor: androidx.compose.ui.graphics.Color) {
+private fun WeatherCard(modifier: Modifier = Modifier, flag: String, cityName: String, temp: Int, weatherDesc: String, outfit: OutfitRecommendation, feelsLike: Int, humidity: Int, tempColor: androidx.compose.ui.graphics.Color, cardColor: androidx.compose.ui.graphics.Color, onCardColor: androidx.compose.ui.graphics.Color, tempRange: Pair<Int, Int>? = null) {
     Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = cardColor), shape = RoundedCornerShape(16.dp)) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
             Text("$flag $cityName", style = MaterialTheme.typography.labelMedium, color = onCardColor)
             Text("$temp°", style = MaterialTheme.typography.displaySmall, color = tempColor)
-            Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
-            HorizontalDivider(modifier = Modifier.padding(vertical = 3.dp), color = onCardColor.copy(alpha = 0.2f))
-            Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = onCardColor)
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(stringResource(R.string.dashboard_feels_like, feelsLike), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
-                Text(stringResource(R.string.dashboard_humidity, humidity), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.7f))
+            if (tempRange != null) {
+                Text(stringResource(R.string.forecast_temp_range, tempRange.first, tempRange.second), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.8f))
             }
-        }
-    }
-}
-
-@Composable
-private fun ForecastWeatherCard(modifier: Modifier = Modifier, flag: String, cityName: String, temp: Int, weatherDesc: String, outfit: OutfitRecommendation, feelsLike: Int, humidity: Int, tempMin: Int, tempMax: Int, tempColor: androidx.compose.ui.graphics.Color, cardColor: androidx.compose.ui.graphics.Color, onCardColor: androidx.compose.ui.graphics.Color) {
-    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = cardColor), shape = RoundedCornerShape(16.dp)) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text("$flag $cityName", style = MaterialTheme.typography.labelMedium, color = onCardColor)
-            Text("$temp°", style = MaterialTheme.typography.displaySmall, color = tempColor)
-            Text(stringResource(R.string.forecast_temp_range, tempMin, tempMax), style = MaterialTheme.typography.labelSmall, color = onCardColor.copy(alpha = 0.8f))
             Text(weatherDesc, style = MaterialTheme.typography.labelSmall, color = onCardColor)
             HorizontalDivider(modifier = Modifier.padding(vertical = 3.dp), color = onCardColor.copy(alpha = 0.2f))
             Text(outfit.localizedMainOutfit(), style = MaterialTheme.typography.labelSmall, color = onCardColor)

@@ -106,10 +106,8 @@ private fun AddJournalDialog(onDismiss: () -> Unit, onConfirm: (TravelJournal) -
     var startDate    by remember { mutableStateOf("") }
     var endDate      by remember { mutableStateOf("") }
     var departTemp   by remember { mutableStateOf("") }
-    var departDesc   by remember { mutableStateOf("") }
     var departOutfit by remember { mutableStateOf("") }
     var returnTemp   by remember { mutableStateOf("") }
-    var returnDesc   by remember { mutableStateOf("") }
     var returnOutfit by remember { mutableStateOf("") }
     var memo         by remember { mutableStateOf("") }
     var isJapan      by remember { mutableStateOf(true) }
@@ -143,7 +141,7 @@ private fun AddJournalDialog(onDismiss: () -> Unit, onConfirm: (TravelJournal) -
         },
         confirmButton = {
             TextButton(enabled = destination.isNotBlank() && startDate.isNotBlank(), onClick = {
-                onConfirm(TravelJournal(destination = destination, destinationEmoji = if (isJapan) "🇯🇵" else "🇰🇷", startDate = startDate, endDate = endDate, departTemp = departTemp.toIntOrNull() ?: 0, departWeatherDesc = departDesc, departOutfit = departOutfit, returnTemp = returnTemp.toIntOrNull() ?: 0, returnWeatherDesc = returnDesc, returnOutfit = returnOutfit, memo = memo))
+                onConfirm(TravelJournal(destination = destination, destinationEmoji = if (isJapan) "🇯🇵" else "🇰🇷", startDate = startDate, endDate = endDate, departTemp = departTemp.toIntOrNull() ?: 0, departOutfit = departOutfit, returnTemp = returnTemp.toIntOrNull() ?: 0, returnOutfit = returnOutfit, memo = memo))
             }) { Text(stringResource(R.string.journal_save)) }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.journal_cancel)) } }
