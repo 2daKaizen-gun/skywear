@@ -44,6 +44,9 @@ val TempFreezing = Color(0xFF5E35B1)  // -1°C 이하  — 보라
 // KR-JR Dual City Colors
 val KoreaRed = Color(0xFFBC002D) // 한국 빨강
 val JapanBlue = Color(0xFF0047A0) // 일본 파랑
+// 다크 모드용 (어두운 카드 배경 위에서 대비 확보)
+val KoreaRedDark = Color(0xFFFFB3B8)
+val JapanBlueDark = Color(0xFFA8C8FF)
 
 // LightMode
 val Neutral10 = Color(0xFF1A1C1E)

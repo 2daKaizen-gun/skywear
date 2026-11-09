@@ -131,7 +131,14 @@ fun SkyWearTheme(
     }
 
     // [핵심 수정] CompositionLocalProvider를 추가하여 커스텀 컬러를 하위 뷰에 전달
-    CompositionLocalProvider(LocalExtraColors provides SkyWearExtraColors()) {
+    // 다크 모드에서는 국가 컬러를 밝은 톤으로 교체 (어두운 컨테이너 위 대비 확보)
+    val extraColors = if (darkTheme) {
+        SkyWearExtraColors(koreaRed = KoreaRedDark, japanBlue = JapanBlueDark)
+    } else {
+        SkyWearExtraColors()
+    }
+
+    CompositionLocalProvider(LocalExtraColors provides extraColors) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = SkyWearTypography,

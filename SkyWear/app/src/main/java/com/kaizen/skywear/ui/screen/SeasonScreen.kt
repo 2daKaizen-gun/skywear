@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kaizen.skywear.R
@@ -65,7 +66,13 @@ private fun SeasonCard(event: SeasonEvent, lang: String, isNow: Boolean) {
     val dDayText = if (dDay == 0L) stringResource(R.string.season_dday_today) else stringResource(R.string.season_dday, dDay)
 
     val accentColor = when (event.colorTag) { "green" -> Color(0xFF639922); "blue" -> Color(0xFF378ADD); "amber" -> Color(0xFFEF9F27); else -> Color(0xFFD85A30) }
-    val bgColor     = when (event.colorTag) { "green" -> Color(0xFFEAF3DE); "blue" -> Color(0xFFE6F1FB); "amber" -> Color(0xFFFAEEDA); else -> Color(0xFFFAECE7) }
+    // 파스텔 배경은 다크 모드의 밝은 onSurface 글씨와 대비가 거의 없으므로 다크 모드용 어두운 톤 사용
+    val isDark      = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val bgColor     = if (isDark) {
+        when (event.colorTag) { "green" -> Color(0xFF26361A); "blue" -> Color(0xFF1A2C42); "amber" -> Color(0xFF3D2C12); else -> Color(0xFF3E2219) }
+    } else {
+        when (event.colorTag) { "green" -> Color(0xFFEAF3DE); "blue" -> Color(0xFFE6F1FB); "amber" -> Color(0xFFFAEEDA); else -> Color(0xFFFAECE7) }
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
