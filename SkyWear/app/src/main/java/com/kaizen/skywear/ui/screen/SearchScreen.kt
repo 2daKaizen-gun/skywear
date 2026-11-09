@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.City
 import com.kaizen.skywear.ui.viewmodel.CitySearchViewModel
@@ -28,12 +29,12 @@ fun SearchScreen(
     searchViewModel: CitySearchViewModel,
     weatherViewModel: WeatherViewModel
 ) {
-    val krQuery by searchViewModel.krSearchQuery.collectAsState()
-    val jpQuery by searchViewModel.jpSearchQuery.collectAsState()
-    val krResults by searchViewModel.krSearchResults.collectAsState()
-    val jpResults by searchViewModel.jpSearchResults.collectAsState()
-    val savedKrCity by searchViewModel.savedKrCity.collectAsState()
-    val savedJpCity by searchViewModel.savedJpCity.collectAsState()
+    val krQuery by searchViewModel.krSearchQuery.collectAsStateWithLifecycle()
+    val jpQuery by searchViewModel.jpSearchQuery.collectAsStateWithLifecycle()
+    val krResults by searchViewModel.krSearchResults.collectAsStateWithLifecycle()
+    val jpResults by searchViewModel.jpSearchResults.collectAsStateWithLifecycle()
+    val savedKrCity by searchViewModel.savedKrCity.collectAsStateWithLifecycle()
+    val savedJpCity by searchViewModel.savedJpCity.collectAsStateWithLifecycle()
 
     var activeTab by remember { mutableIntStateOf(1) } // 0 = KR, 1 = JP
 
@@ -56,7 +57,7 @@ fun SearchScreen(
                 .padding(padding)
         ) {
             // 탭 (KR / JP)
-            TabRow(selectedTabIndex = activeTab) {
+            PrimaryTabRow(selectedTabIndex = activeTab) {
                 Tab(
                     selected = activeTab == 0,
                     onClick = { activeTab = 0 },

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.local.ChecklistCategory
 import com.kaizen.skywear.data.local.ChecklistItem
@@ -29,10 +30,10 @@ fun ChecklistScreen(
     onBack: () -> Unit,
     viewModel: ChecklistViewModel = hiltViewModel()
 ) {
-    val allItems by viewModel.allItems.collectAsState()
-    val checkedCount by viewModel.checkedCount.collectAsState()
-    val totalCount by viewModel.totalCount.collectAsState()
-    val selectedCategory by viewModel.selectedCategory.collectAsState()
+    val allItems by viewModel.allItems.collectAsStateWithLifecycle()
+    val checkedCount by viewModel.checkedCount.collectAsStateWithLifecycle()
+    val totalCount by viewModel.totalCount.collectAsStateWithLifecycle()
+    val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var showClearDialog by remember { mutableStateOf(false) }

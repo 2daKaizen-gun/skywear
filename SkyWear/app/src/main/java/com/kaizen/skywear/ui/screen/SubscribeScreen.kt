@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.local.SubscribedCity
 import com.kaizen.skywear.data.model.City
@@ -27,10 +28,10 @@ import com.kaizen.skywear.ui.viewmodel.SubscribeViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscribeScreen(viewModel: SubscribeViewModel = hiltViewModel()) {
-    val cities     by viewModel.subscribedCities.collectAsState()
-    val query      by viewModel.searchQuery.collectAsState()
-    val results    by viewModel.searchResults.collectAsState()
-    val weatherMap by viewModel.weatherMap.collectAsState()
+    val cities     by viewModel.subscribedCities.collectAsStateWithLifecycle()
+    val query      by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val results    by viewModel.searchResults.collectAsStateWithLifecycle()
+    val weatherMap by viewModel.weatherMap.collectAsStateWithLifecycle()
     var showSearch by remember { mutableStateOf(false) }
 
     Scaffold(

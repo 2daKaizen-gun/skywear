@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.local.TravelJournal
 import com.kaizen.skywear.ui.viewmodel.JournalViewModel
@@ -26,7 +27,7 @@ import com.kaizen.skywear.ui.viewmodel.JournalViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalScreen(viewModel: JournalViewModel = hiltViewModel()) {
-    val journals by viewModel.journals.collectAsState()
+    val journals by viewModel.journals.collectAsStateWithLifecycle()
     var showAddDialog by remember { mutableStateOf(false) }
 
     Scaffold(

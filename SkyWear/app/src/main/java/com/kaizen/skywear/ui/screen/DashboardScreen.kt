@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.DailyForecastPair
 import com.kaizen.skywear.data.model.localizedCityName
@@ -46,12 +47,12 @@ fun DashboardScreen(
     onNavigateToSearch: () -> Unit,
     viewModel: WeatherViewModel
 ) {
-    val uiState         by viewModel.uiState.collectAsState()
-    val forecastState   by viewModel.forecastState.collectAsState()
-    val travelDirection by viewModel.travelDirection.collectAsState()
-    val selectedDateKey by viewModel.selectedDateKey.collectAsState()
-    val selectedKrCity  by viewModel.selectedKrCity.collectAsState()
-    val selectedJpCity  by viewModel.selectedJpCity.collectAsState()
+    val uiState         by viewModel.uiState.collectAsStateWithLifecycle()
+    val forecastState   by viewModel.forecastState.collectAsStateWithLifecycle()
+    val travelDirection by viewModel.travelDirection.collectAsStateWithLifecycle()
+    val selectedDateKey by viewModel.selectedDateKey.collectAsStateWithLifecycle()
+    val selectedKrCity  by viewModel.selectedKrCity.collectAsStateWithLifecycle()
+    val selectedJpCity  by viewModel.selectedJpCity.collectAsStateWithLifecycle()
     val colors = LocalExtraColors.current
     val isKrToJp = travelDirection == TravelDirection.KR_TO_JP
 
