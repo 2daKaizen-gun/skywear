@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 상태바 알림 아이콘 (단색): 해 + 구름 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 해 -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M9,3.5a3.5,3.5 0,1 1,-0.01,0z" />
+    <!-- 햇살 -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M8.25,0h1.5v2h-1.5zM8.25,12h1.5v2h-1.5zM2,6.25h2v1.5h-2zM14,6.25h2v1.5h-2zM3.4,2.4l1.06,-1.06 1.41,1.41 -1.06,1.06zM12.13,11.13l1.06,-1.06 1.41,1.41 -1.06,1.06zM3.4,11.6l1.41,-1.41 1.06,1.06 -1.41,1.41zM12.13,2.87l1.41,-1.41 1.06,1.06 -1.41,1.41z" />
+    <!-- 구름 -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M19,22H8.5C6,22 4,20 4,17.5S6,13 8.5,13c0.3,0 0.6,0 0.9,0.1C10.3,10.7 12.5,9 15,9c3.3,0 6,2.7 6,6v0.3c1.7,0.6 3,2.3 3,4.2C24,21 22.7,22 21,22z" />
+</vector>

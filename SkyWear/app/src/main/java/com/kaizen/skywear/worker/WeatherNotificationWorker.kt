@@ -9,8 +9,10 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.kaizen.skywear.R
+import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.data.model.tempRounded
+import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.data.repository.UserPreferencesRepository
 import com.kaizen.skywear.data.repository.WeatherRepository
 import com.kaizen.skywear.domain.getOutfitRecommendation
@@ -35,29 +37,28 @@ class WeatherNotificationWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            val krCity = prefsRepo.selectedKrCity.first()
-            val jpCity = prefsRepo.selectedJpCity.first()
+            val krCity    = prefsRepo.selectedKrCity.first()
+            val jpCity    = prefsRepo.selectedJpCity.first()
+            val isKrToJp  = prefsRepo.travelDirection.first() == TravelDirection.KR_TO_JP
 
             val dualResult = weatherRepo.getDualCityWeather(krCity, jpCity)
             val krWeather  = dualResult.krWeather.getOrNull()
             val jpWeather  = dualResult.jpWeather.getOrNull()
             if (krWeather == null || jpWeather == null) return Result.retry()
 
-            val krTemp   = krWeather.tempRounded()
-            val jpTemp   = jpWeather.tempRounded()
-            val krOutfit = context.getString(getOutfitRecommendation(krWeather.main.temp).mainOutfitRes())
-            val jpOutfit = context.getString(getOutfitRecommendation(jpWeather.main.temp).mainOutfitRes())
+            // 대시보드와 동일하게 여행 방향 기준으로 출발지 → 도착지 순서로 표시
+            val krLine = briefingLine("🇰🇷", localizedCityName(krCity), krWeather)
+            val jpLine = briefingLine("🇯🇵", localizedCityName(jpCity), jpWeather)
+            val (depLine, dstLine) = if (isKrToJp) krLine to jpLine else jpLine to krLine
 
-            // 현지화된 도시명 사용
-            val krCityName = localizedCityName(krCity)
-            val jpCityName = localizedCityName(jpCity)
-
-            val gap     = jpTemp - krTemp
+            // 온도 차이 = 도착지 - 출발지
+            val krTemp  = krWeather.tempRounded()
+            val jpTemp  = jpWeather.tempRounded()
+            val gap     = if (isKrToJp) jpTemp - krTemp else krTemp - jpTemp
             val gapText = if (gap >= 0) "+${gap}°C" else "${gap}°C"
 
             val title   = context.getString(R.string.notification_title)
-            val message = "🇰🇷 $krCityName ${krTemp}°C → $krOutfit\n" +
-                    "🇯🇵 $jpCityName ${jpTemp}°C → $jpOutfit\n" +
+            val message = "$depLine\n$dstLine\n" +
                     context.getString(R.string.notification_briefing_gap, gapText)
 
             sendNotification(title, message)
@@ -66,6 +67,12 @@ class WeatherNotificationWorker @AssistedInject constructor(
         } catch (e: Exception) {
             Result.retry()
         }
+    }
+
+    // "🇰🇷 서울 3°C → 롱패딩 + 목도리" 형식의 한 줄
+    private fun briefingLine(flag: String, cityName: String, weather: WeatherResponse): String {
+        val outfit = context.getString(getOutfitRecommendation(weather.main.temp).mainOutfitRes())
+        return "$flag $cityName ${weather.tempRounded()}°C → $outfit"
     }
 
     private fun sendNotification(title: String, message: String) {
@@ -80,13 +87,8 @@ class WeatherNotificationWorker @AssistedInject constructor(
             manager.createNotificationChannel(channel)
         }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(title)
-            .setContentText(message)
+        val notification = buildSkyWearNotification(context, CHANNEL_ID, title, message)
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true)
             .build()
 
         manager.notify(NOTIFICATION_ID, notification)
