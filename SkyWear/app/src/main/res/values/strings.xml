@@ -131,7 +131,7 @@
     <string name="journal_empty_desc">여행의 날씨와 코디를 기억할 수 있어요</string>
     <string name="journal_add_title">여행 일지 추가</string>
     <string name="journal_destination">목적지 도시</string>
-    <string name="journal_start_date">출발일 (MM-DD)</string>
+    <string name="journal_start_date">출발일</string>
     <string name="journal_end_date">귀국일</string>
     <string name="journal_depart_weather">출발일 날씨</string>
     <string name="journal_return_weather">귀국일 날씨</string>
@@ -140,6 +140,7 @@
     <string name="journal_memo">메모</string>
     <string name="journal_save">저장</string>
     <string name="journal_cancel">취소</string>
+    <string name="journal_date_range_error">귀국일은 출발일과 같거나 이후여야 해요.</string>
     <string name="journal_depart_label">출발</string>
     <string name="journal_return_label">귀국</string>
     <string name="journal_tab_japan">🇯🇵 일본</string>

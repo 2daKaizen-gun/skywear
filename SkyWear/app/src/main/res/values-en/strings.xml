@@ -122,7 +122,7 @@
     <string name="journal_empty_desc">Remember the weather and outfits from your trip</string>
     <string name="journal_add_title">Add Travel Journal</string>
     <string name="journal_destination">Destination city</string>
-    <string name="journal_start_date">Departure (MM-DD)</string>
+    <string name="journal_start_date">Departure date</string>
     <string name="journal_end_date">Return date</string>
     <string name="journal_depart_weather">Departure day weather</string>
     <string name="journal_return_weather">Return day weather</string>
@@ -131,6 +131,7 @@
     <string name="journal_memo">Memo</string>
     <string name="journal_save">Save</string>
     <string name="journal_cancel">Cancel</string>
+    <string name="journal_date_range_error">Return date must be on or after the departure date.</string>
     <string name="journal_depart_label">Departure</string>
     <string name="journal_return_label">Return</string>
     <string name="journal_tab_japan">🇯🇵 Japan</string>
