@@ -29,6 +29,6 @@ class ChecklistRepository @Inject constructor(private val dao: ChecklistDao) {
     // 아이템 삭제
     suspend fun deleteItem(item: ChecklistItem) = dao.deleteItem(item)
 
-    // 체크된 아이템 전체 삭제
-    suspend fun deleteCheckedItems(destination: String) = dao.deleteCheckedItems(destination)
+    // 완료 항목 정리 (커스텀 아이템 삭제, 기본 아이템은 체크 해제)
+    suspend fun clearCheckedItems(destination: String) = dao.clearCheckedItems(destination)
 }

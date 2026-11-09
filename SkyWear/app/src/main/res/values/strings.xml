@@ -76,13 +76,16 @@
     <string name="checklist_title">🗺️ 여행 체크리스트</string>
     <string name="checklist_progress">준비 완료</string>
     <string name="checklist_add">항목 추가</string>
-    <string name="checklist_delete_checked">완료 항목 삭제</string>
+    <string name="checklist_delete_checked">완료 항목 정리</string>
     <string name="checklist_add_title">항목 추가</string>
     <string name="checklist_add_name">항목 이름</string>
     <string name="checklist_add_category">카테고리</string>
     <string name="checklist_confirm">추가</string>
     <string name="checklist_cancel">취소</string>
     <string name="checklist_all">전체</string>
+    <string name="checklist_clear_title">완료 항목 정리</string>
+    <string name="checklist_clear_message">직접 추가한 항목은 삭제되고, 기본 항목은 체크만 해제돼요.</string>
+    <string name="checklist_clear_confirm">정리</string>
 
     <!-- 카테고리 -->
     <string name="category_document">📄 서류</string>

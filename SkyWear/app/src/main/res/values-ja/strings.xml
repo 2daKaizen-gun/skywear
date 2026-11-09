@@ -70,13 +70,16 @@
     <string name="checklist_title">🗺️ 旅行チェックリスト</string>
     <string name="checklist_progress">準備完了</string>
     <string name="checklist_add">項目を追加</string>
-    <string name="checklist_delete_checked">完了項目を削除</string>
+    <string name="checklist_delete_checked">完了項目を整理</string>
     <string name="checklist_add_title">項目を追加</string>
     <string name="checklist_add_name">項目名</string>
     <string name="checklist_add_category">カテゴリ</string>
     <string name="checklist_confirm">追加</string>
     <string name="checklist_cancel">キャンセル</string>
     <string name="checklist_all">すべて</string>
+    <string name="checklist_clear_title">完了項目の整理</string>
+    <string name="checklist_clear_message">追加した項目は削除され、基本項目はチェックのみ解除されます。</string>
+    <string name="checklist_clear_confirm">整理</string>
 
     <string name="category_document">📄 書類</string>
     <string name="category_money">💴 お金</string>

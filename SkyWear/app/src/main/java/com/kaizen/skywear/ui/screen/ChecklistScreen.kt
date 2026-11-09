@@ -35,6 +35,7 @@ fun ChecklistScreen(
     val selectedCategory by viewModel.selectedCategory.collectAsState()
 
     var showAddDialog by remember { mutableStateOf(false) }
+    var showClearDialog by remember { mutableStateOf(false) }
 
     // 카테고리 필터링
     val displayItems = if (selectedCategory == null) {
@@ -54,7 +55,7 @@ fun ChecklistScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.deleteCheckedItems() }) {
+                    IconButton(onClick = { showClearDialog = true }, enabled = checkedCount > 0) {
                         Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.checklist_delete_checked))
                     }
                 }
@@ -137,6 +138,24 @@ fun ChecklistScreen(
                     )
                 }
             }
+        }
+
+        // 완료 항목 정리 확인 다이얼로그
+        if (showClearDialog) {
+            AlertDialog(
+                onDismissRequest = { showClearDialog = false },
+                title = { Text(stringResource(R.string.checklist_clear_title)) },
+                text = { Text(stringResource(R.string.checklist_clear_message)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        viewModel.clearCheckedItems()
+                        showClearDialog = false
+                    }) { Text(stringResource(R.string.checklist_clear_confirm)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showClearDialog = false }) { Text(stringResource(R.string.checklist_cancel)) }
+                }
+            )
         }
 
         // 항목 추가 다이얼로그

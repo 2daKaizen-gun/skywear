@@ -86,11 +86,11 @@ class ChecklistViewModel @Inject constructor(
         }
     }
 
-    // 체크된 아이템 전체 삭제
-    fun deleteCheckedItems() {
+    // 완료 항목 정리 (커스텀 아이템 삭제, 기본 아이템은 체크 해제)
+    fun clearCheckedItems() {
         viewModelScope.launch {
             val destination = if (travelDirection.value == TravelDirection.KR_TO_JP) "JP" else "KR"
-            repository.deleteCheckedItems(destination)
+            repository.clearCheckedItems(destination)
         }
     }
 

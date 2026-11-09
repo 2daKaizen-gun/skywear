@@ -70,13 +70,16 @@
     <string name="checklist_title">🗺️ Travel Checklist</string>
     <string name="checklist_progress">Ready</string>
     <string name="checklist_add">Add Item</string>
-    <string name="checklist_delete_checked">Delete Checked Items</string>
+    <string name="checklist_delete_checked">Clear Checked Items</string>
     <string name="checklist_add_title">Add Item</string>
     <string name="checklist_add_name">Item Name</string>
     <string name="checklist_add_category">Category</string>
     <string name="checklist_confirm">Add</string>
     <string name="checklist_cancel">Cancel</string>
     <string name="checklist_all">All</string>
+    <string name="checklist_clear_title">Clear checked items</string>
+    <string name="checklist_clear_message">Items you added will be deleted, and default items will just be unchecked.</string>
+    <string name="checklist_clear_confirm">Clear</string>
 
     <string name="category_document">📄 Documents</string>
     <string name="category_money">💴 Money</string>
