@@ -23,6 +23,7 @@ import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.data.model.tempRounded
 import com.kaizen.skywear.data.repository.TravelDirection
 import com.kaizen.skywear.domain.ContextAwareResult
+import com.kaizen.skywear.domain.ExtraItem
 import com.kaizen.skywear.domain.HumidityLevel
 import com.kaizen.skywear.domain.OutfitGapLevel
 import com.kaizen.skywear.domain.OutfitRecommendation
@@ -150,6 +151,8 @@ private fun CurrentWeatherContent(uiState: WeatherUiState, isKrToJp: Boolean, co
                 }
                 TempGapCard(uiState.comparisonResult.directedGapLabel(isKrToJp), comparisonMessage, travelAdvice)
                 if (abs(depWeather.main.feelsLike - depWeather.main.temp) >= 2.0) ContextCard(contextMessage)
+                // 도착지 날씨 기준으로 추가로 챙길 아이템
+                if (dstContext.extraItems.isNotEmpty()) ExtraItemsCard(dstFlag, dstContext.extraItems)
                 // 상단 카드와 동일하게 체감온도 보정 코디 기준으로 비교/표시
                 if (depContext.adjustedOutfit.stage != dstContext.adjustedOutfit.stage) {
                     OutfitTransitionCard(depContext.adjustedOutfit, dstContext.adjustedOutfit, depFlag, dstFlag)
@@ -254,6 +257,17 @@ private fun TempGapCard(gapLabel: String, comparisonMessage: String, travelAdvic
 private fun ContextCard(message: String) {
     Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), shape = RoundedCornerShape(14.dp)) {
         Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(12.dp))
+    }
+}
+
+@Composable
+private fun ExtraItemsCard(flag: String, items: List<ExtraItem>) {
+    val labels = items.map { stringResource(it.labelRes) }
+    Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer), shape = RoundedCornerShape(14.dp)) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("$flag " + stringResource(R.string.dashboard_extra_items_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
+            Text(labels.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
+        }
     }
 }
 

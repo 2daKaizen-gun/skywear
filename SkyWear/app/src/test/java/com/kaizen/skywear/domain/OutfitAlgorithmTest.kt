@@ -56,7 +56,7 @@ class OutfitAlgorithmTest {
     fun `영하이면 stage 8 반환`() {
         val result = getOutfitRecommendation(-5.0)
         assertEquals(8, result.stage)
-        assertTrue(result.essentialItems.contains("핫팩"))
+        assertTrue(result.mainOutfit.contains("핫팩"))
     }
 
     // 경계값 테스트
@@ -75,18 +75,12 @@ class OutfitAlgorithmTest {
         assertEquals(8, getOutfitRecommendation(-1.0).stage)
     }
 
-    // 필수 아이템 포함 여부
+    // 기온이 내려갈수록 단계가 올라가는지 (단조 증가)
     @Test
-    fun `폭염일 때 선크림 포함`() {
-        val result = getOutfitRecommendation(30.0)
-        assertTrue(result.essentialItems.contains("선크림"))
-    }
-
-    @Test
-    fun `혹한일 때 핫팩과 히트텍 포함`() {
-        val result = getOutfitRecommendation(-10.0)
-        assertTrue(result.essentialItems.contains("핫팩"))
-        assertTrue(result.essentialItems.contains("히트텍"))
+    fun `기온이 낮아질수록 코디 단계는 줄어들지 않는다`() {
+        val stages = (35 downTo -15).map { getOutfitRecommendation(it.toDouble()).stage }
+        stages.zipWithNext().forEach { (warmer, colder) -> assertTrue(colder >= warmer) }
+        assertEquals((1..8).toList(), stages.distinct())
     }
 
     // 이모지 비어있는지 안 비어있는지

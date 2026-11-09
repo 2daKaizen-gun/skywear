@@ -7,6 +7,17 @@
     <string name="dashboard_refresh">Refresh</string>
     <string name="dashboard_retry">Try Again</string>
     <string name="dashboard_temp_gap">Temperature Gap</string>
+    <string name="dashboard_extra_items_title">🎒 Bring along</string>
+    <string name="extra_umbrella">Umbrella</string>
+    <string name="extra_moisture_wicking">Breathable clothes</string>
+    <string name="extra_moisturizer">Moisturizer</string>
+    <string name="extra_lip_balm">Lip balm</string>
+    <string name="extra_windproof_jacket">Windproof jacket</string>
+    <string name="extra_neck_warmer">Neck warmer</string>
+    <string name="extra_windbreaker">Windbreaker</string>
+    <string name="extra_hand_warmer">Hand warmer</string>
+    <string name="extra_handheld_fan">Handheld fan</string>
+    <string name="extra_cooling_towel">Cooling towel</string>
     <string name="dashboard_feels_like">Feels %1$d°</string>
     <string name="dashboard_humidity">Humidity %1$d%%</string>
 

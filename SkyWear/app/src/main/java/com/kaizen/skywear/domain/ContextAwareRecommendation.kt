@@ -1,5 +1,7 @@
 package com.kaizen.skywear.domain
 
+import androidx.annotation.StringRes
+import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.WeatherResponse
 import kotlin.math.pow
 
@@ -8,9 +10,23 @@ data class ContextAwareResult (
     val adjustedOutfit: OutfitRecommendation, // 체감 온도 보정 후 코디
     val feelsLikeTemp: Double, // 계산된 체감 온도
     val humidityLevel: HumidityLevel, // 습도 단계
-    val windLevel: WindLevel, // 온도 단계
-    val extraItems: List<String> // 추가 아이템 (ex: ["우산", "방풍 재킷"])
+    val windLevel: WindLevel, // 바람 단계
+    val extraItems: List<ExtraItem> // 추가로 챙길 아이템 (ex: 우산, 방풍 재킷)
 )
+
+// 날씨 상황별 추가 아이템 (화면 표시 문구는 labelRes 현지화 리소스)
+enum class ExtraItem(@StringRes val labelRes: Int) {
+    UMBRELLA(R.string.extra_umbrella),
+    MOISTURE_WICKING_CLOTHES(R.string.extra_moisture_wicking),
+    MOISTURIZER(R.string.extra_moisturizer),
+    LIP_BALM(R.string.extra_lip_balm),
+    WINDPROOF_JACKET(R.string.extra_windproof_jacket),
+    NECK_WARMER(R.string.extra_neck_warmer),
+    WINDBREAKER(R.string.extra_windbreaker),
+    HAND_WARMER(R.string.extra_hand_warmer),
+    HANDHELD_FAN(R.string.extra_handheld_fan),
+    COOLING_TOWEL(R.string.extra_cooling_towel)
+}
 
 // 습도 단계
 enum class HumidityLevel {
@@ -44,7 +60,12 @@ fun buildContextAwareRecommendation (weather: WeatherResponse): ContextAwareResu
         feelsLikeTemp  = feelsLike,
         humidityLevel  = classifyHumidity(humidity),
         windLevel      = classifyWind(windSpeed),
-        extraItems     = buildExtraItems(classifyHumidity(humidity), classifyWind(windSpeed), feelsLike)
+        extraItems     = buildExtraItems(
+            humidityLevel = classifyHumidity(humidity),
+            windLevel     = classifyWind(windSpeed),
+            feelsLikeTemp = feelsLike,
+            isRainy       = isRainyWeather(weather.weather.firstOrNull()?.id)
+        )
     )
 }
 
@@ -106,19 +127,20 @@ private fun classifyWind(windSpeed: Double): WindLevel = when {
 private fun buildExtraItems(
     humidityLevel: HumidityLevel,
     windLevel: WindLevel,
-    feelsLikeTemp: Double
-): List<String> {
-    val items = mutableListOf<String>()
+    feelsLikeTemp: Double,
+    isRainy: Boolean
+): List<ExtraItem> {
+    val items = mutableListOf<ExtraItem>()
+
+    // 비/이슬비/뇌우 예보 시 우산
+    if (isRainy) items.add(ExtraItem.UMBRELLA)
 
     // 습도별 추가 아이템
     when (humidityLevel) {
-        HumidityLevel.VERY_HUMID, HumidityLevel.HUMID -> {
-            items.add("우산 (습한 날씨)")
-            items.add("제습 기능 의류")
-        }
+        HumidityLevel.VERY_HUMID, HumidityLevel.HUMID -> items.add(ExtraItem.MOISTURE_WICKING_CLOTHES)
         HumidityLevel.DRY -> {
-            items.add("보습 크림")
-            items.add("립밤")
+            items.add(ExtraItem.MOISTURIZER)
+            items.add(ExtraItem.LIP_BALM)
         }
         else -> {}
     }
@@ -126,21 +148,26 @@ private fun buildExtraItems(
     // 바람별 추가 아이템
     when (windLevel) {
         WindLevel.VERY_WINDY -> {
-            items.add("방풍 재킷")
-            items.add("넥워머")
+            items.add(ExtraItem.WINDPROOF_JACKET)
+            items.add(ExtraItem.NECK_WARMER)
         }
-        WindLevel.WINDY -> items.add("바람막이")
+        WindLevel.WINDY -> items.add(ExtraItem.WINDBREAKER)
         else -> {}
     }
 
     // 체감온도별 추가 아이템
     when {
-        feelsLikeTemp < 0 -> items.add("핫팩")
+        feelsLikeTemp < 0 -> items.add(ExtraItem.HAND_WARMER)
         feelsLikeTemp > 30 -> {
-            items.add("손 선풍기")
-            items.add("쿨링 타월")
+            items.add(ExtraItem.HANDHELD_FAN)
+            items.add(ExtraItem.COOLING_TOWEL)
         }
     }
 
     return items.distinct()
 }
+
+// 비 계열 날씨 코드 (2xx 뇌우, 3xx 이슬비, 5xx 비)
+// https://openweathermap.org/weather-conditions
+private fun isRainyWeather(weatherId: Int?): Boolean =
+    weatherId != null && (weatherId in 200..321 || weatherId in 500..531)

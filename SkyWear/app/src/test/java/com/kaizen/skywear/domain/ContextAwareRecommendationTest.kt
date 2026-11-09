@@ -7,6 +7,7 @@ import com.kaizen.skywear.data.model.Weather
 import com.kaizen.skywear.data.model.WeatherResponse
 import com.kaizen.skywear.data.model.Wind
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -15,10 +16,10 @@ import org.junit.Test
 
 class ContextAwareRecommendationTest {
 
-    private fun makeWeather(temp: Double, humidity: Int = 50, windSpeed: Double = 0.0) = WeatherResponse(
+    private fun makeWeather(temp: Double, humidity: Int = 50, windSpeed: Double = 0.0, weatherId: Int = 800) = WeatherResponse(
         cityName = "Seoul",
         main = MainWeather(temp = temp, feelsLike = temp, tempMin = temp, tempMax = temp, humidity = humidity, pressure = 1013),
-        weather = listOf(Weather(id = 800, main = "Clear", description = "clear", icon = "01d")),
+        weather = listOf(Weather(id = weatherId, main = "", description = "", icon = "01d")),
         wind = Wind(speed = windSpeed, deg = 0),
         sys = Sys(country = "KR"),
         coord = Coord(lat = 0.0, lon = 0.0),
@@ -62,7 +63,24 @@ class ContextAwareRecommendationTest {
     @Test
     fun `체감온도가 영하면 핫팩을 추천한다`() {
         val result = buildContextAwareRecommendation(makeWeather(temp = -3.0, windSpeed = 5.0))
-        assertTrue(result.extraItems.contains("핫팩"))
+        assertTrue(result.extraItems.contains(ExtraItem.HAND_WARMER))
+    }
+
+    @Test
+    fun `비 날씨에만 우산을 추천한다`() {
+        val rainy = buildContextAwareRecommendation(makeWeather(temp = 15.0, weatherId = 501))
+        val drizzle = buildContextAwareRecommendation(makeWeather(temp = 15.0, weatherId = 300))
+        val clearButHumid = buildContextAwareRecommendation(makeWeather(temp = 15.0, humidity = 90, weatherId = 800))
+        assertTrue(rainy.extraItems.contains(ExtraItem.UMBRELLA))
+        assertTrue(drizzle.extraItems.contains(ExtraItem.UMBRELLA))
+        assertFalse(clearButHumid.extraItems.contains(ExtraItem.UMBRELLA))
+        assertTrue(clearButHumid.extraItems.contains(ExtraItem.MOISTURE_WICKING_CLOTHES))
+    }
+
+    @Test
+    fun `쾌적한 날씨에는 추가 아이템이 없다`() {
+        val result = buildContextAwareRecommendation(makeWeather(temp = 18.0, humidity = 50, windSpeed = 1.0))
+        assertTrue(result.extraItems.isEmpty())
     }
 
     @Test

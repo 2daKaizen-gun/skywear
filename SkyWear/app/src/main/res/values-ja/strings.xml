@@ -7,6 +7,17 @@
     <string name="dashboard_refresh">更新</string>
     <string name="dashboard_retry">もう一度試す</string>
     <string name="dashboard_temp_gap">気温差</string>
+    <string name="dashboard_extra_items_title">🎒 持ち物</string>
+    <string name="extra_umbrella">傘</string>
+    <string name="extra_moisture_wicking">通気性の良い服</string>
+    <string name="extra_moisturizer">保湿クリーム</string>
+    <string name="extra_lip_balm">リップクリーム</string>
+    <string name="extra_windproof_jacket">防風ジャケット</string>
+    <string name="extra_neck_warmer">ネックウォーマー</string>
+    <string name="extra_windbreaker">ウインドブレーカー</string>
+    <string name="extra_hand_warmer">カイロ</string>
+    <string name="extra_handheld_fan">ハンディファン</string>
+    <string name="extra_cooling_towel">冷感タオル</string>
     <string name="dashboard_feels_like">体感 %1$d°</string>
     <string name="dashboard_humidity">湿度 %1$d%%</string>
 

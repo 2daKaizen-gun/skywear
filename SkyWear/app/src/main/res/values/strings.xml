@@ -7,6 +7,17 @@
     <string name="dashboard_refresh">새로고침</string>
     <string name="dashboard_retry">다시 시도</string>
     <string name="dashboard_temp_gap">온도 차이</string>
+    <string name="dashboard_extra_items_title">🎒 챙길 것</string>
+    <string name="extra_umbrella">우산</string>
+    <string name="extra_moisture_wicking">통기성 좋은 옷</string>
+    <string name="extra_moisturizer">보습 크림</string>
+    <string name="extra_lip_balm">립밤</string>
+    <string name="extra_windproof_jacket">방풍 재킷</string>
+    <string name="extra_neck_warmer">넥워머</string>
+    <string name="extra_windbreaker">바람막이</string>
+    <string name="extra_hand_warmer">핫팩</string>
+    <string name="extra_handheld_fan">손 선풍기</string>
+    <string name="extra_cooling_towel">쿨링 타월</string>
     <string name="dashboard_feels_like">체감 %1$d°</string>
     <string name="dashboard_humidity">습도 %1$d%%</string>
 
