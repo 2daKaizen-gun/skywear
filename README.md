@@ -34,9 +34,11 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
   6. **City Subscription**: Follow up to 5 cities with real-time weather and alert toggle
   7. **Seasonal Recommendations**: D-day countdown for 8 JP + 8 KR major travel events, direction-aware
   8. **Travel Journal**: Record trip weather, outfit history, and personal memos
-  9. **Full i18n**: Korean / English / Japanese localization across all screens
-  10. **Responsive Layout**: Adaptive padding and typography for all screen sizes
-  11. **Firebase Crashlytics**: Production crash monitoring with release-only collection
+  9. **Bring-along Items**: Destination-based extras (umbrella only on rainy codes, hand warmer, windbreaker, ...) shown on the dashboard
+  10. **Notifications**: Daily 08:00 travel briefing (direction-aware) and hourly ±3°C change alerts for subscribed cities, with Android 13+ permission handling
+  11. **Full i18n**: Korean / English / Japanese localization across all screens, notifications, and error messages
+  12. **Responsive Layout & Dark Mode**: Adaptive padding/typography and contrast-checked dark theme colors
+  13. **Firebase Crashlytics**: Production crash monitoring with release-only collection
 
 ---
 
@@ -52,16 +54,35 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 
 ## 🛠️ Tech Stack
 
-- **Language**: ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
-- **UI Framework**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-UI-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
-- **Architecture**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_+_Clean-green?style=for-the-badge)
-- **DI**: ![Hilt](https://img.shields.io/badge/Hilt-DI-E91E63?style=for-the-badge)
-- **Network**: ![Retrofit2](https://img.shields.io/badge/Retrofit2-Network-48B983?style=for-the-badge) | ![OkHttp3](https://img.shields.io/badge/OkHttp3-Interceptor-48B983?style=for-the-badge)
-- **Local DB**: ![Room](https://img.shields.io/badge/Room-v3-FF6F00?style=for-the-badge)
+- **Language**: ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) | ![Coroutines](https://img.shields.io/badge/Coroutines-Flow_%2F_StateFlow-7F52FF?style=for-the-badge)
+- **UI**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-BOM_2025.10-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white) | ![Material 3](https://img.shields.io/badge/Material_3-1.4-757575?style=for-the-badge&logo=materialdesign&logoColor=white) | ![Navigation](https://img.shields.io/badge/Navigation_Compose-2.8-4285F4?style=for-the-badge)
+- **Architecture**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_%28Data_%2F_Domain_%2F_UI%29-green?style=for-the-badge)
+- **DI**: ![Hilt](https://img.shields.io/badge/Hilt-2.51-E91E63?style=for-the-badge) (incl. `@HiltWorker`)
+- **Network**: ![Retrofit2](https://img.shields.io/badge/Retrofit-2.11_+_Gson-48B983?style=for-the-badge) | ![OkHttp3](https://img.shields.io/badge/OkHttp-4.12_Interceptor-48B983?style=for-the-badge)
+- **Local DB**: ![Room](https://img.shields.io/badge/Room-2.7_%28Schema_v3%29-FF6F00?style=for-the-badge)
 - **Preferences**: ![DataStore](https://img.shields.io/badge/DataStore-Preferences-FF6F00?style=for-the-badge)
-- **Background**: ![WorkManager](https://img.shields.io/badge/WorkManager-Notifications-FF6F00?style=for-the-badge)
+- **Background**: ![WorkManager](https://img.shields.io/badge/WorkManager-2.9_Notifications-FF6F00?style=for-the-badge)
 - **Monitoring**: ![Firebase](https://img.shields.io/badge/Firebase-Crashlytics-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-- **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-API-EB6E4B?style=for-the-badge)
+- **Testing**: ![JUnit4](https://img.shields.io/badge/JUnit4-45_Unit_Tests-25A162?style=for-the-badge)
+- **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-Current_+_5--Day_Forecast-EB6E4B?style=for-the-badge)
+- **Build**: AGP 8.9.1 · KSP 2.0.21-1.0.28 · JDK 21 · minSdk 26 / targetSdk 36 · Gradle Version Catalog
+
+---
+
+## 🚀 Getting Started
+
+1. Get a free API key from [OpenWeatherMap](https://openweathermap.org/api).
+2. Add it to `SkyWear/local.properties` (exposed as `BuildConfig.WEATHER_API_KEY`):
+   ```properties
+   WEATHER_API_KEY=your_api_key_here
+   ```
+3. Place your Firebase `google-services.json` in `SkyWear/app/` (required by the Google Services / Crashlytics plugins).
+4. Build and test:
+   ```bash
+   cd SkyWear
+   ./gradlew assembleDebug
+   ./gradlew testDebugUnitTest
+   ```
 
 ---
 
@@ -71,6 +92,7 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 graph TD
     subgraph UI["🖥️ UI Layer (Jetpack Compose)"]
         MA[MainActivity]
+        NAV[SkyWearNavGraph\nBottom Navigation]
         WVM[WeatherViewModel]
         CVM[ChecklistViewModel]
         CSVM[CitySearchViewModel]
@@ -93,6 +115,11 @@ graph TD
         JR[JournalRepository]
     end
 
+    subgraph Background["⏰ Background (WorkManager + Hilt)"]
+        WNW[WeatherNotificationWorker\nDaily 08:00 Briefing]
+        SWW[SubscribeWeatherWorker\nHourly ±3°C Alert]
+    end
+
     subgraph Remote["🌐 Remote"]
         API[WeatherApiService\nRetrofit2 + OkHttp3]
         OWM[(OpenWeatherMap API)]
@@ -103,12 +130,14 @@ graph TD
         DS[(DataStore\nPreferences)]
     end
 
-    MA --> WVM & CVM & CSVM & SUBVM & JVM
+    MA --> NAV --> WVM & CVM & CSVM & SUBVM & JVM
     WVM --> WR & OA & TC & CA
     SUBVM --> SR & WR
     JVM --> JR
     CVM --> CR & UPR
     CSVM --> UPR
+    WNW --> WR & UPR & OA
+    SWW --> WR & SR
     WR --> API --> OWM
     CR --> ROOM
     SR --> ROOM
@@ -137,7 +166,7 @@ graph TD
   - [x] Phase 3-2: Implement Comparative Analysis Logic (KR vs JP Temperature Gap)
   - [x] Phase 3-3: Build Context-Aware Recommendation Logic (Wind Chill & Humidity)
   - [x] Phase 3-4: Reactive State Management Integration using ViewModel & StateFlow
-  - [x] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons)
+  - [x] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons) — *removed in Phase 10 as no screen rendered it*
 
 - **Phase 4**: Travel Intelligence & Data Persistence
   - [x] Phase 4-1: Implement Direction-Aware Travel Checklist using Room DB
@@ -146,7 +175,7 @@ graph TD
   - [x] Phase 4-4: Dark Mode Support
 
 - **Phase 5**: Quality Assurance & Dependency Injection
-  - [x] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule
+  - [x] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule — *replaced by domain/data unit tests in Phase 10*
   - [x] Phase 5-2: Code Refactoring & Dependency Injection (Hilt) Optimization
   - [x] Phase 5-3: Final Build Generation (.APK)
 
@@ -176,13 +205,19 @@ graph TD
   - [x] Phase 9-5: Portfolio Finalization & README Update
   - [x] Phase 9-6: Responsive Layout Optimization for all screen sizes
 
+- **Phase 10**: Code Quality & UX Refinement
+  - [x] Phase 10-1: Remove dead code, unused assets (Lottie, template files) and stale dependencies
+  - [x] Phase 10-2: Android 13+ notification permission, tappable notifications, localized notifications & error messages
+  - [x] Phase 10-3: UX fixes — checklist default items, journal date pickers & input validation, dark mode contrast, bring-along items
+  - [x] Phase 10-4: Dependency alignment (Compose BOM 2025.10, Room 2.7, lifecycle 2.9), lint cleanup, 45 unit tests
+
 ---
 
 ## 🔥 Troubleshooting & Lessons Learned
 
 **1. KSP + Kotlin Version Compatibility**
-- **Challenge**: Room Compiler KSP version mismatch with Kotlin 2.2.10 caused build failure at compile time.
-- **Resolution**: Pinned `ksp = "2.2.10-2.0.2"` to exactly match the Kotlin version.
+- **Challenge**: The initial Kotlin 2.2.10 + KSP 2.2.10-2.0.2 setup failed to build with the Room compiler and the rest of the toolchain.
+- **Resolution**: Aligned the toolchain to Kotlin `2.0.21` with the matching KSP `2.0.21-1.0.28` — the KSP version prefix must always equal the Kotlin version.
 
 **2. Hilt — Missing `android:name` in AndroidManifest**
 - **Challenge**: App crashed on launch with `Hilt Activity must be attached to an @HiltAndroidApp Application`.
@@ -225,6 +260,26 @@ graph TD
 - **Challenge**: Fixed padding (16dp) and `displayMedium` font caused excessive white space on larger phones.
 - **Resolution**: Reduced vertical padding to 8dp, switched temperature display to `displaySmall`, and tightened card spacing from 16dp to 10dp across all screens.
 
+**12. Silent Notifications on Android 13+**
+- **Challenge**: `POST_NOTIFICATIONS` was declared in the manifest but never requested, so both workers ran successfully while every notification was silently dropped (targetSdk 36).
+- **Resolution**: Request the runtime permission once on first launch, and attach a `PendingIntent` so tapping a notification opens the app.
+
+**13. OkHttp Interceptor Connection Leak**
+- **Challenge**: `NetworkInterceptor` threw a custom exception on non-200 responses without closing the response body, leaking connections.
+- **Resolution**: Return any 2xx as-is, `close()` the response before mapping the status code to a `NetworkException`, and map exceptions to localized string resources in the UI.
+
+**14. `stateIn` Initial Value Trap**
+- **Challenge**: `SubscribeViewModel` refreshed weather in `init` by reading `subscribedCities.value`, which is always the empty initial value of `stateIn(WhileSubscribed)` — no weather loaded until the user tapped refresh.
+- **Resolution**: Read the source flow directly with `repository.getAllCities().first()`.
+
+**15. Duplicate API Calls from Screen-scoped ViewModels**
+- **Challenge**: The Season tab called `hiltViewModel()` for its own `WeatherViewModel`, re-running 4 weather/forecast requests every time the tab opened just to read the travel direction.
+- **Resolution**: Pass the NavGraph-level shared instance (same lesson as #3).
+
+**16. Checklist Defaults Deleted Permanently**
+- **Challenge**: "Delete checked items" also removed seeded default items, which are only inserted in `RoomDatabase.Callback.onCreate` and could not be restored.
+- **Resolution**: Delete only custom items and uncheck defaults in a single `@Transaction`, behind a confirmation dialog.
+
 ---
 
 ## 📈 Results
@@ -235,8 +290,9 @@ graph TD
 - **Long-term Engagement**: 4-tab lifecycle loop (Weather → Subscribe → Journal → Season)
 - **Responsive Design**: Consistent layout across small (360dp) to large (420dp+) Android screens
 - **Crash Monitoring**: Firebase Crashlytics integrated with release-only collection policy
-- **Error Handling**: 6-type sealed class network error handling covering all failure scenarios
-- **Architecture**: Strict 3-layer separation (Data / Domain / UI) with Room DB v3 and clean migration path
+- **Error Handling**: 7-type sealed class network errors mapped to localized user-facing messages
+- **Architecture**: 3-layer separation (Data / Domain / UI) with Room DB v3 and clean migration path
+- **Quality**: 45 JVM unit tests (outfit engine, feels-like correction, forecast aggregation, city search, input validation) and 0 Android Lint errors
 
 ---
 
@@ -262,7 +318,7 @@ graph TD
 SkyWear was built around a genuine pain point: travelers don't need more weather data — they need weather *intelligence*. By combining real-time API data with a proprietary outfit algorithm, bidirectional travel support, and lifecycle features, this project demonstrates that mobile engineering can deliver tangible, human-centered value.
 
 ### 🚀 Technical Evolution: Architecture as a Foundation
-Starting from a simple API call and evolving into a fully layered MVVM + Clean Architecture application with Hilt DI, Room v3 migrations, DataStore persistence, and Firebase monitoring taught me that architecture is not overhead — it is the foundation that makes every feature addition faster and safer.
+Starting from a simple API call and evolving into a fully layered MVVM application with Hilt DI, Room v3 migrations, DataStore persistence, and Firebase monitoring taught me that architecture is not overhead — it is the foundation that makes every feature addition faster and safer.
 
 ### 🌏 Bridging Markets Through Technology
 As a developer targeting the Japanese IT market, SkyWear represents my approach to engineering: identify a real cross-cultural friction point, and solve it with clean, maintainable, and user-empathetic code.
@@ -277,5 +333,5 @@ As a developer targeting the Japanese IT market, SkyWear represents my approach 
 ---
 
 <div align="center">
-<sub>Built for ❤️ · SkyWear © 2026</sub>
+<sub>Built with ❤️ for KR-JP Travelers · SkyWear © 2026</sub>
 </div>

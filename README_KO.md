@@ -34,9 +34,11 @@
   6. **도시 구독**: 최대 5개 도시 실시간 날씨 + 알림 토글
   7. **계절별 추천**: JP 8개 + KR 8개 주요 여행 이벤트 D-day 카운트다운, 방향별 자동 전환
   8. **여행 일지**: 여행 날씨, 코디 기록, 개인 메모 저장
-  9. **완전한 다국어 지원**: 모든 화면 한국어 / 영어 / 일본어 현지화
-  10. **반응형 레이아웃**: 모든 Android 기기 화면 크기에 적응하는 레이아웃
-  11. **Firebase Crashlytics**: 릴리즈 빌드 전용 프로덕션 크래시 모니터링
+  9. **챙길 것 추천**: 도착지 날씨 기준 추가 아이템(비 올 때만 우산, 핫팩, 바람막이 등)을 대시보드에 표시
+  10. **알림**: 매일 오전 8시 여행 방향별 브리핑 + 구독 도시 ±3°C 변화 알림(1시간 주기), Android 13+ 알림 권한 처리
+  11. **완전한 다국어 지원**: 모든 화면·알림·에러 메시지 한국어 / 영어 / 일본어 현지화
+  12. **반응형 레이아웃 & 다크 모드**: 기기 크기에 맞는 레이아웃과 대비를 확인한 다크 테마 색상
+  13. **Firebase Crashlytics**: 릴리즈 빌드 전용 프로덕션 크래시 모니터링
 
 ---
 
@@ -52,16 +54,35 @@
 
 ## 🛠️ 기술 스택
 
-- **언어**: ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
-- **UI 프레임워크**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-UI-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
-- **아키텍처**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_+_Clean-green?style=for-the-badge)
-- **DI**: ![Hilt](https://img.shields.io/badge/Hilt-DI-E91E63?style=for-the-badge)
-- **네트워크**: ![Retrofit2](https://img.shields.io/badge/Retrofit2-Network-48B983?style=for-the-badge) | ![OkHttp3](https://img.shields.io/badge/OkHttp3-Interceptor-48B983?style=for-the-badge)
-- **로컬 DB**: ![Room](https://img.shields.io/badge/Room-v3-FF6F00?style=for-the-badge)
+- **언어**: ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) | ![Coroutines](https://img.shields.io/badge/Coroutines-Flow_%2F_StateFlow-7F52FF?style=for-the-badge)
+- **UI**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-BOM_2025.10-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white) | ![Material 3](https://img.shields.io/badge/Material_3-1.4-757575?style=for-the-badge&logo=materialdesign&logoColor=white) | ![Navigation](https://img.shields.io/badge/Navigation_Compose-2.8-4285F4?style=for-the-badge)
+- **아키텍처**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_%28Data_%2F_Domain_%2F_UI%29-green?style=for-the-badge)
+- **DI**: ![Hilt](https://img.shields.io/badge/Hilt-2.51-E91E63?style=for-the-badge) (`@HiltWorker` 포함)
+- **네트워크**: ![Retrofit2](https://img.shields.io/badge/Retrofit-2.11_+_Gson-48B983?style=for-the-badge) | ![OkHttp3](https://img.shields.io/badge/OkHttp-4.12_Interceptor-48B983?style=for-the-badge)
+- **로컬 DB**: ![Room](https://img.shields.io/badge/Room-2.7_%28Schema_v3%29-FF6F00?style=for-the-badge)
 - **설정 저장**: ![DataStore](https://img.shields.io/badge/DataStore-Preferences-FF6F00?style=for-the-badge)
-- **백그라운드**: ![WorkManager](https://img.shields.io/badge/WorkManager-Notifications-FF6F00?style=for-the-badge)
+- **백그라운드**: ![WorkManager](https://img.shields.io/badge/WorkManager-2.9_Notifications-FF6F00?style=for-the-badge)
 - **모니터링**: ![Firebase](https://img.shields.io/badge/Firebase-Crashlytics-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-- **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-API-EB6E4B?style=for-the-badge)
+- **테스트**: ![JUnit4](https://img.shields.io/badge/JUnit4-45_Unit_Tests-25A162?style=for-the-badge)
+- **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-Current_+_5--Day_Forecast-EB6E4B?style=for-the-badge)
+- **빌드**: AGP 8.9.1 · KSP 2.0.21-1.0.28 · JDK 21 · minSdk 26 / targetSdk 36 · Gradle Version Catalog
+
+---
+
+## 🚀 실행 방법
+
+1. [OpenWeatherMap](https://openweathermap.org/api)에서 무료 API 키를 발급받습니다.
+2. `SkyWear/local.properties`에 추가합니다 (`BuildConfig.WEATHER_API_KEY`로 주입됨):
+   ```properties
+   WEATHER_API_KEY=your_api_key_here
+   ```
+3. Firebase `google-services.json`을 `SkyWear/app/`에 넣습니다 (Google Services / Crashlytics 플러그인 필수).
+4. 빌드 및 테스트:
+   ```bash
+   cd SkyWear
+   ./gradlew assembleDebug
+   ./gradlew testDebugUnitTest
+   ```
 
 ---
 
@@ -71,6 +92,7 @@
 graph TD
     subgraph UI["🖥️ UI Layer (Jetpack Compose)"]
         MA[MainActivity]
+        NAV[SkyWearNavGraph\nBottom Navigation]
         WVM[WeatherViewModel]
         CVM[ChecklistViewModel]
         CSVM[CitySearchViewModel]
@@ -93,6 +115,11 @@ graph TD
         JR[JournalRepository]
     end
 
+    subgraph Background["⏰ Background (WorkManager + Hilt)"]
+        WNW[WeatherNotificationWorker\nDaily 08:00 Briefing]
+        SWW[SubscribeWeatherWorker\nHourly ±3°C Alert]
+    end
+
     subgraph Remote["🌐 Remote"]
         API[WeatherApiService\nRetrofit2 + OkHttp3]
         OWM[(OpenWeatherMap API)]
@@ -103,12 +130,14 @@ graph TD
         DS[(DataStore\nPreferences)]
     end
 
-    MA --> WVM & CVM & CSVM & SUBVM & JVM
+    MA --> NAV --> WVM & CVM & CSVM & SUBVM & JVM
     WVM --> WR & OA & TC & CA
     SUBVM --> SR & WR
     JVM --> JR
     CVM --> CR & UPR
     CSVM --> UPR
+    WNW --> WR & UPR & OA
+    SWW --> WR & SR
     WR --> API --> OWM
     CR --> ROOM
     SR --> ROOM
@@ -130,14 +159,14 @@ graph TD
   - [x] Phase 2-1: Retrofit2 & OkHttp3 원격 데이터 소스 설계
   - [x] Phase 2-2: OpenWeatherMap DTO 설계
   - [x] Phase 2-3: Dual-City 날씨 동시 호출 구현
-  - [x] Phase 2-4: 커스텀 NetworkInterceptor & 6종 에러 핸들링
+  - [x] Phase 2-4: 커스텀 NetworkInterceptor & 7종 에러 핸들링
 
 - **Phase 3**: 핵심 로직 & 코디 추천 엔진
   - [x] Phase 3-1: 8단계 온도별 코디 알고리즘 개발
   - [x] Phase 3-2: KR vs JP 온도 비교 분석 로직
   - [x] Phase 3-3: Wind Chill & Heat Index 체감온도 보정
   - [x] Phase 3-4: StateFlow 기반 반응형 상태 관리
-  - [x] Phase 3-5: 날씨 코드 → 이모지/색상 매핑 엔진
+  - [x] Phase 3-5: 날씨 코드 → 이모지/색상 매핑 엔진 — *화면에서 쓰이지 않아 Phase 10에서 제거*
 
 - **Phase 4**: 여행 인텔리전스 & 데이터 영속성
   - [x] Phase 4-1: 방향별 여행 체크리스트 Room DB 구현
@@ -146,7 +175,7 @@ graph TD
   - [x] Phase 4-4: 다크 모드 지원
 
 - **Phase 5**: QA & 의존성 주입
-  - [x] Phase 5-1: Compose Test Rule 단위/UI 테스트
+  - [x] Phase 5-1: Compose Test Rule 단위/UI 테스트 — *Phase 10에서 도메인/데이터 단위 테스트로 대체*
   - [x] Phase 5-2: Hilt DI 전면 도입 & 코드 리팩토링
   - [x] Phase 5-3: APK 빌드 생성
 
@@ -176,13 +205,19 @@ graph TD
   - [x] Phase 9-5: 포트폴리오 마무리 & README 업데이트
   - [x] Phase 9-6: 반응형 레이아웃 최적화 (모든 화면 크기 대응)
 
+- **Phase 10**: 코드 품질 & UX 개선
+  - [x] Phase 10-1: 데드 코드, 미사용 에셋(Lottie, 템플릿 파일), 불필요한 의존성 정리
+  - [x] Phase 10-2: Android 13+ 알림 권한, 알림 탭 시 앱 열기, 알림·에러 메시지 다국어화
+  - [x] Phase 10-3: UX 수정 — 체크리스트 기본 항목 보존, 일지 날짜 선택기·입력 검증, 다크 모드 대비, 챙길 것 추천
+  - [x] Phase 10-4: 의존성 정렬(Compose BOM 2025.10, Room 2.7, lifecycle 2.9), Lint 정리, 단위 테스트 45개
+
 ---
 
 ## 🔥 트러블슈팅 & 교훈
 
 **1. KSP + Kotlin 버전 호환성**
-- **문제**: Room Compiler KSP 버전이 Kotlin 2.2.10과 맞지 않아 컴파일 타임 빌드 실패.
-- **해결**: `ksp = "2.2.10-2.0.2"`로 Kotlin 버전에 정확히 대응하는 버전 고정.
+- **문제**: 초기 Kotlin 2.2.10 + KSP 2.2.10-2.0.2 조합이 Room Compiler 및 툴체인과 맞지 않아 빌드 실패.
+- **해결**: Kotlin `2.0.21`과 이에 대응하는 KSP `2.0.21-1.0.28`로 툴체인 정렬. KSP 버전 앞자리는 항상 Kotlin 버전과 같아야 함.
 
 **2. Hilt — AndroidManifest `android:name` 누락**
 - **문제**: 앱 실행 시 `Hilt Activity must be attached to an @HiltAndroidApp Application` 크래시.
@@ -226,6 +261,26 @@ graph TD
 - **문제**: 레이아웃에 공백이 많아지고 보기가 불편해짐.
 - **해결**: 고정 패딩 16dp→8dp 축소, `displayMedium`→`displaySmall` 전환, 카드 간격 10dp로 통일.
 
+**12. Android 13+에서 알림이 표시되지 않음**
+- **문제**: 매니페스트에 `POST_NOTIFICATIONS`를 선언만 하고 런타임 권한을 요청하지 않아, 워커는 정상 동작해도 알림이 조용히 차단됨 (targetSdk 36).
+- **해결**: 첫 실행 시 권한을 한 번 요청하고, 알림 탭 시 앱이 열리도록 `PendingIntent` 연결.
+
+**13. OkHttp Interceptor 커넥션 누수**
+- **문제**: `NetworkInterceptor`가 200이 아닌 응답에서 response body를 닫지 않고 예외를 던져 커넥션이 누수됨.
+- **해결**: 2xx는 그대로 반환하고, 상태 코드를 `NetworkException`으로 매핑하기 전에 `close()` 호출. 예외는 UI에서 현지화된 문자열 리소스로 변환.
+
+**14. `stateIn` 초기값 함정**
+- **문제**: `SubscribeViewModel`이 `init`에서 `subscribedCities.value`를 읽어 날씨를 갱신했는데, `stateIn(WhileSubscribed)`의 초기값은 항상 빈 리스트라 새로고침 전까지 날씨가 로드되지 않음.
+- **해결**: `repository.getAllCities().first()`로 원본 Flow를 직접 조회.
+
+**15. 화면 단위 ViewModel로 인한 API 중복 호출**
+- **문제**: 시즌 탭이 `hiltViewModel()`로 별도 `WeatherViewModel`을 만들어, 여행 방향 하나를 읽으려고 탭을 열 때마다 날씨·예보 API 4회를 다시 호출함.
+- **해결**: NavGraph 레벨의 공유 인스턴스를 전달 (#3과 같은 교훈).
+
+**16. 체크리스트 기본 항목 영구 삭제**
+- **문제**: "완료 항목 삭제"가 기본 항목까지 지웠는데, 기본 항목은 `RoomDatabase.Callback.onCreate`에서만 생성돼 복구 불가.
+- **해결**: 커스텀 항목만 삭제하고 기본 항목은 체크 해제하도록 하나의 `@Transaction`으로 처리, 실행 전 확인 다이얼로그 추가.
+
 ---
 
 ## 📈 성과
@@ -236,8 +291,9 @@ graph TD
 - **장기 사용 유도**: 날씨→구독→일지→추천 4탭 라이프사이클 루프
 - **반응형 디자인**: 360dp~420dp+ 모든 Android 화면 크기에서 일관된 UI
 - **크래시 모니터링**: Firebase Crashlytics 릴리즈 전용 수집 정책으로 통합
-- **에러 핸들링**: 6종 Sealed Class 네트워크 에러 핸들링으로 모든 실패 시나리오 대응
-- **아키텍처**: Room DB v3 + 깔끔한 마이그레이션 경로를 갖춘 엄격한 3계층 분리
+- **에러 핸들링**: 7종 Sealed Class 네트워크 에러를 현지화된 사용자 메시지로 매핑
+- **아키텍처**: Room DB v3 + 깔끔한 마이그레이션 경로를 갖춘 3계층 분리 (Data / Domain / UI)
+- **품질**: JVM 단위 테스트 45개 (코디 엔진, 체감온도 보정, 예보 집계, 도시 검색, 입력 검증), Android Lint 오류 0개
 
 ---
 
@@ -263,7 +319,7 @@ graph TD
 SkyWear는 진짜 불편함에서 출발했습니다. 여행자에게 필요한 것은 더 많은 날씨 데이터가 아니라 날씨 *인텔리전스*입니다. 실시간 API 데이터와 독자적인 코디 알고리즘, 양방향 여행 지원, 라이프사이클 기능을 결합함으로써, 모바일 엔지니어링이 진정한 인간 중심의 가치를 제공할 수 있음을 보여주는 프로젝트입니다.
 
 ### 🚀 기술적 진화: 아키텍처를 기반으로
-단순한 API 호출에서 시작해 Hilt DI, Room v3 마이그레이션, DataStore 영속성, Firebase 모니터링을 갖춘 완전한 계층형 MVVM + Clean Architecture 앱으로 발전시키는 과정은, 아키텍처가 부담이 아니라 모든 기능 추가를 더 빠르고 안전하게 만드는 기반임을 가르쳐 주었습니다.
+단순한 API 호출에서 시작해 Hilt DI, Room v3 마이그레이션, DataStore 영속성, Firebase 모니터링을 갖춘 완전한 계층형 MVVM 앱으로 발전시키는 과정은, 아키텍처가 부담이 아니라 모든 기능 추가를 더 빠르고 안전하게 만드는 기반임을 가르쳐 주었습니다.
 
 ### 🌏 기술로 시장을 연결하다
 일본 IT 시장을 목표로 하는 개발자로서, SkyWear는 저의 엔지니어링 접근 방식을 대표합니다. 실제 교차 문화적 마찰 지점을 찾아내고, 깔끔하고 유지보수 가능하며 사용자 공감적인 코드로 해결하는 것입니다.
