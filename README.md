@@ -54,18 +54,35 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 
 ## 🛠️ Tech Stack
 
-- **Language**: ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) | ![Coroutines](https://img.shields.io/badge/Coroutines-Flow_%2F_StateFlow-7F52FF?style=for-the-badge)
-- **UI**: ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-BOM_2025.10-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white) | ![Material 3](https://img.shields.io/badge/Material_3-1.4-757575?style=for-the-badge&logo=materialdesign&logoColor=white) | ![Navigation](https://img.shields.io/badge/Navigation_Compose-2.8-4285F4?style=for-the-badge)
-- **Architecture**: ![MVVM](https://img.shields.io/badge/Architecture-MVVM_%28Data_%2F_Domain_%2F_UI%29-green?style=for-the-badge)
-- **DI**: ![Hilt](https://img.shields.io/badge/Hilt-2.51-E91E63?style=for-the-badge) (incl. `@HiltWorker`)
-- **Network**: ![Retrofit2](https://img.shields.io/badge/Retrofit-2.11_+_Gson-48B983?style=for-the-badge) | ![OkHttp3](https://img.shields.io/badge/OkHttp-4.12_Interceptor-48B983?style=for-the-badge)
-- **Local DB**: ![Room](https://img.shields.io/badge/Room-2.7_%28Schema_v3%29-FF6F00?style=for-the-badge)
-- **Preferences**: ![DataStore](https://img.shields.io/badge/DataStore-Preferences-FF6F00?style=for-the-badge)
-- **Background**: ![WorkManager](https://img.shields.io/badge/WorkManager-2.9_Notifications-FF6F00?style=for-the-badge)
-- **Monitoring**: ![Firebase](https://img.shields.io/badge/Firebase-Crashlytics-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-- **Testing**: ![JUnit4](https://img.shields.io/badge/JUnit4-45_Unit_Tests-25A162?style=for-the-badge)
-- **API**: ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-Current_+_5--Day_Forecast-EB6E4B?style=for-the-badge)
-- **Build**: AGP 8.9.1 · KSP 2.0.21-1.0.28 · JDK 21 · minSdk 26 / targetSdk 36 · Gradle Version Catalog
+| Category | Stack |
+| --- | --- |
+| **Language** | ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) ![Coroutines](https://img.shields.io/badge/Coroutines-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) ![Flow](https://img.shields.io/badge/Flow-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white) |
+| **UI** | ![Jetpack Compose](https://img.shields.io/badge/Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white) ![Material 3](https://img.shields.io/badge/Material_3-757575?style=for-the-badge&logo=materialdesign&logoColor=white) ![Navigation](https://img.shields.io/badge/Navigation-3DDC84?style=for-the-badge&logo=android&logoColor=white) |
+| **Architecture** | ![MVVM](https://img.shields.io/badge/MVVM-2E7D32?style=for-the-badge) ![Hilt](https://img.shields.io/badge/Hilt-E91E63?style=for-the-badge&logo=android&logoColor=white) |
+| **Network** | ![Retrofit](https://img.shields.io/badge/Retrofit-48B983?style=for-the-badge&logo=square&logoColor=white) ![OkHttp](https://img.shields.io/badge/OkHttp-48B983?style=for-the-badge&logo=square&logoColor=white) ![Gson](https://img.shields.io/badge/Gson-4285F4?style=for-the-badge&logo=google&logoColor=white) |
+| **Local Storage** | ![Room](https://img.shields.io/badge/Room-003B57?style=for-the-badge&logo=sqlite&logoColor=white) ![DataStore](https://img.shields.io/badge/DataStore-3DDC84?style=for-the-badge&logo=android&logoColor=white) |
+| **Background** | ![WorkManager](https://img.shields.io/badge/WorkManager-3DDC84?style=for-the-badge&logo=android&logoColor=white) |
+| **Monitoring** | ![Firebase Crashlytics](https://img.shields.io/badge/Firebase_Crashlytics-FFCA28?style=for-the-badge&logo=firebase&logoColor=black) |
+| **Testing** | ![JUnit4](https://img.shields.io/badge/JUnit4-25A162?style=for-the-badge&logo=junit5&logoColor=white) |
+| **API** | ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-EB6E4B?style=for-the-badge) |
+
+<details>
+<summary>📦 Versions</summary>
+
+| Item | Version |
+| --- | --- |
+| Kotlin / KSP | `2.0.21 / 2.0.21-1.0.28` |
+| Android Gradle Plugin / JDK | `8.9.1 / 21` |
+| minSdk / targetSdk | `26 / 36` |
+| Compose BOM / Material 3 | `2025.10.00 / 1.4.0` |
+| Navigation Compose | `2.8.9` |
+| Hilt / hilt-work | `2.51.1 / 1.2.0` |
+| Retrofit / OkHttp | `2.11.0 / 4.12.0` |
+| Room (DB schema) | `2.7.1 (v3)` |
+| DataStore / WorkManager | `1.1.1 / 2.9.1` |
+| Firebase BOM | `33.1.0` |
+
+</details>
 
 ---
 
