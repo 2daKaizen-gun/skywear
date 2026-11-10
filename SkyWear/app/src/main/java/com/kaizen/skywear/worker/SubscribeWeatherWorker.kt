@@ -3,7 +3,6 @@ package com.kaizen.skywear.worker
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.kaizen.skywear.R
@@ -102,17 +101,16 @@ class SubscribeWeatherWorker @AssistedInject constructor(
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                context.getString(R.string.notification_subscribe_channel_name),
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = context.getString(R.string.notification_subscribe_channel_desc)
-            }
-            val manager = context.getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
+        // minSdk 26 (Android 8.0) 이상이므로 알림 채널은 항상 생성
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            context.getString(R.string.notification_subscribe_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = context.getString(R.string.notification_subscribe_channel_desc)
         }
+        val manager = context.getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(channel)
     }
 
     private fun sendNotification(id: Int, title: String, message: String) {

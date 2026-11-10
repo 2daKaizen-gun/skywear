@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 13+ 테마 아이콘용 단색 레이어 (알림 아이콘 재사용, 어댑티브 아이콘 안전 영역 안으로 축소) -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_notification"
+    android:inset="26%" />
