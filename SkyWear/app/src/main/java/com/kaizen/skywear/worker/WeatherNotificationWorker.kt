@@ -19,6 +19,7 @@ import com.kaizen.skywear.domain.mainOutfitRes
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
+import kotlin.coroutines.cancellation.CancellationException
 
 // 매일 오전 8시 KR/JP 날씨 + 코디 브리핑 알림
 @HiltWorker
@@ -63,6 +64,8 @@ class WeatherNotificationWorker @AssistedInject constructor(
             sendNotification(title, message)
             Result.success()
 
+        } catch (e: CancellationException) {
+            throw e // 워커 중지는 WorkManager가 처리하도록 전파
         } catch (e: Exception) {
             Result.retry()
         }

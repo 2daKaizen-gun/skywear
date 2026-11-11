@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
@@ -78,7 +80,8 @@ class SubscribeViewModel @Inject constructor(
         viewModelScope.launch {
             // subscribedCities(stateIn)는 화면이 구독하기 전엔 빈 리스트라 init 시점에 항상 비어 있음 → DB에서 직접 조회
             val current = repository.getAllCities().first()
-            current.forEach { city -> fetchWeatherForCity(city.nameEn) }
+            // 도시별 요청을 병렬로 실행
+            current.forEach { city -> launch { fetchWeatherForCity(city.nameEn) } }
         }
     }
 
@@ -89,10 +92,10 @@ class SubscribeViewModel @Inject constructor(
                 val temp = weather.main.temp.toInt()
                 val desc = weather.weather.firstOrNull()?.description ?: ""
                 repository.updateLastWeather(nameEn, weather.main.temp, desc)
-                val map = _weatherMap.value.toMutableMap()
-                map[nameEn] = Pair(temp, desc)
-                _weatherMap.value = map
+                _weatherMap.update { it + (nameEn to Pair(temp, desc)) }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) { /* 조용히 실패 */ }
     }
 }

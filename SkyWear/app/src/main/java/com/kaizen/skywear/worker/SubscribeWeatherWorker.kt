@@ -12,6 +12,7 @@ import com.kaizen.skywear.data.repository.WeatherRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -92,8 +93,10 @@ class SubscribeWeatherWorker @AssistedInject constructor(
                 // ✅ 최신 날씨 DB 업데이트
                 subscribeRepository.updateLastWeather(city.nameEn, newTemp, newDesc)
 
+            } catch (e: CancellationException) {
+                throw e // 워커 중지(제약 조건 해제 등)는 실패로 삼키지 않고 전파
             } catch (e: Exception) {
-                // 조용히 실패
+                // 한 도시 실패가 나머지 도시 확인을 막지 않도록 조용히 넘어감
             }
         }
 
