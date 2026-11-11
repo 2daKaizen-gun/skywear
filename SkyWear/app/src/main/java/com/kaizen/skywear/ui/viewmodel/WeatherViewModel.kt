@@ -18,6 +18,7 @@ import com.kaizen.skywear.domain.analyzeTempComparison
 import com.kaizen.skywear.domain.buildContextAwareRecommendation
 import com.kaizen.skywear.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -82,18 +83,20 @@ class WeatherViewModel @Inject constructor(
         fetchAll(_selectedKrCity.value, _selectedJpCity.value)
     }
 
-    // 헌재 날씨 + 예보 동시 호출
+    // 진행 중인 요청 — 도시 변경/새로고침이 연달아 오면 이전 요청 결과가 새 결과를 덮어쓰지 않도록 취소
+    private var weatherJob: Job? = null
+    private var forecastJob: Job? = null
+
+    // 현재 날씨 + 예보 동시 호출
     private fun fetchAll(krCity: String, jpCity: String) {
         fetchDualCityWeather(krCity, jpCity)
         fetchDualCityForecast(krCity, jpCity)
     }
-    
+
     // 현재 날씨 호출
-    fun fetchDualCityWeather(
-        krCity: String = _selectedKrCity.value,
-        jpCity: String = _selectedJpCity.value
-    ) {
-        viewModelScope.launch {
+    private fun fetchDualCityWeather(krCity: String, jpCity: String) {
+        weatherJob?.cancel()
+        weatherJob = viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
             val result = repository.getDualCityWeather(krCity, jpCity)
             _uiState.value = if (result.isSuccess) {
@@ -113,11 +116,9 @@ class WeatherViewModel @Inject constructor(
     }
     
     // 5일 예보 호출
-    fun fetchDualCityForecast(
-        krCity: String = _selectedKrCity.value,
-        jpCity: String = _selectedJpCity.value
-    ) {
-        viewModelScope.launch {
+    private fun fetchDualCityForecast(krCity: String, jpCity: String) {
+        forecastJob?.cancel()
+        forecastJob = viewModelScope.launch {
             _forecastState.value = ForecastUiState.Loading
             val result = repository.getDualCityForecast(krCity, jpCity)
             _forecastState.value = if (result.isSuccess) {
@@ -160,6 +161,15 @@ class WeatherViewModel @Inject constructor(
                 ForecastUiState.Success(pairs = pairs)
             } else {
                 ForecastUiState.Error
+            }
+
+            // 선택했던 예보 날짜가 새 결과에 없으면(날짜 경과, 도시 변경, 오류) 대시보드가 빈 화면이 되므로 현재 날씨로 복귀
+            val newState = _forecastState.value
+            val selected = _selectedDateKey.value
+            if (selected != null &&
+                (newState !is ForecastUiState.Success || newState.pairs.none { it.dateKey == selected })
+            ) {
+                _selectedDateKey.value = null
             }
         }
     }
