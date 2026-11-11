@@ -227,6 +227,7 @@ graph TD
   - [x] Phase 10-2: Android 13+ notification permission, tappable notifications, localized notifications & error messages
   - [x] Phase 10-3: UX fixes — checklist default items, journal date pickers & input validation, dark mode contrast, bring-along items
   - [x] Phase 10-4: Dependency alignment (Compose BOM 2025.10, Room 2.7, lifecycle 2.9), lint cleanup, 45 unit tests
+  - [x] Phase 10-5: Review fixes — forecast in local time, stale request cancellation, coroutine cancellation handling, portable Gradle config, 50 unit tests
 
 ---
 
@@ -263,7 +264,7 @@ graph TD
 
 **8. Forecast Date Filtering**
 - **Challenge**: Past dates remained visible in forecast date selector tabs after midnight.
-- **Resolution**: Added `.filter { it >= today }` using `java.time.LocalDate.now().toString()` with a renamed lambda parameter (`key`) to avoid shadowing the `dateKey()` extension function.
+- **Resolution**: Added `.filter { it >= today }` with a renamed lambda parameter (`key`) to avoid shadowing the `dateKey()` extension function. "Today" is now computed in the city's time zone (see #17).
 
 **9. Daily Min/Max Temperature Reliability**
 - **Challenge**: A single 12:00 forecast slot showed high variability — a day might have a warm afternoon but a cold evening, making outfit advice misleading.
@@ -297,6 +298,22 @@ graph TD
 - **Challenge**: "Delete checked items" also removed seeded default items, which are only inserted in `RoomDatabase.Callback.onCreate` and could not be restored.
 - **Resolution**: Delete only custom items and uncheck defaults in a single `@Transaction`, behind a confirmation dialog.
 
+**17. Forecast Shifted by 9 Hours (UTC `dt_txt`)**
+- **Challenge**: The forecast API's `dt_txt` is UTC, but it was parsed as local time. In KR/JP (UTC+9) the "12:00" representative slot was really 21:00 and each day was split at 09:00 local.
+- **Resolution**: Derive date key, date label and time label from `dt` plus the city's `timezone` offset with `java.time`, and round daily min/max instead of truncating.
+
+**18. Stale Responses Overwriting New Ones**
+- **Challenge**: Each refresh or city change launched new coroutines without cancelling the old ones, so a slower earlier request could overwrite the dashboard with the previous city.
+- **Resolution**: Keep the in-flight `Job`s and cancel them before fetching again; reset the selected forecast date when it disappears from the new result.
+
+**19. `runCatching` Swallowing Cancellation**
+- **Challenge**: `runCatching` and `catch (e: Exception)` also caught `CancellationException`, turning cancelled requests into error states and stopped workers into retries.
+- **Resolution**: Wrap API calls with `apiResult`, which rethrows cancellation, and fetch KR/JP in parallel with `async` as the code comments intended.
+
+**20. Machine-specific `org.gradle.java.home`**
+- **Challenge**: `gradle.properties` pinned the JDK to a local Android Studio path, so the project could not build on another machine or CI.
+- **Resolution**: Remove it and rely on `gradle-daemon-jvm.properties` (JDK 21) and `jvmToolchain(21)`.
+
 ---
 
 ## 📈 Results
@@ -309,7 +326,7 @@ graph TD
 - **Crash Monitoring**: Firebase Crashlytics integrated with release-only collection policy
 - **Error Handling**: 7-type sealed class network errors mapped to localized user-facing messages
 - **Architecture**: 3-layer separation (Data / Domain / UI) with Room DB v3 and clean migration path
-- **Quality**: 45 JVM unit tests (outfit engine, feels-like correction, forecast aggregation, city search, input validation) and 0 Android Lint errors
+- **Quality**: 50 JVM unit tests (outfit engine, feels-like correction, forecast aggregation, city search, input validation) and 0 Android Lint errors
 
 ---
 
