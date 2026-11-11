@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 // WeatherViewModel Update
@@ -122,19 +124,22 @@ class WeatherViewModel @Inject constructor(
                 val krForecast = result.krForecast.getOrNull()!!
                 val jpForecast = result.jpForecast.getOrNull()!!
 
+                // 각 도시의 현지 시각 기준 (API dt_txt는 UTC)
+                val krOffset = krForecast.city.utcOffsetSeconds
+                val jpOffset = jpForecast.city.utcOffsetSeconds
+
                 // 대표 슬롯, 시간, pair(최저, 최고)
-                val krDaily = krForecast.list.dailyRepresentativeWithTime()
-                val jpDaily = jpForecast.list.dailyRepresentativeWithTime()
+                val krDaily = krForecast.list.dailyRepresentativeWithTime(krOffset)
+                val jpDaily = jpForecast.list.dailyRepresentativeWithTime(jpOffset)
 
                 // KR + JP 공통 날짜만 페어링
-                val today = java.time.LocalDate.now().toString()
+                val today = LocalDate.now(ZoneOffset.ofTotalSeconds(krOffset)).toString()
                 val commonDates = krDaily.keys.intersect(jpDaily.keys)
                     .filter { it >= today }
-                    .filter { Key ->
+                    .filter { key ->
                         // KR, JP 모두 슬롯 3개 이상인 날짜만
-                        val krSlots = krForecast.list.filter { it.dateKey() == Key }
-                        val jpSlots = jpForecast.list.filter { it.dateKey() == Key }
-                        krSlots.size >= 3 && jpSlots.size >= 3
+                        krForecast.list.count { it.dateKey(krOffset) == key } >= 3 &&
+                            jpForecast.list.count { it.dateKey(jpOffset) == key } >= 3
                     }
                     .sorted()
                 val pairs = commonDates.mapNotNull { dateKey ->
@@ -142,7 +147,7 @@ class WeatherViewModel @Inject constructor(
                     val (jpItem, _, jpMinMax)      = jpDaily[dateKey] ?: return@mapNotNull null
                     DailyForecastPair(
                         dateKey   = dateKey,
-                        dateLabel = krItem.dateLabel(),
+                        dateLabel = krItem.dateLabel(krOffset),
                         representativeTime = krTime,
                         krItem    = krItem,
                         jpItem    = jpItem,
