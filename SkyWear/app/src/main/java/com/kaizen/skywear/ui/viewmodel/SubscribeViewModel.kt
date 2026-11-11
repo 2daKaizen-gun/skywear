@@ -18,6 +18,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.math.roundToInt
+
+// 구독 가능한 최대 도시 수
+const val MAX_SUBSCRIBED_CITIES = 5
 
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
@@ -51,7 +55,7 @@ class SubscribeViewModel @Inject constructor(
 
     fun addCity(city: City) {
         viewModelScope.launch {
-            if (repository.count() >= 5) return@launch  // 최대 5개
+            if (repository.count() >= MAX_SUBSCRIBED_CITIES) return@launch
             repository.addCity(
                 SubscribedCity(
                     nameEn  = city.nameEn,
@@ -89,7 +93,8 @@ class SubscribeViewModel @Inject constructor(
         try {
             val result = weatherRepository.getWeather(nameEn)
             result.getOrNull()?.let { weather ->
-                val temp = weather.main.temp.toInt()
+                // 대시보드/알림과 같은 값이 보이도록 절삭(toInt) 대신 반올림
+                val temp = weather.main.temp.roundToInt()
                 val desc = weather.weather.firstOrNull()?.description ?: ""
                 repository.updateLastWeather(nameEn, weather.main.temp, desc)
                 _weatherMap.update { it + (nameEn to Pair(temp, desc)) }

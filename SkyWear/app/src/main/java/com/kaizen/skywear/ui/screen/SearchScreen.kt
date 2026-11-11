@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaizen.skywear.R
 import com.kaizen.skywear.data.model.City
+import com.kaizen.skywear.data.model.localizedCityName
 import com.kaizen.skywear.ui.viewmodel.CitySearchViewModel
 import com.kaizen.skywear.ui.viewmodel.WeatherViewModel
 
@@ -134,7 +135,7 @@ private fun CitySearchContent(
 
         // 현재 선택된 도시 표시
         Text(
-            text = stringResource(R.string.search_selected, savedCity),
+            text = stringResource(R.string.search_selected, localizedCityName(savedCity)),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 16.dp)

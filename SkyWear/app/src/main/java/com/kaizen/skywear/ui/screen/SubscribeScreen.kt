@@ -23,6 +23,7 @@ import com.kaizen.skywear.R
 import com.kaizen.skywear.data.local.SubscribedCity
 import com.kaizen.skywear.data.model.City
 import com.kaizen.skywear.data.model.localizedCityName
+import com.kaizen.skywear.ui.viewmodel.MAX_SUBSCRIBED_CITIES
 import com.kaizen.skywear.ui.viewmodel.SubscribeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,13 +42,14 @@ fun SubscribeScreen(viewModel: SubscribeViewModel = hiltViewModel()) {
                 title = { Text(stringResource(R.string.nav_subscribe)) },
                 actions = {
                     IconButton(onClick = { viewModel.refreshAllWeather() }) { Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.dashboard_refresh)) }
-                    IconButton(onClick = { showSearch = !showSearch }) { Icon(Icons.Default.Add, contentDescription = stringResource(R.string.subscribe_add_button)) }
+                    // 최대 5개 도달 시 추가해도 저장되지 않으므로 버튼 비활성화
+                    IconButton(onClick = { showSearch = !showSearch }, enabled = cities.size < MAX_SUBSCRIBED_CITIES) { Icon(Icons.Default.Add, contentDescription = stringResource(R.string.subscribe_add_button)) }
                 }
             )
         }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
-            if (showSearch) {
+            if (showSearch && cities.size < MAX_SUBSCRIBED_CITIES) {
                 OutlinedTextField(
                     value = query, onValueChange = { viewModel.searchCity(it) },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
@@ -70,7 +72,7 @@ fun SubscribeScreen(viewModel: SubscribeViewModel = hiltViewModel()) {
                 }
             }
 
-            if (cities.size >= 5) {
+            if (cities.size >= MAX_SUBSCRIBED_CITIES) {
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
