@@ -88,13 +88,14 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 
 ## 🚀 Getting Started
 
-1. Get a free API key from [OpenWeatherMap](https://openweathermap.org/api).
-2. Add it to `SkyWear/local.properties` (exposed as `BuildConfig.WEATHER_API_KEY`):
+1. Install JDK 21. Gradle picks it up via `gradle/gradle-daemon-jvm.properties`; in Android Studio, set *Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK* to a JDK 21 (e.g. the bundled JetBrains Runtime).
+2. Get a free API key from [OpenWeatherMap](https://openweathermap.org/api).
+3. Add it to `SkyWear/local.properties` (exposed as `BuildConfig.WEATHER_API_KEY`):
    ```properties
    WEATHER_API_KEY=your_api_key_here
    ```
-3. Place your Firebase `google-services.json` in `SkyWear/app/` (required by the Google Services / Crashlytics plugins).
-4. Build and test:
+4. Place your Firebase `google-services.json` in `SkyWear/app/` (required by the Google Services / Crashlytics plugins).
+5. Build and test:
    ```bash
    cd SkyWear
    ./gradlew assembleDebug

@@ -88,13 +88,14 @@
 
 ## 🚀 실행 방법
 
-1. [OpenWeatherMap](https://openweathermap.org/api)에서 무료 API 키를 발급받습니다.
-2. `SkyWear/local.properties`에 추가합니다 (`BuildConfig.WEATHER_API_KEY`로 주입됨):
+1. JDK 21을 설치합니다. Gradle은 `gradle/gradle-daemon-jvm.properties`로 JDK 21을 찾고, Android Studio에서는 *Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK*를 JDK 21(예: 내장 JetBrains Runtime)로 지정합니다.
+2. [OpenWeatherMap](https://openweathermap.org/api)에서 무료 API 키를 발급받습니다.
+3. `SkyWear/local.properties`에 추가합니다 (`BuildConfig.WEATHER_API_KEY`로 주입됨):
    ```properties
    WEATHER_API_KEY=your_api_key_here
    ```
-3. Firebase `google-services.json`을 `SkyWear/app/`에 넣습니다 (Google Services / Crashlytics 플러그인 필수).
-4. 빌드 및 테스트:
+4. Firebase `google-services.json`을 `SkyWear/app/`에 넣습니다 (Google Services / Crashlytics 플러그인 필수).
+5. 빌드 및 테스트:
    ```bash
    cd SkyWear
    ./gradlew assembleDebug
