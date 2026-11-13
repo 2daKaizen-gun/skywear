@@ -1,58 +1,25 @@
-# 📋 SkyWear: 🇰🇷🇯🇵 KR-JP Smart Travel Outfit Coordinator
-> **"Don't just check the weather. Know what to wear."**
->
-> **SkyWear** [Sky (Weather) + Wear (Outfit)]: An Android-native solution designed to bridge the temperature gap between Korea and Japan, transforming raw weather data into actionable, culturally-aware travel outfit recommendations.
+# SkyWear
 
-An Android travel companion that compares real-time and 5-day forecast weather between Korean and Japanese cities, delivers 8-stage outfit recommendations powered by Wind Chill and Heat Index algorithms, and adapts entirely to the traveler's direction — whether heading from Korea to Japan, or Japan to Korea. Lifecycle features including city subscription, seasonal recommendations, and a travel journal keep users engaged long after the trip ends.
+**English** · [한국어](README_KO.md)
 
----
+An Android travel app that compares the weather in a Korean city and a Japanese city and suggests what to wear, in 8 steps from T-shirt and shorts to a long puffer and hand warmers.
+Seoul can be below freezing while Osaka is above 10°C, and I wanted one screen that tells you what to pack for the other side.
 
-## 🎯 Background & Motivation
+韓国と日本の都市の天気を比べて、服装を8段階で提案する Android の旅行アプリです。
 
-### The Context: "Seamless Travel Experience"
-Korea and Japan are the closest neighboring countries in Northeast Asia, yet their climates differ significantly due to latitude, terrain, and seasonal patterns. It is common for Seoul to be below freezing while Osaka remains comfortably above 10°C — a gap that can make or break a traveler's packing decision.
+## Features
 
-### The Problem
-1. **Cross-reference Fatigue**: Travelers manually switch between Korean and Japanese weather apps, mentally calculating temperature differences without any outfit context.
-2. **Numbers Without Meaning**: "8°C" alone doesn't tell a traveler whether they need a light coat or a heavy parka. Raw data lacks the outfit intelligence layer.
-3. **One-Directional Design**: Most travel apps are built for a single market. There is no solution that seamlessly serves both Korean travelers heading to Japan *and* Japanese travelers heading to Korea.
-4. **No Long-term Value**: Most weather apps are forgotten after a trip ends. There is no reason to return unless another trip is planned.
+- Current weather and 5-day forecast for the departure and destination cities side by side, with daily min/max
+- Outfit suggestion in 8 steps, adjusted with wind chill and heat index
+- A KR→JP / JP→KR switch that changes the cities, advice, checklist and seasonal events
+- Travel checklist in Korean / English / Japanese
+- Follow up to 5 cities, with a daily 08:00 briefing and an alert when the temperature changes by 3°C or more
+- Seasonal events (8 in Japan, 8 in Korea) with a countdown
+- Travel journal with the weather and what you wore
+- Extra items for the destination (umbrella only when rain is forecast, hand warmers, windbreaker, ...)
+- Korean / English / Japanese UI and dark mode
 
-### The Solution
-1. **Dual-City Dashboard**: Displays real-time and 5-day forecast weather for both departure and destination cities side-by-side, with daily min/max temperature and temperature gap visualization.
-2. **8-Stage Outfit Engine**: Converts temperature into concrete outfit stages — from T-shirt + Shorts (28°C+) to Long Puffer + Scarf + Hand Warmers (below -1°C) — enhanced by Wind Chill and Heat Index corrections.
-3. **Bidirectional Travel Mode**: A single toggle switches the entire app experience between KR→JP and JP→KR, including localized checklists, comparison messages, and outfit advice.
-4. **Lifecycle Features**: City subscription, seasonal recommendations, and travel journal ensure users return even when not actively planning a trip.
-
-- **Data Source**: OpenWeatherMap API (Current Weather + 5-Day Forecast)
-- **Key Features**:
-  1. **Dual-City Weather Comparison**: Side-by-side KR/JP weather cards with feels-like temperature and humidity
-  2. **8-Stage Outfit Algorithm**: Temperature-to-outfit mapping with Wind Chill / Heat Index corrections
-  3. **5-Day Forecast with Date Selector**: Daily min/max temperature across all time slots per day
-  4. **Travel Direction Switch**: KR→JP ↔ JP→KR bidirectional toggle with full UX adaptation
-  5. **Localized Checklist**: Direction-aware travel checklist (Japan trip / Korea trip) in 3 languages
-  6. **City Subscription**: Follow up to 5 cities with real-time weather and alert toggle
-  7. **Seasonal Recommendations**: D-day countdown for 8 JP + 8 KR major travel events, direction-aware
-  8. **Travel Journal**: Record trip weather, outfit history, and personal memos
-  9. **Bring-along Items**: Destination-based extras (umbrella only on rainy codes, hand warmer, windbreaker, ...) shown on the dashboard
-  10. **Notifications**: Daily 08:00 travel briefing (direction-aware) and hourly ±3°C change alerts for subscribed cities, with Android 13+ permission handling
-  11. **Full i18n**: Korean / English / Japanese localization across all screens, notifications, and error messages
-  12. **Responsive Layout & Dark Mode**: Adaptive padding/typography and contrast-checked dark theme colors
-  13. **Firebase Crashlytics**: Production crash monitoring with release-only collection
-
----
-
-## ⚙️ Key Features
-
-- **Outfit Intelligence**: Goes beyond temperature numbers to deliver stage-based outfit recommendations tailored to real feels-like conditions
-- **Bidirectional UX**: Full experience swap — departure/destination cities, comparison messages, travel advice, checklists, and seasonal recommendations — with a single toggle
-- **Long-term Engagement**: City subscription, travel journal, and seasonal events keep users returning between trips
-- **Multilingual Support**: Complete localization in Korean, English, and Japanese including weather descriptions via dynamic API `lang` parameter
-- **Responsive Design**: Adaptive layout with proportional spacing and typography across all Android devices
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Category | Stack |
 | --- | --- |
@@ -67,7 +34,7 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 | **API** | ![OpenWeatherMap](https://img.shields.io/badge/OpenWeatherMap-EB6E4B?style=for-the-badge) |
 
 <details>
-<summary>📦 Versions</summary>
+<summary>Versions</summary>
 
 | Item | Version |
 | --- | --- |
@@ -84,9 +51,8 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
 
 </details>
 
----
 
-## 🚀 Getting Started
+## Getting Started
 
 1. Install JDK 21. Gradle picks it up via `gradle/gradle-daemon-jvm.properties`; in Android Studio, set *Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK* to a JDK 21 (e.g. the bundled JetBrains Runtime).
 2. Get a free API key from [OpenWeatherMap](https://openweathermap.org/api).
@@ -102,13 +68,12 @@ Korea and Japan are the closest neighboring countries in Northeast Asia, yet the
    ./gradlew testDebugUnitTest
    ```
 
----
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 graph TD
-    subgraph UI["🖥️ UI Layer (Jetpack Compose)"]
+    subgraph UI["UI Layer (Jetpack Compose)"]
         MA[MainActivity]
         NAV[SkyWearNavGraph\nBottom Navigation]
         WVM[WeatherViewModel]
@@ -118,14 +83,14 @@ graph TD
         JVM[JournalViewModel]
     end
 
-    subgraph Domain["🧠 Domain Layer"]
+    subgraph Domain["Domain Layer"]
         OA[OutfitAlgorithm]
         TC[TemperatureComparator]
         CA[ContextAwareRecommendation]
         SE[SeasonEvent]
     end
 
-    subgraph Data["🗄️ Data Layer"]
+    subgraph Data["Data Layer"]
         WR[WeatherRepository]
         CR[ChecklistRepository]
         UPR[UserPreferencesRepository]
@@ -133,17 +98,17 @@ graph TD
         JR[JournalRepository]
     end
 
-    subgraph Background["⏰ Background (WorkManager + Hilt)"]
+    subgraph Background["Background (WorkManager + Hilt)"]
         WNW[WeatherNotificationWorker\nDaily 08:00 Briefing]
         SWW[SubscribeWeatherWorker\nHourly ±3°C Alert]
     end
 
-    subgraph Remote["🌐 Remote"]
+    subgraph Remote["Remote"]
         API[WeatherApiService\nRetrofit2 + OkHttp3]
         OWM[(OpenWeatherMap API)]
     end
 
-    subgraph Local["💾 Local"]
+    subgraph Local["Local"]
         ROOM[(Room DB v3\nChecklist + Subscribe + Journal)]
         DS[(DataStore\nPreferences)]
     end
@@ -163,76 +128,8 @@ graph TD
     UPR --> DS
 ```
 
----
 
-## ✅ Milestone
-
-- **Phase 1**: Project Foundation & Android Environment Setup
-  - [x] Phase 1-1: Initialize GitHub Repository & Technical Documentation (README.md) & Project Board
-  - [x] Phase 1-2: Setup Android Studio & Kotlin/Compose Development Environment
-  - [x] Phase 1-3: Define Design System (Color Palette, Typography, & Brand Assets)
-  - [x] Phase 1-4: Security Configuration (API Key Management & local.properties Setup)
-
-- **Phase 2**: Network Layer & Weather Data Integration
-  - [x] Phase 2-1: Architect Remote Data Source using Retrofit2 & OkHttp3
-  - [x] Phase 2-2: Design Weather Data Transfer Objects (DTO) for OpenWeatherMap API
-  - [x] Phase 2-3: Implement Dual-City Weather Fetching Logic (Source: KR / Destination: JP)
-  - [x] Phase 2-4: Build Robust Error Handling & Interceptor for Network Stability
-
-- **Phase 3**: Core Logic & Outfit Recommendation Engine
-  - [x] Phase 3-1: Develop Temperature-based 8-Stage Smart Outfit Algorithm
-  - [x] Phase 3-2: Implement Comparative Analysis Logic (KR vs JP Temperature Gap)
-  - [x] Phase 3-3: Build Context-Aware Recommendation Logic (Wind Chill & Humidity)
-  - [x] Phase 3-4: Reactive State Management Integration using ViewModel & StateFlow
-  - [x] Phase 3-5: Design Asset Mapping Engine (Weather State to Visual Icons) — *removed in Phase 10 as no screen rendered it*
-
-- **Phase 4**: Travel Intelligence & Data Persistence
-  - [x] Phase 4-1: Implement Direction-Aware Travel Checklist using Room DB
-  - [x] Phase 4-2: Develop City Search & User Preference Management Features
-  - [x] Phase 4-3: Build Background Notification Service for Daily Travel Briefing
-  - [x] Phase 4-4: Dark Mode Support
-
-- **Phase 5**: Quality Assurance & Dependency Injection
-  - [x] Phase 5-1: Execute UI Testing & Component Validation using Compose Test Rule — *replaced by domain/data unit tests in Phase 10*
-  - [x] Phase 5-2: Code Refactoring & Dependency Injection (Hilt) Optimization
-  - [x] Phase 5-3: Final Build Generation (.APK)
-
-- **Phase 6**: Main UI Implementation
-  - [x] Phase 6-1: Navigation & Screen Integration
-  - [x] Phase 6-2: Dual-City Weather Dashboard Screen
-  - [x] Phase 6-3: City Search Screen
-  - [x] Phase 6-4: Direction-Aware Travel Checklist Screen
-  - [x] Phase 6-5: Bug Fixes & Code Quality Improvements
-
-- **Phase 7**: Product Optimization
-  - [x] Phase 7-1: Advanced Localization (Korean / English / Japanese)
-  - [x] Phase 7-2: Travel Direction Switch (KR→JP ↔ JP→KR)
-  - [x] Phase 7-3: Performance & Monitoring (Firebase Crashlytics, StrictMode)
-
-- **Phase 8**: 5-Day Forecast Comparison
-  - [x] Phase 8-1: Forecast API Integration & DTO (WeatherForecastResponse, DailyForecastPair)
-  - [x] Phase 8-2: Forecast Dashboard UI with Date Selector & Daily Min/Max Temperature
-  - [x] Phase 8-3: Project Retrospective & Feedback
-  - [x] Phase 8-4: Technical Documentation
-
-- **Phase 9**: Lifecycle Features & Long-term Engagement
-  - [x] Phase 9-1: Bottom Navigation Bar Integration (Weather / Subscribe / Journal / Season)
-  - [x] Phase 9-2: City Subscription & Weather Change Alerts (up to 5 cities)
-  - [x] Phase 9-3: Seasonal Travel Recommendation Engine (8 JP + 8 KR events, direction-aware)
-  - [x] Phase 9-4: Travel Journal & Weather History Log
-  - [x] Phase 9-5: Portfolio Finalization & README Update
-  - [x] Phase 9-6: Responsive Layout Optimization for all screen sizes
-
-- **Phase 10**: Code Quality & UX Refinement
-  - [x] Phase 10-1: Remove dead code, unused assets (Lottie, template files) and stale dependencies
-  - [x] Phase 10-2: Android 13+ notification permission, tappable notifications, localized notifications & error messages
-  - [x] Phase 10-3: UX fixes — checklist default items, journal date pickers & input validation, dark mode contrast, bring-along items
-  - [x] Phase 10-4: Dependency alignment (Compose BOM 2025.10, Room 2.7, lifecycle 2.9), lint cleanup, 45 unit tests
-  - [x] Phase 10-5: Review fixes — forecast in local time, stale request cancellation, coroutine cancellation handling, portable Gradle config, 50 unit tests
-
----
-
-## 🔥 Troubleshooting & Lessons Learned
+## Problems I ran into
 
 **1. KSP + Kotlin Version Compatibility**
 - **Challenge**: The initial Kotlin 2.2.10 + KSP 2.2.10-2.0.2 setup failed to build with the Room compiler and the rest of the toolchain.
@@ -315,58 +212,13 @@ graph TD
 - **Challenge**: `gradle.properties` pinned the JDK to a local Android Studio path, so the project could not build on another machine or CI.
 - **Resolution**: Remove it and rely on `gradle-daemon-jvm.properties` (JDK 21) and `jvmToolchain(21)`.
 
----
 
-## 📈 Results
+## Numbers
 
-- **Localization**: 100% string coverage in Korean, English, and Japanese across all screens including Subscribe, Journal, and Season screens
-- **Bidirectional Support**: Full UX adaptation for both KR→JP and JP→KR travel modes including direction-aware seasonal recommendations
-- **Forecast Accuracy**: Daily min/max temperature extracted from all available 3-hour slots — not just a single time slot
-- **Long-term Engagement**: 4-tab lifecycle loop (Weather → Subscribe → Journal → Season)
-- **Responsive Design**: Consistent layout across small (360dp) to large (420dp+) Android screens
-- **Crash Monitoring**: Firebase Crashlytics integrated with release-only collection policy
-- **Error Handling**: 7-type sealed class network errors mapped to localized user-facing messages
-- **Architecture**: 3-layer separation (Data / Domain / UI) with Room DB v3 and clean migration path
-- **Quality**: 50 JVM unit tests (outfit engine, feels-like correction, forecast aggregation, city search, input validation) and 0 Android Lint errors
+- 50 JVM unit tests (outfit logic, feels-like correction, forecast aggregation, city search, input validation), 0 Android Lint errors
+- All screens translated into Korean, English and Japanese
+- Room DB v3 with migrations from v1, Firebase Crashlytics in release builds only
 
----
+## Contact
 
-## 🧐 Self-Reflection
-
-### Technical Growth
-- **Algorithm to Product**: Translating meteorological formulas (Wind Chill, Heat Index) into a user-facing outfit recommendation system taught me the importance of bridging domain knowledge with engineering.
-- **State Management Mastery**: Managing bidirectional travel state across multiple screens with `StateFlow`, `flatMapLatest`, and shared ViewModels deepened my understanding of reactive architecture in Jetpack Compose.
-- **i18n Architecture**: Learning that internationalization must be a first-class architectural concern — not an afterthought — was one of the most valuable lessons of this project.
-- **DB Migration Strategy**: Incremental Room migrations (`MIGRATION_1_2`, `MIGRATION_2_3`) demonstrated the importance of planning schema evolution from the start.
-
-### Problem-Solving Mindset
-- **Cultural Product Thinking**: Building for both Korean and Japanese travelers reinforced that great products require empathy for diverse user contexts, not just technical correctness.
-- **Root Cause Over Quick Fix**: The gapDegree sign inversion bug could have been patched with a conditional, but understanding *why* the sign was wrong — and fixing the abstraction — produced a cleaner, more maintainable solution.
-- **Layer Discipline**: Every time a string or logic leaked between layers, it created downstream i18n or testability problems. Respecting architectural boundaries is not academic — it has real engineering consequences.
-- **User Lifecycle Thinking**: Realizing that "weather app for travelers" ends when the trip ends pushed the design toward a "KR-JP lifestyle companion" — a much stickier product concept.
-
----
-
-## 🧐 Final Project Retrospective
-
-### 💡 Engineering for Real Travelers
-SkyWear was built around a genuine pain point: travelers don't need more weather data — they need weather *intelligence*. By combining real-time API data with a proprietary outfit algorithm, bidirectional travel support, and lifecycle features, this project demonstrates that mobile engineering can deliver tangible, human-centered value.
-
-### 🚀 Technical Evolution: Architecture as a Foundation
-Starting from a simple API call and evolving into a fully layered MVVM application with Hilt DI, Room v3 migrations, DataStore persistence, and Firebase monitoring taught me that architecture is not overhead — it is the foundation that makes every feature addition faster and safer.
-
-### 🌏 Bridging Markets Through Technology
-As a developer targeting the Japanese IT market, SkyWear represents my approach to engineering: identify a real cross-cultural friction point, and solve it with clean, maintainable, and user-empathetic code.
-
----
-
-## ✨ Contact
-
-- **GitHub Repository**: https://github.com/2daKaizen-gun/skywear
-- **Email**: hkys1223@gmail.com
-
----
-
-<div align="center">
-<sub>Built with ❤️ for KR-JP Travelers · SkyWear © 2026</sub>
-</div>
+hkys1223@gmail.com
